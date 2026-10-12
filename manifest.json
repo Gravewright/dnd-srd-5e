@@ -1,0 +1,106 @@
+{
+  "id": "gravewright.5e-srd",
+  "name": "DnD 5e SRD",
+  "version": "0.1.0",
+  "description": "DnD 5e SRD for Gravewright: character, monster and item sheets, licensed SRD compendiums, and selectable 2014/2024 rules. Requires Gravewright VTT 0.2.1 or newer and the trusted server companion.",
+  "author": "Ricardo Tristão; Gravewright contributors",
+  "license": "MIT AND CC-BY-4.0",
+  "sdk": {
+    "requires": ">=1.0.0 <2.0.0",
+    "tested": "1.0.0"
+  },
+  "entry": "main.js",
+  "content": {
+    "compendiums": [
+      "compendiums/2014.json",
+      "compendiums/2024.json"
+    ]
+  },
+  "system": {
+    "actorTypes": [
+      {
+        "id": "character",
+        "label": "Character",
+        "labelKey": "actorType.character"
+      },
+      {
+        "id": "monster",
+        "label": "Monster",
+        "labelKey": "actorType.monster"
+      }
+    ],
+    "itemTypes": [
+      {
+        "id": "weapon",
+        "label": "Weapon",
+        "labelKey": "itemType.weapon",
+        "icon": "Sword"
+      },
+      {
+        "id": "armor",
+        "label": "Armor",
+        "labelKey": "itemType.armor",
+        "icon": "ShieldCheck"
+      },
+      {
+        "id": "equipment",
+        "label": "Equipment",
+        "labelKey": "itemType.equipment",
+        "icon": "Backpack"
+      },
+      {
+        "id": "consumable",
+        "label": "Consumable",
+        "labelKey": "itemType.consumable",
+        "icon": "Backpack"
+      },
+      {
+        "id": "spell",
+        "label": "Spell",
+        "labelKey": "itemType.spell",
+        "icon": "Scroll"
+      },
+      {
+        "id": "feat",
+        "label": "Feat",
+        "labelKey": "itemType.feat",
+        "icon": "Sparkle"
+      },
+      {
+        "id": "feature",
+        "label": "Feature",
+        "labelKey": "itemType.feature",
+        "icon": "Sparkle"
+      },
+      {
+        "id": "race",
+        "label": "Race",
+        "labelKey": "itemType.race",
+        "icon": "User"
+      },
+      {
+        "id": "background",
+        "label": "Background",
+        "labelKey": "itemType.background",
+        "icon": "User"
+      },
+      {
+        "id": "class",
+        "label": "Class",
+        "labelKey": "itemType.class",
+        "icon": "User"
+      },
+      {
+        "id": "effect",
+        "label": "Effect",
+        "labelKey": "itemType.effect",
+        "icon": "Sparkle"
+      }
+    ],
+    "combat": {
+      "formula": "1d20 + @init",
+      "manualInput": "number",
+      "requiresProvider": true
+    }
+  }
+}

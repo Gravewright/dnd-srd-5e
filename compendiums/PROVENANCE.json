@@ -1,0 +1,5295 @@
+{
+  "upstream": {
+    "repository": "https://github.com/foundryvtt/dnd5e",
+    "commit": "87e94dbd9f930135e0694cd7e7d49f210603cd2c",
+    "license": "MIT"
+  },
+  "official": {
+    "2014": {
+      "url": "https://media.dndbeyond.com/compendium-images/srd/5.1/SRD_CC_v5.1.pdf",
+      "sha256": "2504d2a0abb0a4d491a939be4f17910a2dde0312570ab8d208080225ccf0a1f0"
+    },
+    "2024": {
+      "url": "https://media.dndbeyond.com/compendium-images/srd/5.2/SRD_CC_v5.2.1.pdf",
+      "sha256": "8974902d109d6e63672d7c490bde9ccf052410503d9cfa768237154fbc5e3d87"
+    }
+  },
+  "counts": {
+    "2014": {
+      "feature": 272,
+      "background": 1,
+      "class": 12,
+      "feat": 1,
+      "weapon": 173,
+      "consumable": 164,
+      "armor": 65,
+      "equipment": 243,
+      "race": 9,
+      "spell": 319
+    },
+    "2024": {
+      "class": 12,
+      "feature": 303,
+      "weapon": 86,
+      "consumable": 146,
+      "equipment": 332,
+      "armor": 24,
+      "feat": 17,
+      "background": 4,
+      "race": 14,
+      "spell": 338
+    }
+  },
+  "excluded": [
+    {
+      "path": "packs/_source/backgrounds/acolyte-equipment/coin-pouch/_container.yml",
+      "name": "Coin Pouch",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/ammunition/bolt-of-slaying.yml",
+      "name": "Bolt of Slaying",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/ammunition/sling-bullet-of-slaying.yml",
+      "name": "Sling Bullet of Slaying",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/adamantine-breastplate.yml",
+      "name": "Adamantine Breastplate",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/adamantine-chain-mail.yml",
+      "name": "Adamantine Chain Mail",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/adamantine-chain-shirt.yml",
+      "name": "Adamantine Chain Shirt",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/adamantine-half-plate-armor.yml",
+      "name": "Adamantine Half Plate Armor",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/adamantine-plate-armor.yml",
+      "name": "Adamantine Plate Armor",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/adamantine-ring-mail.yml",
+      "name": "Adamantine Ring Mail",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/adamantine-scale-mail.yml",
+      "name": "Adamantine Scale Mail",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/adamantine-splint-armor.yml",
+      "name": "Adamantine Splint Armor",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/breastplate-armor-of-resistance.yml",
+      "name": "Breastplate Armor of Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/chain-mail-armor-of-resistance.yml",
+      "name": "Chain Mail Armor of Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/chain-shirt-armor-of-resistance.yml",
+      "name": "Chain Shirt Armor of Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/half-plate-armor-of-resistance.yml",
+      "name": "Half Plate Armor of Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/hide-armor-of-resistance.yml",
+      "name": "Hide Armor of Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/leather-armor-of-resistance.yml",
+      "name": "Leather Armor of Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/mithral-breastplate.yml",
+      "name": "Mithral Breastplate",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/mithral-chain-mail.yml",
+      "name": "Mithral Chain Mail",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/mithral-half-plate-armor.yml",
+      "name": "Mithral Half Plate Armor",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/mithral-plate-armor.yml",
+      "name": "Mithral Plate Armor",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/mithral-ring-mail.yml",
+      "name": "Mithral Ring Mail",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/mithral-scale-mail.yml",
+      "name": "Mithral Scale Mail",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/mithral-splint-armor.yml",
+      "name": "Mithral Splint Armor",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/padded-armor-of-resistance.yml",
+      "name": "Padded Armor of Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/plate-armor-of-resistance.yml",
+      "name": "Plate Armor of Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/ring-mail-armor-of-resistance.yml",
+      "name": "Ring Mail Armor of Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/scale-mail-armor-of-resistance.yml",
+      "name": "Scale Mail Armor of Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/splint-armor-of-resistance.yml",
+      "name": "Splint Armor of Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/armor/studded-leather-armor-of-resistance.yml",
+      "name": "Studded Leather Armor of Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/container/crossbow-bolt-case/_container.yml",
+      "name": "Crossbow Bolt Case",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/container/glass-bottle/_container.yml",
+      "name": "Glass Bottle",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/container/iron-pot/_container.yml",
+      "name": "Iron Pot",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/container/map-or-scroll-case/_container.yml",
+      "name": "Map or Scroll Case",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment-packs/diplomats-pack/ink-bottle.yml",
+      "name": "Ink Bottle",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment-packs/diplomats-pack/map-case/_container.yml",
+      "name": "Map Case",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment-packs/diplomats-pack/scroll-case/_container.yml",
+      "name": "Scroll Case",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment-packs/entertainers-pack/costume-clothes.yml",
+      "name": "Costume Clothes",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment-packs/priests-pack/block-of-incense.yml",
+      "name": "Block of Incense",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment-packs/scholars-pack/ink-bottle.yml",
+      "name": "Ink Bottle",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/belt-of-cloud-giant-strength.yml",
+      "name": "Belt of Cloud Giant Strength",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/belt-of-fire-giant-strength.yml",
+      "name": "Belt of Fire Giant Strength",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/belt-of-hill-giant-strength.yml",
+      "name": "Belt of Hill Giant Strength",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/belt-of-storm-giant-strength.yml",
+      "name": "Belt of Storm Giant Strength",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/costume-clothes.yml",
+      "name": "Costume Clothes",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-absorption.yml",
+      "name": "Ioun Stone of Absorption",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-agility.yml",
+      "name": "Ioun Stone of Agility",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-awareness.yml",
+      "name": "Ioun Stone of Awareness",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-fortitude.yml",
+      "name": "Ioun Stone of Fortitude",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-greater-absorption.yml",
+      "name": "Ioun Stone of Greater Absorption",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-insight.yml",
+      "name": "Ioun Stone of Insight",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-intellect.yml",
+      "name": "Ioun Stone of Intellect",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-leadership.yml",
+      "name": "Ioun Stone of Leadership",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-mastery.yml",
+      "name": "Ioun Stone of Mastery",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-protection.yml",
+      "name": "Ioun Stone of Protection",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-regeneration.yml",
+      "name": "Ioun Stone of Regeneration",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-reserve.yml",
+      "name": "Ioun Stone of Reserve",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-strength.yml",
+      "name": "Ioun Stone of Strength",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/ioun-stone-of-sustenance.yml",
+      "name": "Ioun Stone of Sustenance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/pack-saddle.yml",
+      "name": "Pack Saddle",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/riding-saddle.yml",
+      "name": "Riding Saddle",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/equipment/travelers-clothes.yml",
+      "name": "Traveler's Clothes",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/loot/block-of-incense.yml",
+      "name": "Block of Incense",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/loot/ink-bottle.yml",
+      "name": "Ink Bottle",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/loot/merchants-scale.yml",
+      "name": "Merchant's Scale",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/loot/miners-pick.yml",
+      "name": "Miner's Pick",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/loot/sledgehammer.yml",
+      "name": "Sledgehammer",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/loot/two-person-tent.yml",
+      "name": "Two-Person Tent",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/poison/basic-poison.yml",
+      "name": "Basic Poison",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/flask-of-holy-water.yml",
+      "name": "Flask of Holy Water",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-acid-resistance.yml",
+      "name": "Potion of Acid Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-cloud-giant-strength.yml",
+      "name": "Potion of Cloud Giant Strength",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-cold-resistance.yml",
+      "name": "Potion of Cold Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-fire-giant-strength.yml",
+      "name": "Potion of Fire Giant Strength",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-fire-resistance.yml",
+      "name": "Potion of Fire Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-force-resistance.yml",
+      "name": "Potion of Force Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-greater-healing.yml",
+      "name": "Potion of Greater Healing",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-hill-giant-strength.yml",
+      "name": "Potion of Hill Giant Strength",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-lightning-resistance.yml",
+      "name": "Potion of Lightning Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-necrotic-resistance.yml",
+      "name": "Potion of Necrotic Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-poison-resistance.yml",
+      "name": "Potion of Poison Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-psychic-resistance.yml",
+      "name": "Potion of Psychic Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-radiant-resistance.yml",
+      "name": "Potion of Radiant Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-storm-giant-strength.yml",
+      "name": "Potion of Storm Giant Strength",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-superior-healing.yml",
+      "name": "Potion of Superior Healing",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-supreme-healing.yml",
+      "name": "Potion of Supreme Healing",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/potion/potion-of-thunder-resistance.yml",
+      "name": "Potion of Thunder Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/ring/ring-of-acid-resistance.yml",
+      "name": "Ring of Acid Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/ring/ring-of-cold-resistance.yml",
+      "name": "Ring of Cold Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/ring/ring-of-fire-resistance.yml",
+      "name": "Ring of Fire Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/ring/ring-of-force-resistance.yml",
+      "name": "Ring of Force Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/ring/ring-of-lightning-resistance.yml",
+      "name": "Ring of Lightning Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/ring/ring-of-necrotic-resistance.yml",
+      "name": "Ring of Necrotic Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/ring/ring-of-poison-resistance.yml",
+      "name": "Ring of Poison Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/ring/ring-of-psychic-resistance.yml",
+      "name": "Ring of Psychic Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/ring/ring-of-radiant-resistance.yml",
+      "name": "Ring of Radiant Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/ring/ring-of-thunder-resistance.yml",
+      "name": "Ring of Thunder Resistance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/scroll/spell-scroll-1st-level.yml",
+      "name": "Spell Scroll 1st Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/scroll/spell-scroll-2nd-level.yml",
+      "name": "Spell Scroll 2nd Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/scroll/spell-scroll-3rd-level.yml",
+      "name": "Spell Scroll 3rd Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/scroll/spell-scroll-4th-level.yml",
+      "name": "Spell Scroll 4th Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/scroll/spell-scroll-5th-level.yml",
+      "name": "Spell Scroll 5th Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/scroll/spell-scroll-6th-level.yml",
+      "name": "Spell Scroll 6th Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/scroll/spell-scroll-7th-level.yml",
+      "name": "Spell Scroll 7th Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/scroll/spell-scroll-8th-level.yml",
+      "name": "Spell Scroll 8th Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/scroll/spell-scroll-9th-level.yml",
+      "name": "Spell Scroll 9th Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/scroll/spell-scroll-cantrip.yml",
+      "name": "Spell Scroll Cantrip",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/tool/chess-set.yml",
+      "name": "Chess Set",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/tool/playing-cards-set.yml",
+      "name": "Playing Cards Set",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/alchemy-jug.yml",
+      "name": "Alchemy Jug",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/brass-horn-of-valhalla.yml",
+      "name": "Brass Horn of Valhalla",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/bronze-horn-of-valhalla.yml",
+      "name": "Bronze Horn of Valhalla",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/elemental-gem-of-air.yml",
+      "name": "Elemental Gem of Air",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/elemental-gem-of-earth.yml",
+      "name": "Elemental Gem of Earth",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/elemental-gem-of-fire.yml",
+      "name": "Elemental Gem of Fire",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/elemental-gem-of-water.yml",
+      "name": "Elemental Gem of Water",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/feather-token-anchor.yml",
+      "name": "Feather Token Anchor",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/feather-token-bird.yml",
+      "name": "Feather Token Bird",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/feather-token-fan.yml",
+      "name": "Feather Token Fan",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/feather-token-swan-boat.yml",
+      "name": "Feather Token Swan Boat",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/feather-token-tree.yml",
+      "name": "Feather Token Tree",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/feather-token-whip.yml",
+      "name": "Feather Token Whip",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/iron-horn-of-valhalla.yml",
+      "name": "Iron Horn of Valhalla",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/trinket/silver-horn-of-valhalla.yml",
+      "name": "Silver Horn of Valhalla",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/berserker-battleaxe.yml",
+      "name": "Berserker Battleaxe",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/berserker-greataxe.yml",
+      "name": "Berserker Greataxe",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/berserker-handaxe.yml",
+      "name": "Berserker Handaxe",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/dancing-greatsword.yml",
+      "name": "Dancing Greatsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/dancing-longsword.yml",
+      "name": "Dancing Longsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/dancing-rapier.yml",
+      "name": "Dancing Rapier",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/dancing-scimitar.yml",
+      "name": "Dancing Scimitar",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/dancing-shortsword.yml",
+      "name": "Dancing Shortsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/defender-greatsword.yml",
+      "name": "Defender Greatsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/defender-longsword.yml",
+      "name": "Defender Longsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/defender-rapier.yml",
+      "name": "Defender Rapier",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/defender-scimitar.yml",
+      "name": "Defender Scimitar",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/defender-shortsword.yml",
+      "name": "Defender Shortsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/dragon-slayer-greatsword.yml",
+      "name": "Dragon Slayer Greatsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/dragon-slayer-longsword.yml",
+      "name": "Dragon Slayer Longsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/dragon-slayer-rapier.yml",
+      "name": "Dragon Slayer Rapier",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/dragon-slayer-scimitar.yml",
+      "name": "Dragon Slayer Scimitar",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/dragon-slayer-shortsword.yml",
+      "name": "Dragon Slayer Shortsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/flame-tongue-greatsword.yml",
+      "name": "Flame Tongue Greatsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/flame-tongue-longsword.yml",
+      "name": "Flame Tongue Longsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/flame-tongue-rapier.yml",
+      "name": "Flame Tongue Rapier",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/flame-tongue-scimitar.yml",
+      "name": "Flame Tongue Scimitar",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/flame-tongue-shortsword.yml",
+      "name": "Flame Tongue Shortsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/frost-brand-greatsword.yml",
+      "name": "Frost Brand Greatsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/frost-brand-longsword.yml",
+      "name": "Frost Brand Longsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/frost-brand-rapier.yml",
+      "name": "Frost Brand Rapier",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/frost-brand-scimitar.yml",
+      "name": "Frost Brand Scimitar",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/frost-brand-shortsword.yml",
+      "name": "Frost Brand Shortsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/giant-slayer-battleaxe.yml",
+      "name": "Giant Slayer Battleaxe",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/giant-slayer-greataxe.yml",
+      "name": "Giant Slayer Greataxe",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/giant-slayer-greatsword.yml",
+      "name": "Giant Slayer Greatsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/giant-slayer-handaxe.yml",
+      "name": "Giant Slayer Handaxe",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/giant-slayer-longsword.yml",
+      "name": "Giant Slayer Longsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/giant-slayer-rapier.yml",
+      "name": "Giant Slayer Rapier",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/giant-slayer-scimitar.yml",
+      "name": "Giant Slayer Scimitar",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/giant-slayer-shortsword.yml",
+      "name": "Giant Slayer Shortsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/greatsword-of-life-stealing.yml",
+      "name": "Greatsword of Life Stealing",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/greatsword-of-sharpness.yml",
+      "name": "Greatsword of Sharpness",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/greatsword-of-wounding.yml",
+      "name": "Greatsword of Wounding",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/holy-avenger-greatsword.yml",
+      "name": "Holy Avenger Greatsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/holy-avenger-longsword.yml",
+      "name": "Holy Avenger Longsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/holy-avenger-rapier.yml",
+      "name": "Holy Avenger Rapier",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/holy-avenger-scimitar.yml",
+      "name": "Holy Avenger Scimitar",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/holy-avenger-shortsword.yml",
+      "name": "Holy Avenger Shortsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/longsword-of-life-stealing.yml",
+      "name": "Longsword of Life Stealing",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/longsword-of-sharpness.yml",
+      "name": "Longsword of Sharpness",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/longsword-of-wounding.yml",
+      "name": "Longsword of Wounding",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/luck-blade-greatsword.yml",
+      "name": "Luck Blade Greatsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/luck-blade-longsword.yml",
+      "name": "Luck Blade Longsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/luck-blade-rapier.yml",
+      "name": "Luck Blade Rapier",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/luck-blade-scimitar.yml",
+      "name": "Luck Blade Scimitar",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/luck-blade-shortsword.yml",
+      "name": "Luck Blade Shortsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/net-2.yml",
+      "name": "Net +2",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/net-3.yml",
+      "name": "Net +3",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/nine-lives-stealer-greatsword.yml",
+      "name": "Nine Lives Stealer Greatsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/nine-lives-stealer-longsword.yml",
+      "name": "Nine Lives Stealer Longsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/nine-lives-stealer-rapier.yml",
+      "name": "Nine Lives Stealer Rapier",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/nine-lives-stealer-scimitar.yml",
+      "name": "Nine Lives Stealer Scimitar",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/nine-lives-stealer-shortsword.yml",
+      "name": "Nine Lives Stealer Shortsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/rapier-of-life-stealing.yml",
+      "name": "Rapier of Life Stealing",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/rapier-of-wounding.yml",
+      "name": "Rapier of Wounding",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/scimitar-of-life-stealing.yml",
+      "name": "Scimitar of Life Stealing",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/scimitar-of-sharpness.yml",
+      "name": "Scimitar of Sharpness",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/scimitar-of-wounding.yml",
+      "name": "Scimitar of Wounding",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/shortsword-of-life-stealing.yml",
+      "name": "Shortsword of Life Stealing",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/shortsword-of-wounding.yml",
+      "name": "Shortsword of Wounding",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-battleaxe.yml",
+      "name": "Vicious Battleaxe",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-blowgun.yml",
+      "name": "Vicious Blowgun",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-club.yml",
+      "name": "Vicious Club",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-dagger.yml",
+      "name": "Vicious Dagger",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-dart.yml",
+      "name": "Vicious Dart",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-flail.yml",
+      "name": "Vicious Flail",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-glaive.yml",
+      "name": "Vicious Glaive",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-greataxe.yml",
+      "name": "Vicious Greataxe",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-greatclub.yml",
+      "name": "Vicious Greatclub",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-greatsword.yml",
+      "name": "Vicious Greatsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-halberd.yml",
+      "name": "Vicious Halberd",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-hand-crossbow.yml",
+      "name": "Vicious Hand Crossbow",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-handaxe.yml",
+      "name": "Vicious Handaxe",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-heavy-crossbow.yml",
+      "name": "Vicious Heavy Crossbow",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-javelin.yml",
+      "name": "Vicious Javelin",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-lance.yml",
+      "name": "Vicious Lance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-light-crossbow.yml",
+      "name": "Vicious Light Crossbow",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-light-hammer.yml",
+      "name": "Vicious Light Hammer",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-longbow.yml",
+      "name": "Vicious Longbow",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-longsword.yml",
+      "name": "Vicious Longsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-mace.yml",
+      "name": "Vicious Mace",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-maul.yml",
+      "name": "Vicious Maul",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-morningstar.yml",
+      "name": "Vicious Morningstar",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-pike.yml",
+      "name": "Vicious Pike",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-quarterstaff.yml",
+      "name": "Vicious Quarterstaff",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-rapier.yml",
+      "name": "Vicious Rapier",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-scimitar.yml",
+      "name": "Vicious Scimitar",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-shortbow.yml",
+      "name": "Vicious Shortbow",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-shortsword.yml",
+      "name": "Vicious Shortsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-sickle.yml",
+      "name": "Vicious Sickle",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-sling.yml",
+      "name": "Vicious Sling",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-spear.yml",
+      "name": "Vicious Spear",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-trident.yml",
+      "name": "Vicious Trident",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-war-pick.yml",
+      "name": "Vicious War Pick",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-warhammer.yml",
+      "name": "Vicious Warhammer",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vicious-whip.yml",
+      "name": "Vicious Whip",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vorpal-greatsword.yml",
+      "name": "Vorpal Greatsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vorpal-longsword.yml",
+      "name": "Vorpal Longsword",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/items/weapon/vorpal-scimitar.yml",
+      "name": "Vorpal Scimitar",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/races/dragonborn/dragonborn-features/black-breath-weapon.yml",
+      "name": "Black Breath Weapon",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/races/dragonborn/dragonborn-features/blue-breath-weapon.yml",
+      "name": "Blue Breath Weapon",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/races/dragonborn/dragonborn-features/brass-breath-weapon.yml",
+      "name": "Brass Breath Weapon",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/races/dragonborn/dragonborn-features/bronze-breath-weapon.yml",
+      "name": "Bronze Breath Weapon",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/races/dragonborn/dragonborn-features/copper-breath-weapon.yml",
+      "name": "Copper Breath Weapon",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/races/dragonborn/dragonborn-features/gold-breath-weapon.yml",
+      "name": "Gold Breath Weapon",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/races/dragonborn/dragonborn-features/green-breath-weapon.yml",
+      "name": "Green Breath Weapon",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/races/dragonborn/dragonborn-features/red-breath-weapon.yml",
+      "name": "Red Breath Weapon",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/races/dragonborn/dragonborn-features/silver-breath-weapon.yml",
+      "name": "Silver Breath Weapon",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/races/dragonborn/dragonborn-features/white-breath-weapon.yml",
+      "name": "White Breath Weapon",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/races/dwarf/dwarf-features/dwarven-toughness.yml",
+      "name": "Dwarven Toughness",
+      "reason": "no-explicit-content-license"
+    },
+    {
+      "path": "packs/_source/spells/supplemental-items/conjured-flame-blade.yml",
+      "name": "Conjured Flame Blade",
+      "reason": "no-explicit-content-license"
+    },
+    {
+      "path": "packs/_source/classes24/monk/class-features/unarmed-strike.yml",
+      "name": "Unarmed Strike",
+      "reason": "no-explicit-content-license"
+    },
+    {
+      "path": "packs/_source/classes24/warlock/eldritch-invocation-options/book-of-shadows.yml",
+      "name": "Book of Shadows",
+      "reason": "empty-auxiliary-weapon"
+    },
+    {
+      "path": "packs/_source/equipment24/adventuring-gear/burglars-pack/hooded-lantern.yml",
+      "name": "Hooded Lantern",
+      "reason": "different-edition"
+    },
+    {
+      "path": "packs/_source/equipment24/adventuring-gear/diplomats-pack/fine-clothes.yml",
+      "name": "Fine Clothes",
+      "reason": "different-edition"
+    },
+    {
+      "path": "packs/_source/equipment24/adventuring-gear/diplomats-pack/map-or-scroll-case/_container.yml",
+      "name": "Map or Scroll Case",
+      "reason": "different-edition"
+    },
+    {
+      "path": "packs/_source/equipment24/adventuring-gear/entertainers-pack/bullseye-lantern.yml",
+      "name": "Bullseye Lantern",
+      "reason": "different-edition"
+    },
+    {
+      "path": "packs/_source/equipment24/consumables/scrolls/spell-scrolls/spell-scroll-1st-level.yml",
+      "name": "Spell Scroll, 1st Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/consumables/scrolls/spell-scrolls/spell-scroll-2nd-level.yml",
+      "name": "Spell Scroll, 2nd Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/consumables/scrolls/spell-scrolls/spell-scroll-3rd-level.yml",
+      "name": "Spell Scroll, 3rd Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/consumables/scrolls/spell-scrolls/spell-scroll-4th-level.yml",
+      "name": "Spell Scroll, 4th Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/consumables/scrolls/spell-scrolls/spell-scroll-5th-level.yml",
+      "name": "Spell Scroll, 5th Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/consumables/scrolls/spell-scrolls/spell-scroll-6th-level.yml",
+      "name": "Spell Scroll, 6th Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/consumables/scrolls/spell-scrolls/spell-scroll-7th-level.yml",
+      "name": "Spell Scroll, 7th Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/consumables/scrolls/spell-scrolls/spell-scroll-8th-level.yml",
+      "name": "Spell Scroll, 8th Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/consumables/scrolls/spell-scrolls/spell-scroll-9th-level.yml",
+      "name": "Spell Scroll, 9th Level",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/consumables/water-fresh-pint.yml",
+      "name": "Water, fresh (Pint)",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/consumables/water-salt-pint.yml",
+      "name": "Water, salt (Pint)",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/containers/efficient-quiver/long-compartment/_container.yml",
+      "name": "Long Compartment",
+      "reason": "no-explicit-content-license"
+    },
+    {
+      "path": "packs/_source/equipment24/containers/efficient-quiver/midsize-compartment/_container.yml",
+      "name": "Midsize Compartment",
+      "reason": "no-explicit-content-license"
+    },
+    {
+      "path": "packs/_source/equipment24/containers/efficient-quiver/short-compartment/_container.yml",
+      "name": "Short Compartment",
+      "reason": "no-explicit-content-license"
+    },
+    {
+      "path": "packs/_source/equipment24/containers/folding-boat/activate-folding-boat.yml",
+      "name": "Activate Folding Boat",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/containers/handy-haversack/central-pouch/_container.yml",
+      "name": "Central Pouch",
+      "reason": "no-explicit-content-license"
+    },
+    {
+      "path": "packs/_source/equipment24/containers/handy-haversack/left-pouch/_container.yml",
+      "name": "Left Pouch",
+      "reason": "no-explicit-content-license"
+    },
+    {
+      "path": "packs/_source/equipment24/containers/handy-haversack/right-pouch/_container.yml",
+      "name": "Right Pouch",
+      "reason": "no-explicit-content-license"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/horns-of-valhalla/brass-horn-of-valhalla.yml",
+      "name": "Brass Horn of Valhalla",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/horns-of-valhalla/bronze-horn-of-valhalla.yml",
+      "name": "Bronze Horn of Valhalla",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/horns-of-valhalla/iron-horn-of-valhalla.yml",
+      "name": "Iron Horn of Valhalla",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/horns-of-valhalla/silver-horn-of-valhalla.yml",
+      "name": "Silver Horn of Valhalla",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-absorption.yml",
+      "name": "Ioun Stone of Absorption",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-agility.yml",
+      "name": "Ioun Stone of Agility",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-awareness.yml",
+      "name": "Ioun Stone of Awareness",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-fortitude.yml",
+      "name": "Ioun Stone of Fortitude",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-greater-absorption.yml",
+      "name": "Ioun Stone of Greater Absorption",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-insight.yml",
+      "name": "Ioun Stone of Insight",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-intellect.yml",
+      "name": "Ioun Stone of Intellect",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-leadership.yml",
+      "name": "Ioun Stone of Leadership",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-mastery.yml",
+      "name": "Ioun Stone of Mastery",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-protection.yml",
+      "name": "Ioun Stone of Protection",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-regeneration.yml",
+      "name": "Ioun Stone of Regeneration",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-reserve.yml",
+      "name": "Ioun Stone of Reserve",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-strength.yml",
+      "name": "Ioun Stone of Strength",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/ioun-stones/ioun-stone-of-sustenance.yml",
+      "name": "Ioun Stone of Sustenance",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/rings/air-ring-of-elemental-command.yml",
+      "name": "Air Ring of Elemental Command",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/rings/earth-ring-of-elemental-command.yml",
+      "name": "Earth Ring of Elemental Command",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/rings/fire-ring-of-elemental-command.yml",
+      "name": "Fire Ring of Elemental Command",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/equipment/rings/water-ring-of-elemental-command.yml",
+      "name": "Water Ring of Elemental Command",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/equipment24/supplemental/unarmed-strike.yml",
+      "name": "Unarmed Strike",
+      "reason": "empty-auxiliary-weapon"
+    },
+    {
+      "path": "packs/_source/equipment24/weapons/unarmed-strike.yml",
+      "name": "Unarmed Strike",
+      "reason": "no-explicit-content-license"
+    },
+    {
+      "path": "packs/_source/spells24/1st-level/ice-knife.yml",
+      "name": "Ice Knife",
+      "reason": "no-explicit-content-license"
+    },
+    {
+      "path": "packs/_source/spells24/2nd-level/arcane-vigor.yml",
+      "name": "Arcane Vigor",
+      "reason": "name-not-confirmed-in-official-SRD"
+    },
+    {
+      "path": "packs/_source/spells24/supplemental-items/magical-berries.yml",
+      "name": "Magical Berries",
+      "reason": "name-not-confirmed-in-official-SRD"
+    }
+  ],
+  "advancement": {
+    "2014": {
+      "entries": 1259,
+      "derived": [
+        {
+          "id": "7bc9559e-c30d-553d-8ef7-be44329dfd5a",
+          "name": "Black Breath Weapon",
+          "parentId": "a8954a7b-3f2c-57f0-8eb4-e986e885f39e"
+        },
+        {
+          "id": "dfbfb252-fb18-54b9-9c04-67e0bb295984",
+          "name": "Blue Breath Weapon",
+          "parentId": "a8954a7b-3f2c-57f0-8eb4-e986e885f39e"
+        },
+        {
+          "id": "f5755660-bd39-5f9b-95e6-962698b75694",
+          "name": "Brass Breath Weapon",
+          "parentId": "a8954a7b-3f2c-57f0-8eb4-e986e885f39e"
+        },
+        {
+          "id": "e41c423d-53ca-5267-9da8-ef66f736248b",
+          "name": "Bronze Breath Weapon",
+          "parentId": "a8954a7b-3f2c-57f0-8eb4-e986e885f39e"
+        },
+        {
+          "id": "073b0b8d-726b-53f0-b169-d67c2e340f61",
+          "name": "Copper Breath Weapon",
+          "parentId": "a8954a7b-3f2c-57f0-8eb4-e986e885f39e"
+        },
+        {
+          "id": "c0be88fa-0a0b-573c-9ed0-8f2bf167e61d",
+          "name": "Gold Breath Weapon",
+          "parentId": "a8954a7b-3f2c-57f0-8eb4-e986e885f39e"
+        },
+        {
+          "id": "fe739588-bd69-5d63-953f-4b43e59347bd",
+          "name": "Green Breath Weapon",
+          "parentId": "a8954a7b-3f2c-57f0-8eb4-e986e885f39e"
+        },
+        {
+          "id": "7e5c9b4f-0c05-5ce1-86fa-3a11123794e7",
+          "name": "Red Breath Weapon",
+          "parentId": "a8954a7b-3f2c-57f0-8eb4-e986e885f39e"
+        },
+        {
+          "id": "d60f0dd5-0488-5a34-a2b5-6746236fc814",
+          "name": "Silver Breath Weapon",
+          "parentId": "a8954a7b-3f2c-57f0-8eb4-e986e885f39e"
+        },
+        {
+          "id": "1f12b6e8-99fc-5771-ad8e-53c3ea3d62d6",
+          "name": "White Breath Weapon",
+          "parentId": "a8954a7b-3f2c-57f0-8eb4-e986e885f39e"
+        },
+        {
+          "id": "6d253e6c-1159-5e49-b248-d276365a7cec",
+          "name": "Dwarven Toughness",
+          "parentId": "5ba0699e-0ac4-5b6a-8326-509c96b4e3f4"
+        }
+      ],
+      "advancements": {
+        "ItemGrant": 144,
+        "ItemChoice": 20,
+        "Trait": 88,
+        "ScaleValue": 27,
+        "HitPoints": 12,
+        "AbilityScoreImprovement": 72,
+        "Subclass": 12,
+        "Size": 9
+      },
+      "unresolved": [],
+      "manualEffects": [
+        {
+          "entryId": "9a2cf64d-012b-5746-aa64-a0bc8c418900",
+          "effectId": "eWhL8hUr0c2ujDUm",
+          "name": "Rage",
+          "targets": [
+            "system.bonuses.mwak.damage",
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.str.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "ec37e6d1-5e62-5220-ae3a-a1cc2bf85172",
+          "effectId": "K4xQzXl1Z4zMnyOa",
+          "name": "Jack of All Trades",
+          "targets": [
+            "flags.dnd5e.jackOfAllTrades"
+          ]
+        },
+        {
+          "entryId": "2cb08912-babe-5df3-a26b-1aae77581799",
+          "effectId": "v6jhyPoAYRIIXBG1",
+          "name": "Diamond Soul",
+          "targets": [
+            "flags.dnd5e.diamondSoul"
+          ]
+        },
+        {
+          "entryId": "f8367744-2bd5-57da-8d03-e68ec9360fdd",
+          "effectId": "yvLL91omI6kHMHau",
+          "name": "Improved Divine Smite",
+          "targets": [
+            "system.bonuses.mwak.damage"
+          ]
+        },
+        {
+          "entryId": "3ed7e870-cd4f-5aec-ae2a-1d5c53d0ab18",
+          "effectId": "vMMZHZQ0qT7MT4I4",
+          "name": "Reliable Talent",
+          "targets": [
+            "flags.dnd5e.reliableTalent"
+          ]
+        },
+        {
+          "entryId": "ac090d2a-34b8-5111-88b4-d7995fa1580b",
+          "effectId": "B5KM6oYsKC7vRMgG",
+          "name": "Dueling",
+          "targets": [
+            "system.bonuses.mwak.damage"
+          ]
+        },
+        {
+          "entryId": "116a55d9-3541-501a-8ae4-41a4c24b93ce",
+          "effectId": "Pu89Tsgy2FJjYPQi",
+          "name": "Draconic Resilience",
+          "targets": [
+            "system.attributes.ac.calc"
+          ]
+        },
+        {
+          "entryId": "0b9e00ae-7bac-5142-b615-a48959818693",
+          "effectId": "reg3sjReHspgkd0I",
+          "name": "Fiendish Resilience",
+          "targets": [
+            "system.traits.dr.custom"
+          ]
+        },
+        {
+          "entryId": "5a885259-504c-57a4-b79e-a227c75f4300",
+          "effectId": "8oJGOvksocvoVzVE",
+          "name": "Halfling Nimbleness",
+          "targets": [
+            "flags.dnd5e.halflingNimbleness"
+          ]
+        },
+        {
+          "entryId": "8a202475-985d-5750-9eb5-0f1e21777373",
+          "effectId": "uG46N3C6WoFQmW0W",
+          "name": "Lucky",
+          "targets": [
+            "flags.dnd5e.halflingLucky"
+          ]
+        },
+        {
+          "entryId": "44971553-5850-5071-9426-c2a25c98a9c3",
+          "effectId": "HGtTN5utBdoMs37f",
+          "name": "Savage Attacks",
+          "targets": [
+            "flags.dnd5e.meleeCriticalDamageDice"
+          ]
+        },
+        {
+          "entryId": "d630694b-cf6e-5625-bfaf-34e0c0ae520c",
+          "effectId": "95tYhecAl2D69Gtv",
+          "name": "Hammer of Thunderbolts",
+          "targets": [
+            "system.abilities.str.max"
+          ]
+        },
+        {
+          "entryId": "7d96d67e-6f2f-5d7f-9f46-16be1c290d29",
+          "effectId": "IHJhvGPE1KPinh1r",
+          "name": "Oil of Sharpness",
+          "targets": [
+            "system.magicalBonus",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7d96d67e-6f2f-5d7f-9f46-16be1c290d29",
+          "effectId": "L6ERoLhCCv7UsF1b",
+          "name": "Oil of Sharpness",
+          "targets": [
+            "system.magicalBonus",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "29214f22-be6b-5661-a5df-064f0136892a",
+          "effectId": "4OOm3lGF9n4bLHyt",
+          "name": "Oil of Slipperiness",
+          "targets": [
+            "system.traits.di.value",
+            "system.traits.di.value",
+            "system.attributes.movement.ignoredDifficultTerrain"
+          ]
+        },
+        {
+          "entryId": "7299e5d4-9b1e-5e63-98e3-899eeacb4b5a",
+          "effectId": "6sChAuK0HObortfE",
+          "name": "Potion of Diminution",
+          "targets": [
+            "system.bonuses.mwak.damage",
+            "system.bonuses.rwak.damage",
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.str.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "25bc4154-3a0e-5454-8717-89d806fcfeec",
+          "effectId": "SffmmlIyQEG7jM0r",
+          "name": "Potion of Gaseous Form",
+          "targets": [
+            "system.abilities.str.save.roll.mode",
+            "system.abilities.dex.save.roll.mode",
+            "system.abilities.con.save.roll.mode",
+            "system.traits.dr.bypasses"
+          ]
+        },
+        {
+          "entryId": "0abe0734-c518-5182-8017-d3bc0983e82c",
+          "effectId": "HAuNLWE4FAG5lpup",
+          "name": "Potion of Growth",
+          "targets": [
+            "system.bonuses.mwak.damage",
+            "system.bonuses.rwak.damage",
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.str.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "63929273-34fc-531f-8c74-2588c4f9d580",
+          "effectId": "KKcIKvHCHET79fEp",
+          "name": "Potion of Heroism",
+          "targets": [
+            "system.bonuses.abilities.save",
+            "system.bonuses.mwak.attack",
+            "system.bonuses.msak.attack",
+            "system.bonuses.rsak.attack",
+            "system.bonuses.rwak.attack"
+          ]
+        },
+        {
+          "entryId": "7d3eae22-0a66-5710-81b5-0648b21c79d9",
+          "effectId": "PXMOx6wnEh05eAKY",
+          "name": "Potion of Speed",
+          "targets": [
+            "system.abilities.dex.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "a0a3e2e5-2ce2-5987-a6a1-9e497aec4f32",
+          "effectId": "uuh2qSmWVNoHcqTc",
+          "name": "Belt of Dwarvenkind",
+          "targets": [
+            "system.traits.languages.value"
+          ]
+        },
+        {
+          "entryId": "b57d5765-12df-5a6d-ae4a-f792047d276d",
+          "effectId": "ChaLjlYldFzDgHHv",
+          "name": "Bracers of Archery",
+          "targets": [
+            "system.traits.weaponProf.value",
+            "system.traits.weaponProf.value"
+          ]
+        },
+        {
+          "entryId": "8838f785-49a6-54ed-b6c3-1ef9be4ad58b",
+          "effectId": "x6gy8sik893jvxea",
+          "name": "Robe of the Archmagi",
+          "targets": [
+            "system.attributes.ac.armor"
+          ]
+        },
+        {
+          "entryId": "e6c7b4cc-a4b5-53c1-9972-7e0e282d4f9e",
+          "effectId": "potjmpJPeUA1U4oe",
+          "name": "Bane",
+          "targets": [
+            "system.bonuses.abilities.save",
+            "system.bonuses.mwak.attack",
+            "system.bonuses.msak.attack",
+            "system.bonuses.rsak.attack",
+            "system.bonuses.rwak.attack"
+          ]
+        },
+        {
+          "entryId": "fba680b7-5bd3-5bf1-8ec6-7f81eeffcd9c",
+          "effectId": "8rP3gwmXVTgZqYZE",
+          "name": "Bless",
+          "targets": [
+            "system.bonuses.abilities.save",
+            "system.bonuses.mwak.attack",
+            "system.bonuses.msak.attack",
+            "system.bonuses.rsak.attack",
+            "system.bonuses.rwak.attack"
+          ]
+        },
+        {
+          "entryId": "a839db63-efa6-56a2-97bb-8598908da727",
+          "effectId": "YNlbHxIwut5swF2d",
+          "name": "Divine Favor",
+          "targets": [
+            "system.bonuses.rwak.damage",
+            "system.bonuses.mwak.damage"
+          ]
+        },
+        {
+          "entryId": "4c072e65-23e6-5240-b338-3256d7625230",
+          "effectId": "ElS7F2Oh06jeZtpi",
+          "name": "Find Familiar",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "0348dd10-1207-5b89-9571-775aec1c03ab",
+          "effectId": "cfwMU7LuOJ619Lny",
+          "name": "Mage Armor",
+          "targets": [
+            "system.attributes.ac.calc"
+          ]
+        },
+        {
+          "entryId": "a45dbdc1-0a6f-520f-bb51-2bf7aae4517b",
+          "effectId": "YigtHr8dQ0ngnghZ",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "a45dbdc1-0a6f-520f-bb51-2bf7aae4517b",
+          "effectId": "ydbXvjPv1fY3KtbQ",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "a45dbdc1-0a6f-520f-bb51-2bf7aae4517b",
+          "effectId": "W9eUgPnCkGtKvQOk",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "a45dbdc1-0a6f-520f-bb51-2bf7aae4517b",
+          "effectId": "7Zcvgumtxcyz4aj5",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "a45dbdc1-0a6f-520f-bb51-2bf7aae4517b",
+          "effectId": "mRobqRBcu8jtkYc3",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "a45dbdc1-0a6f-520f-bb51-2bf7aae4517b",
+          "effectId": "w1AUEmzJmQI5vaEs",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "a45dbdc1-0a6f-520f-bb51-2bf7aae4517b",
+          "effectId": "lHlCX0dxqfKc54ls",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "a45dbdc1-0a6f-520f-bb51-2bf7aae4517b",
+          "effectId": "Q7ho5m2GWwSVkEs1",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "bcfe7a5c-2d5a-5c31-ba6b-2071e70beb25",
+          "effectId": "uM6rgctYpcbCVSkn",
+          "name": "Barkskin",
+          "targets": [
+            "system.attributes.ac.min"
+          ]
+        },
+        {
+          "entryId": "ee987b67-8c2c-5348-b375-eed7e783a4eb",
+          "effectId": "mEIfHN39NpypxvkS",
+          "name": "Branding Smite",
+          "targets": [
+            "token.light.dim",
+            "token.light.animation.type",
+            "token.light.color"
+          ]
+        },
+        {
+          "entryId": "30c3d0ae-8c09-5137-9f7e-0a77b1818ba2",
+          "effectId": "H4kfOYuc1G4lckzb",
+          "name": "Continual Flame",
+          "targets": [
+            "system.description.value"
+          ]
+        },
+        {
+          "entryId": "30c3d0ae-8c09-5137-9f7e-0a77b1818ba2",
+          "effectId": "mGjF4d035590u5V0",
+          "name": "Continual Flame",
+          "targets": [
+            "token.light.dim",
+            "token.light.bright",
+            "token.light.color",
+            "token.light.animation.type",
+            "token.light.animation.intensity",
+            "token.light.animation.speed"
+          ]
+        },
+        {
+          "entryId": "bdcb024e-ac30-554a-a304-000d9792a451",
+          "effectId": "Tm6GfEu4JKv0pU8U",
+          "name": "Darkness",
+          "targets": [
+            "system.description.value"
+          ]
+        },
+        {
+          "entryId": "bdcb024e-ac30-554a-a304-000d9792a451",
+          "effectId": "xxbzHLlG7wj1GCvI",
+          "name": "Darkness",
+          "targets": [
+            "token.light.negative",
+            "token.light.dim"
+          ]
+        },
+        {
+          "entryId": "67002f50-b998-5ce7-aa9a-0910bdea607e",
+          "effectId": "9qaZQFN5xP8Gig8f",
+          "name": "Darkvision",
+          "targets": [
+            "system.attributes.senses.ranges.darkvision"
+          ]
+        },
+        {
+          "entryId": "81091a8a-ca0f-53a7-8082-bc56d7e54d98",
+          "effectId": "4wHuqQygcUoETdfL",
+          "name": "Enhance Ability",
+          "targets": [
+            "system.abilities.con.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "81091a8a-ca0f-53a7-8082-bc56d7e54d98",
+          "effectId": "dXPiowCzQbenlxaJ",
+          "name": "Enhance Ability",
+          "targets": [
+            "system.abilities.str.check.roll.mode",
+            "system.attributes.encumbrance.multipliers.overall"
+          ]
+        },
+        {
+          "entryId": "81091a8a-ca0f-53a7-8082-bc56d7e54d98",
+          "effectId": "fQYlplRem5XWAYlX",
+          "name": "Enhance Ability",
+          "targets": [
+            "system.abilities.dex.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "81091a8a-ca0f-53a7-8082-bc56d7e54d98",
+          "effectId": "fL5yxySa2tgQR96A",
+          "name": "Enhance Ability",
+          "targets": [
+            "system.abilities.cha.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "81091a8a-ca0f-53a7-8082-bc56d7e54d98",
+          "effectId": "pHwVg5BiH0Z7ysfD",
+          "name": "Enhance Ability",
+          "targets": [
+            "system.abilities.int.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "81091a8a-ca0f-53a7-8082-bc56d7e54d98",
+          "effectId": "FCTEJkHaaxkAeNhQ",
+          "name": "Enhance Ability",
+          "targets": [
+            "system.abilities.wis.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "12a00bd0-c0cf-569d-9864-0693bee52073",
+          "effectId": "iVWIbqSzCYFAQzV6",
+          "name": "Enlarge/Reduce",
+          "targets": [
+            "system.bonuses.mwak.damage",
+            "system.bonuses.rwak.damage",
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.str.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "12a00bd0-c0cf-569d-9864-0693bee52073",
+          "effectId": "rFRjXg3BjmTb5GOh",
+          "name": "Enlarge/Reduce",
+          "targets": [
+            "system.bonuses.mwak.damage",
+            "system.bonuses.rwak.damage",
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.str.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "e03aa698-0b99-5e67-9700-50b6a2480961",
+          "effectId": "sGKbaTfegKKF0zmV",
+          "name": "Enthrall",
+          "targets": [
+            "system.skills.prc.roll.mode"
+          ]
+        },
+        {
+          "entryId": "8c9db383-4930-5484-ba64-dd353511b7e8",
+          "effectId": "QAbEeDGXCby1oGvV",
+          "name": "Find Steed",
+          "targets": [
+            "system.traits.languages.custom",
+            "system.traits.languages.communication.telepathy.value",
+            "system.traits.languages.communication.telepathy.units"
+          ]
+        },
+        {
+          "entryId": "afd8bbf8-38d0-5f9b-a559-94c50fbe47bf",
+          "effectId": "Dg3Qi2SmWyCMpmU4",
+          "name": "Flame Blade",
+          "targets": [
+            "flags.world.flame-blade-damage"
+          ]
+        },
+        {
+          "entryId": "afd8bbf8-38d0-5f9b-a559-94c50fbe47bf",
+          "effectId": "vULxJuCFS32tApK7",
+          "name": "Flame Blade",
+          "targets": [
+            "flags.world.flame-blade-damage"
+          ]
+        },
+        {
+          "entryId": "afd8bbf8-38d0-5f9b-a559-94c50fbe47bf",
+          "effectId": "tpXf44S04mFJMol7",
+          "name": "Flame Blade",
+          "targets": [
+            "flags.world.flame-blade-damage"
+          ]
+        },
+        {
+          "entryId": "afd8bbf8-38d0-5f9b-a559-94c50fbe47bf",
+          "effectId": "BUBEz95PSksSQbVs",
+          "name": "Flame Blade",
+          "targets": [
+            "flags.world.flame-blade-damage"
+          ]
+        },
+        {
+          "entryId": "afd8bbf8-38d0-5f9b-a559-94c50fbe47bf",
+          "effectId": "9TTHVfcjufZowUOr",
+          "name": "Flame Blade",
+          "targets": [
+            "flags.world.flame-blade-damage"
+          ]
+        },
+        {
+          "entryId": "afd8bbf8-38d0-5f9b-a559-94c50fbe47bf",
+          "effectId": "nHmffcGZo11sgPV3",
+          "name": "Flame Blade",
+          "targets": [
+            "flags.world.flame-blade-damage"
+          ]
+        },
+        {
+          "entryId": "afd8bbf8-38d0-5f9b-a559-94c50fbe47bf",
+          "effectId": "JF8ELBI1o8vmfiZA",
+          "name": "Flame Blade",
+          "targets": [
+            "flags.world.flame-blade-damage"
+          ]
+        },
+        {
+          "entryId": "afd8bbf8-38d0-5f9b-a559-94c50fbe47bf",
+          "effectId": "HrBnniYMsaCB4PQz",
+          "name": "Flame Blade",
+          "targets": [
+            "flags.world.flame-blade-damage"
+          ]
+        },
+        {
+          "entryId": "8f1c2511-56d8-512b-a153-365166c2f09a",
+          "effectId": "hPjQYP6nZM06WETE",
+          "name": "Heat Metal",
+          "targets": [
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.dex.check.roll.mode",
+            "system.abilities.con.check.roll.mode",
+            "system.abilities.int.check.roll.mode",
+            "system.abilities.wis.check.roll.mode",
+            "system.abilities.cha.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "d8ffc08a-4336-5f3d-a077-690b32c12f3a",
+          "effectId": "SLSudYaACjmmmZsU",
+          "name": "Magic Weapon",
+          "targets": [
+            "name",
+            "system.properties",
+            "system.magicalBonus"
+          ]
+        },
+        {
+          "entryId": "d8ffc08a-4336-5f3d-a077-690b32c12f3a",
+          "effectId": "8OhsRxK3dF1JeQXO",
+          "name": "Magic Weapon",
+          "targets": [
+            "name",
+            "system.properties",
+            "system.magicalBonus"
+          ]
+        },
+        {
+          "entryId": "d8ffc08a-4336-5f3d-a077-690b32c12f3a",
+          "effectId": "7L1wKfaEdN85IA0Z",
+          "name": "Magic Weapon",
+          "targets": [
+            "name",
+            "system.properties",
+            "system.magicalBonus"
+          ]
+        },
+        {
+          "entryId": "0135d924-41cf-5d6d-96f4-06ddb819528d",
+          "effectId": "I5Cgu5m0knHmdXge",
+          "name": "Mirror Image",
+          "targets": [
+            "flags.world.mirror-image"
+          ]
+        },
+        {
+          "entryId": "0135d924-41cf-5d6d-96f4-06ddb819528d",
+          "effectId": "uFd6X0bNcmjRKqu1",
+          "name": "Mirror Image",
+          "targets": [
+            "flags.world.mirror-image"
+          ]
+        },
+        {
+          "entryId": "0135d924-41cf-5d6d-96f4-06ddb819528d",
+          "effectId": "n89eid0r3Ui0XvJb",
+          "name": "Mirror Image",
+          "targets": [
+            "flags.world.mirror-image"
+          ]
+        },
+        {
+          "entryId": "e69ab436-b563-598d-98a6-db748d6685e0",
+          "effectId": "32YeLueknbdTmm6Y",
+          "name": "Warding Bond",
+          "targets": [
+            "system.traits.dr.value"
+          ]
+        },
+        {
+          "entryId": "b31156c6-a736-56ef-b293-775833d16f8b",
+          "effectId": "rTmKyD87PuzUBGpJ",
+          "name": "Beacon of Hope",
+          "targets": [
+            "system.abilities.wis.save.roll.mode",
+            "system.attributes.death.roll.mode"
+          ]
+        },
+        {
+          "entryId": "5b2aa373-131d-5f67-aedd-5262d0666dbf",
+          "effectId": "OSGSF1Zm61GXLvrC",
+          "name": "Bestow Curse",
+          "targets": [
+            "system.abilities.cha.check.roll.mode",
+            "system.abilities.cha.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "5b2aa373-131d-5f67-aedd-5262d0666dbf",
+          "effectId": "pgBN0brGeJBSc413",
+          "name": "Bestow Curse",
+          "targets": [
+            "system.abilities.con.check.roll.mode",
+            "system.abilities.con.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "5b2aa373-131d-5f67-aedd-5262d0666dbf",
+          "effectId": "RoAMbIx9IUqpNREv",
+          "name": "Bestow Curse",
+          "targets": [
+            "system.abilities.dex.check.roll.mode",
+            "system.abilities.dex.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "5b2aa373-131d-5f67-aedd-5262d0666dbf",
+          "effectId": "KCdm5KtgQkFm9L9b",
+          "name": "Bestow Curse",
+          "targets": [
+            "system.abilities.int.check.roll.mode",
+            "system.abilities.int.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "5b2aa373-131d-5f67-aedd-5262d0666dbf",
+          "effectId": "yO17H6NUUH6yTtJj",
+          "name": "Bestow Curse",
+          "targets": [
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.str.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "5b2aa373-131d-5f67-aedd-5262d0666dbf",
+          "effectId": "yFn5nMRayDT5pVeT",
+          "name": "Bestow Curse",
+          "targets": [
+            "system.abilities.wis.save.roll.mode",
+            "system.abilities.wis.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "05e81198-0268-5d4e-a020-18e53ed6e337",
+          "effectId": "sfKQeT5HoeUFiaBj",
+          "name": "Conjure Animals",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "c6a55a38-4d0f-5809-a662-1e6eb71feb31",
+          "effectId": "pXozRRGkzMMm00kl",
+          "name": "Daylight",
+          "targets": [
+            "system.description.value"
+          ]
+        },
+        {
+          "entryId": "c6a55a38-4d0f-5809-a662-1e6eb71feb31",
+          "effectId": "9QQoXFhnT4bcSEVM",
+          "name": "Daylight",
+          "targets": [
+            "token.light.dim",
+            "token.light.bright",
+            "token.light.animation.type",
+            "token.light.color"
+          ]
+        },
+        {
+          "entryId": "4951c503-5daa-5f82-9c7f-adbaca2a30ff",
+          "effectId": "gICakgyAi1hrs8ug",
+          "name": "Gaseous Form",
+          "targets": [
+            "system.abilities.str.save.roll.mode",
+            "system.abilities.dex.save.roll.mode",
+            "system.abilities.con.save.roll.mode",
+            "system.traits.dr.bypasses"
+          ]
+        },
+        {
+          "entryId": "cd23c0f4-72ef-5710-90a8-eee0f6957c4e",
+          "effectId": "DEPrzDiNHOqKj4Hj",
+          "name": "Haste",
+          "targets": [
+            "system.abilities.dex.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "e73c9c85-abe8-5034-b688-0c4c2565d91b",
+          "effectId": "YtN8kTDQyxFaxpEx",
+          "name": "Slow",
+          "targets": [
+            "system.abilities.dex.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "8b0ca435-5c03-5308-938e-330a646c40d6",
+          "effectId": "9h8p0npULTRN0IDw",
+          "name": "Tongues",
+          "targets": [
+            "system.traits.languages.custom"
+          ]
+        },
+        {
+          "entryId": "ed54446e-c8d6-5945-943b-226ffc6095b8",
+          "effectId": "UEWE8BJT1TE6KDt0",
+          "name": "Conjure Minor Elementals",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "537dba44-a0de-50c5-8065-afda72bb1715",
+          "effectId": "4IJ3RAavRBuB52H9",
+          "name": "Conjure Woodland Beings",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "67cc5430-2012-5ea5-9e2d-07ac9a519188",
+          "effectId": "lVKx8swB08jm6IFE",
+          "name": "Fire Shield",
+          "targets": [
+            "token.light.dim",
+            "token.light.bright",
+            "token.light.animation.type",
+            "token.light.color"
+          ]
+        },
+        {
+          "entryId": "67cc5430-2012-5ea5-9e2d-07ac9a519188",
+          "effectId": "UUXwEKSPX4nYfDzo",
+          "name": "Fire Shield",
+          "targets": [
+            "token.light.dim",
+            "token.light.bright",
+            "token.light.animation.type",
+            "token.light.color"
+          ]
+        },
+        {
+          "entryId": "49c28fe2-e068-5308-b6af-36d448fa6818",
+          "effectId": "OnWa3f4IQ3pneB5T",
+          "name": "Freedom of Movement",
+          "targets": [
+            "system.traits.di.value",
+            "system.traits.di.value",
+            "system.attributes.movement.ignoredDifficultTerrain"
+          ]
+        },
+        {
+          "entryId": "b48efd5c-32df-523b-9828-5503512e0cdc",
+          "effectId": "LRgM5MR01y8ZEi0g",
+          "name": "Secret Chest",
+          "targets": [
+            "system.description.value",
+            "name",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "086cfc46-8796-5d1a-83d0-303cece2b331",
+          "effectId": "cSVCA9h5OEo5lfBE",
+          "name": "Stoneskin",
+          "targets": [
+            "system.traits.dr.bypasses"
+          ]
+        },
+        {
+          "entryId": "c12cc8a5-7fc9-5abc-8b31-d8643c460f25",
+          "effectId": "BjPkBFpp7mZIhyaT",
+          "name": "Awaken",
+          "targets": [
+            "system.traits.languages.custom"
+          ]
+        },
+        {
+          "entryId": "b136983f-bf19-5b84-8461-889a2a10dc12",
+          "effectId": "I4lTsFrmG6W4G5Wo",
+          "name": "Contact Other Plane",
+          "targets": [
+            "system.traits.languages.custom",
+            "system.traits.languages.custom",
+            "system.traits.languages.custom"
+          ]
+        },
+        {
+          "entryId": "44671806-6c49-5f38-9117-92a5a6b233da",
+          "effectId": "i7n9jGZ51Scdwwia",
+          "name": "Contagion",
+          "targets": [
+            "system.abilities.wis.save.roll.mode",
+            "system.abilities.wis.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "44671806-6c49-5f38-9117-92a5a6b233da",
+          "effectId": "hZkALiwlSPABBDSk",
+          "name": "Contagion",
+          "targets": [
+            "system.abilities.str.save.roll.mode",
+            "system.abilities.str.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "44671806-6c49-5f38-9117-92a5a6b233da",
+          "effectId": "1VOSXuEvObGjy3nZ",
+          "name": "Contagion",
+          "targets": [
+            "system.traits.dv.value",
+            "system.abilities.cha.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "44671806-6c49-5f38-9117-92a5a6b233da",
+          "effectId": "S3eSD4rmdbYajX2l",
+          "name": "Contagion",
+          "targets": [
+            "system.abilities.int.save.roll.mode",
+            "system.abilities.int.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "44671806-6c49-5f38-9117-92a5a6b233da",
+          "effectId": "GCyWrky8VpY2W8PA",
+          "name": "Contagion",
+          "targets": [
+            "system.abilities.dex.save.roll.mode",
+            "system.abilities.dex.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "44671806-6c49-5f38-9117-92a5a6b233da",
+          "effectId": "nnfr2kBR5ByV6rdT",
+          "name": "Contagion",
+          "targets": [
+            "system.abilities.con.save.roll.mode",
+            "system.abilities.con.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "58390b0b-301d-50fa-80c8-fd86a9ef3fc2",
+          "effectId": "tiAHzh61HiuYLoYf",
+          "name": "Raise Dead",
+          "targets": [
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "9fbc2925-51d3-5716-ad35-13d89c8016f6",
+          "effectId": "swoj95aPKbfvOvzB",
+          "name": "Scrying",
+          "targets": [
+            "system.activities.ALmQH6xe1eXP4yfS.save.dc.bonus",
+            "system.activities.73BiojjOcZK3adzP.name"
+          ]
+        },
+        {
+          "entryId": "9fbc2925-51d3-5716-ad35-13d89c8016f6",
+          "effectId": "eIRIAOP6mo2CCkgl",
+          "name": "Scrying",
+          "targets": [
+            "system.activities.73BiojjOcZK3adzP.name"
+          ]
+        },
+        {
+          "entryId": "9fbc2925-51d3-5716-ad35-13d89c8016f6",
+          "effectId": "aPR8EiMR9S3wbb1I",
+          "name": "Scrying",
+          "targets": [
+            "system.activities.ALmQH6xe1eXP4yfS.save.dc.bonus",
+            "system.activities.73BiojjOcZK3adzP.name"
+          ]
+        },
+        {
+          "entryId": "9fbc2925-51d3-5716-ad35-13d89c8016f6",
+          "effectId": "sKoP7ypmOp1Wv5m2",
+          "name": "Scrying",
+          "targets": [
+            "system.activities.ALmQH6xe1eXP4yfS.save.dc.bonus",
+            "system.activities.pemgwXnFsWoWUR2e.name"
+          ]
+        },
+        {
+          "entryId": "9fbc2925-51d3-5716-ad35-13d89c8016f6",
+          "effectId": "g6lZ5DEP8bOLRsWZ",
+          "name": "Scrying",
+          "targets": [
+            "system.activities.pemgwXnFsWoWUR2e.name",
+            "system.activities.ALmQH6xe1eXP4yfS.save.dc.bonus"
+          ]
+        },
+        {
+          "entryId": "9fbc2925-51d3-5716-ad35-13d89c8016f6",
+          "effectId": "16QLcS43oSaMOpnz",
+          "name": "Scrying",
+          "targets": [
+            "system.activities.ALmQH6xe1eXP4yfS.save.dc.bonus",
+            "system.activities.pemgwXnFsWoWUR2e.name"
+          ]
+        },
+        {
+          "entryId": "46361624-a0a7-58f3-a4e8-7005c914e980",
+          "effectId": "9nCmXRaDKtOjPZVh",
+          "name": "Heroes' Feast",
+          "targets": [
+            "system.abilities.wis.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "699452a3-6f90-5ed5-8e9b-73cb9013d6c6",
+          "effectId": "l9wtHPpBbSo8cI95",
+          "name": "Instant Summons",
+          "targets": [
+            "system.description.value"
+          ]
+        },
+        {
+          "entryId": "9289beaa-7826-586b-b752-74b63383e81f",
+          "effectId": "xkNK7kGzkmyftFlx",
+          "name": "Irresistible Dance",
+          "targets": [
+            "system.abilities.dex.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "4871b30f-8a7d-55b6-a012-148f1d8347e5",
+          "effectId": "kWBi1D1UMm4XsLgt",
+          "name": "Sunbeam",
+          "targets": [
+            "token.light.dim",
+            "token.light.bright",
+            "token.light.animation.type",
+            "token.light.color"
+          ]
+        },
+        {
+          "entryId": "2cf62137-c595-5b93-9749-2c2c2596b6c9",
+          "effectId": "EurClWVSLFaZFKO8",
+          "name": "True Seeing",
+          "targets": [
+            "system.attributes.senses.ranges.truesight"
+          ]
+        },
+        {
+          "entryId": "c67ea7bc-002e-50b2-9da0-f5afab5e9de3",
+          "effectId": "Ci7AbltSNoXhSBWy",
+          "name": "Wind Walk",
+          "targets": [
+            "system.traits.dr.bypasses"
+          ]
+        },
+        {
+          "entryId": "5b6cba97-82d7-5895-9db5-1d835f792846",
+          "effectId": "ydRvh0MNOPLGsycK",
+          "name": "Resurrection",
+          "targets": [
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "5b6cba97-82d7-5895-9db5-1d835f792846",
+          "effectId": "tqHU3nZQatPgxW7r",
+          "name": "Resurrection",
+          "targets": [
+            "system.abilities.str.save.roll.mode",
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.dex.save.roll.mode",
+            "system.abilities.dex.check.roll.mode",
+            "system.abilities.con.save.roll.mode",
+            "system.abilities.con.check.roll.mode",
+            "system.abilities.int.save.roll.mode",
+            "system.abilities.int.check.roll.mode",
+            "system.abilities.wis.save.roll.mode",
+            "system.abilities.wis.check.roll.mode",
+            "system.abilities.cha.save.roll.mode",
+            "system.abilities.cha.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "d5790130-2396-5987-9536-32a9643a9b8d",
+          "effectId": "7DN3i7SSb2unFuKJ",
+          "name": "Sequester",
+          "targets": [
+            "name",
+            "system.description.value"
+          ]
+        },
+        {
+          "entryId": "975221b7-af81-5b5a-b342-ea63804c3347",
+          "effectId": "9gAmWWC5uTiUuxAI",
+          "name": "Simulacrum",
+          "targets": [
+            "system.attributes.hp.max"
+          ]
+        },
+        {
+          "entryId": "aa98b386-575c-5e01-9e0e-0bcdf9fdf7ec",
+          "effectId": "wBljD0GOI2rgOZgm",
+          "name": "Symbol",
+          "targets": [
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.dex.check.roll.mode",
+            "system.abilities.con.check.roll.mode",
+            "system.abilities.int.check.roll.mode",
+            "system.abilities.wis.check.roll.mode",
+            "system.abilities.cha.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "aa98b386-575c-5e01-9e0e-0bcdf9fdf7ec",
+          "effectId": "Cvg6HrXoZJe9uWQQ",
+          "name": "Symbol",
+          "targets": [
+            "system.traits.languages.custom",
+            "system.traits.languages.custom",
+            "system.traits.languages.custom"
+          ]
+        },
+        {
+          "entryId": "cde12802-826d-5062-8102-f01cb16acf39",
+          "effectId": "flpBCg1pgZchf5Hz",
+          "name": "Feeblemind",
+          "targets": [
+            "system.traits.languages.custom"
+          ]
+        },
+        {
+          "entryId": "6723cb5c-3364-557c-b17e-a05b9b017558",
+          "effectId": "fDvXuZj3U8Lgi7t2",
+          "name": "Glibness",
+          "targets": [
+            "system.abilities.cha.check.roll.min"
+          ]
+        },
+        {
+          "entryId": "1a522f65-7955-5c12-a878-6f4f3cff0e55",
+          "effectId": "vtInaQPPgrwFw8iq",
+          "name": "Holy Aura",
+          "targets": [
+            "system.abilities.str.save.roll.mode",
+            "system.abilities.dex.save.roll.mode",
+            "system.abilities.con.save.roll.mode",
+            "system.abilities.int.save.roll.mode",
+            "system.abilities.wis.save.roll.mode",
+            "system.abilities.cha.save.roll.mode",
+            "token.light.dim",
+            "token.light.animation.type",
+            "token.light.color"
+          ]
+        },
+        {
+          "entryId": "d5a7226e-b3ef-53af-b690-79d458fb0d73",
+          "effectId": "UTG8MneezBrTcBGo",
+          "name": "Foresight",
+          "targets": [
+            "system.abilities.str.save.roll.mode",
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.dex.save.roll.mode",
+            "system.abilities.dex.check.roll.mode",
+            "system.abilities.con.save.roll.mode",
+            "system.abilities.con.check.roll.mode",
+            "system.abilities.int.save.roll.mode",
+            "system.abilities.int.check.roll.mode",
+            "system.abilities.wis.save.roll.mode",
+            "system.abilities.wis.check.roll.mode",
+            "system.abilities.cha.save.roll.mode",
+            "system.abilities.cha.check.roll.mode",
+            "system.traits.ci.value"
+          ]
+        },
+        {
+          "entryId": "c902f438-c7b9-5959-874a-6841d242f319",
+          "effectId": "aLW7iyRM1lOAv7kn",
+          "name": "Wish",
+          "targets": [
+            "system.abilities.str.value"
+          ]
+        },
+        {
+          "entryId": "2e0dbe33-428a-58d5-baab-30885c557b3b",
+          "effectId": "QPsqj6jfS0iXSrTs",
+          "name": "Shillelagh",
+          "targets": [
+            "name",
+            "system.damage.base.number",
+            "system.damage.base.denomination",
+            "system.properties"
+          ]
+        }
+      ],
+      "effectTemplates": 262,
+      "passiveEffects": 44
+    },
+    "2024": {
+      "entries": 1276,
+      "derived": [],
+      "advancements": {
+        "ScaleValue": 42,
+        "ItemGrant": 212,
+        "AbilityScoreImprovement": 78,
+        "HitPoints": 12,
+        "Trait": 102,
+        "Subclass": 12,
+        "ItemChoice": 20,
+        "Size": 14
+      },
+      "unresolved": [
+        {
+          "entryId": "4f74435d-8793-529d-beee-4692d7196a4b",
+          "entryName": "Barbarian",
+          "edition": "2024",
+          "advancementId": "c07WAYE7J6zHt0yk",
+          "type": "ItemGrant",
+          "name": "Unarmed Strike",
+          "reason": "not-in-licensed-catalog",
+          "reference": "Compendium.dnd5e.equipment24.Item.phbUnarmedStrike"
+        },
+        {
+          "entryId": "03c9a7da-7b55-5684-8099-df9562fb6b97",
+          "entryName": "Monk",
+          "edition": "2024",
+          "advancementId": "IeCvD9wvP0cOa6kt",
+          "type": "ItemGrant",
+          "name": "Unarmed Strike",
+          "reason": "not-in-licensed-catalog",
+          "reference": "Compendium.dnd5e.classes24.Item.phbmnkUnarmedStr"
+        },
+        {
+          "entryId": "03c9a7da-7b55-5684-8099-df9562fb6b97",
+          "entryName": "Monk",
+          "edition": "2024",
+          "advancementId": "H32KYn1ozuG9jgYH",
+          "type": "ItemGrant",
+          "name": "Unresolved benefit",
+          "reason": "not-in-licensed-catalog",
+          "reference": "Compendium.dnd5e.classes24.Item.phbmnkSelfrestor"
+        },
+        {
+          "entryId": "b07fe5a8-3851-5c77-8b64-cae6be0415d7",
+          "entryName": "Champion",
+          "edition": "2024",
+          "advancementId": "F4BJnjlTZ7nAuzjg",
+          "type": "ItemChoice",
+          "name": "Unresolved benefit",
+          "reason": "not-in-licensed-catalog",
+          "reference": "Compendium.dnd5e.feats24.Item.phbfstBlindFight"
+        },
+        {
+          "entryId": "b07fe5a8-3851-5c77-8b64-cae6be0415d7",
+          "entryName": "Champion",
+          "edition": "2024",
+          "advancementId": "F4BJnjlTZ7nAuzjg",
+          "type": "ItemChoice",
+          "name": "Unresolved benefit",
+          "reason": "not-in-licensed-catalog",
+          "reference": "Compendium.dnd5e.feats24.Item.phbfstDueling000"
+        },
+        {
+          "entryId": "b07fe5a8-3851-5c77-8b64-cae6be0415d7",
+          "entryName": "Champion",
+          "edition": "2024",
+          "advancementId": "F4BJnjlTZ7nAuzjg",
+          "type": "ItemChoice",
+          "name": "Unresolved benefit",
+          "reason": "not-in-licensed-catalog",
+          "reference": "Compendium.dnd5e.feats24.Item.phbfstIntercepti"
+        },
+        {
+          "entryId": "b07fe5a8-3851-5c77-8b64-cae6be0415d7",
+          "entryName": "Champion",
+          "edition": "2024",
+          "advancementId": "F4BJnjlTZ7nAuzjg",
+          "type": "ItemChoice",
+          "name": "Unresolved benefit",
+          "reason": "not-in-licensed-catalog",
+          "reference": "Compendium.dnd5e.feats24.Item.phbfstProtection"
+        },
+        {
+          "entryId": "b07fe5a8-3851-5c77-8b64-cae6be0415d7",
+          "entryName": "Champion",
+          "edition": "2024",
+          "advancementId": "F4BJnjlTZ7nAuzjg",
+          "type": "ItemChoice",
+          "name": "Unresolved benefit",
+          "reason": "not-in-licensed-catalog",
+          "reference": "Compendium.dnd5e.feats24.Item.phbfstThrownWeap"
+        },
+        {
+          "entryId": "b07fe5a8-3851-5c77-8b64-cae6be0415d7",
+          "entryName": "Champion",
+          "edition": "2024",
+          "advancementId": "F4BJnjlTZ7nAuzjg",
+          "type": "ItemChoice",
+          "name": "Unresolved benefit",
+          "reason": "not-in-licensed-catalog",
+          "reference": "Compendium.dnd5e.feats24.Item.phbfstUnarmedFig"
+        }
+      ],
+      "manualEffects": [
+        {
+          "entryId": "e8e760d0-8b3e-5c59-b5c3-45155f05e1dc",
+          "effectId": "lTOwmIJoE8GLm1oy",
+          "name": "Danger Sense",
+          "targets": [
+            "system.abilities.dex.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "647cea00-2b83-5a61-9f67-d1ed584fa274",
+          "effectId": "ufbJRsGGW3REMmJm",
+          "name": "Primal Knowledge",
+          "targets": [
+            "system.skills.acr.bonuses.check",
+            "system.skills.itm.bonuses.check",
+            "system.skills.prc.bonuses.check",
+            "system.skills.ste.bonuses.check",
+            "system.skills.sur.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "75eb9a0b-21b2-5aa2-a42c-e49ac42cb6d6",
+          "effectId": "G5XZTi4zYTFiHVll",
+          "name": "Rage",
+          "targets": [
+            "system.bonuses.mwak.damage",
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.str.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "a3a6dace-fd86-5177-a1a2-33043765a69c",
+          "effectId": "c7gWn9MMrBQb8ygm",
+          "name": "Jack of All Trades",
+          "targets": [
+            "flags.dnd5e.jackOfAllTrades"
+          ]
+        },
+        {
+          "entryId": "8f2fa48e-f855-5867-b8ea-773d4b6f694f",
+          "effectId": "Mvzn4plDBs9fDfph",
+          "name": "Divine Order: Protector",
+          "targets": [
+            "system.traits.weaponProf.value",
+            "system.traits.armorProf.value"
+          ]
+        },
+        {
+          "entryId": "e67e2cb5-3697-55ac-ad4d-9fd846c26f7d",
+          "effectId": "7fucT9vgkryEEoxI",
+          "name": "Divine Order: Thaumaturge",
+          "targets": [
+            "system.scale.cleric.cantrips-known.value"
+          ]
+        },
+        {
+          "entryId": "ce297f7d-27f4-5461-bb15-def99789a7d2",
+          "effectId": "IqjrvuQ2ORv65hxB",
+          "name": "Primal Order: Magician",
+          "targets": [
+            "system.scale.druid.cantrips-known.value"
+          ]
+        },
+        {
+          "entryId": "c947f095-850f-5996-b294-b3951efb0507",
+          "effectId": "j6MsESItx2TEvDju",
+          "name": "Primal Order: Warden",
+          "targets": [
+            "system.traits.armorProf.value",
+            "system.traits.weaponProf.value"
+          ]
+        },
+        {
+          "entryId": "3ca4b454-514c-51b7-b375-83af73fa5ed5",
+          "effectId": "WWAuOh7qyAZgchmL",
+          "name": "Nature's Ward",
+          "targets": [
+            "system.traits.ci.value"
+          ]
+        },
+        {
+          "entryId": "977da393-ebf5-588b-a02a-9d7c07f914e2",
+          "effectId": "9Dwnc4r39iE997j0",
+          "name": "Tactical Master",
+          "targets": [
+            "system.traits.weaponProf.mastery.bonus",
+            "system.traits.weaponProf.mastery.bonus",
+            "system.traits.weaponProf.mastery.bonus"
+          ]
+        },
+        {
+          "entryId": "cf1c09e3-bc79-56cc-9a10-a10ee009645e",
+          "effectId": "fbCF0jqdt3NMZdkc",
+          "name": "Improved Critical",
+          "targets": [
+            "flags.dnd5e.weaponCriticalThreshold"
+          ]
+        },
+        {
+          "entryId": "ea0d46a1-269d-53e3-b6be-1962fe18bbb7",
+          "effectId": "1f8R9CFfhsetkhF5",
+          "name": "Remarkable Athlete",
+          "targets": [
+            "flags.dnd5e.remarkableAthlete"
+          ]
+        },
+        {
+          "entryId": "2170de4a-6485-5c85-ba03-23cd542f940f",
+          "effectId": "kKOE6KCEE0v4a5lw",
+          "name": "Superior Critical",
+          "targets": [
+            "flags.dnd5e.weaponCriticalThreshold"
+          ]
+        },
+        {
+          "entryId": "08b80cd7-c501-57b7-ab41-11e7e7688802",
+          "effectId": "Js4phYMTL714onqn",
+          "name": "Disciplined Survivor",
+          "targets": [
+            "flags.dnd5e.diamondSoul"
+          ]
+        },
+        {
+          "entryId": "1b6ccf20-c2c8-5fa7-a39e-7036a303cc85",
+          "effectId": "VnV6opO1b3apq6wt",
+          "name": "Martial Arts",
+          "targets": [
+            "system.properties",
+            "system.damage.base.custom.enabled",
+            "system.damage.base.custom.formula",
+            "name"
+          ]
+        },
+        {
+          "entryId": "6d0588b2-82f5-580d-934b-92718a35683d",
+          "effectId": "WOJ5r71FCDRmElea",
+          "name": "Aura of Protection",
+          "targets": [
+            "system.bonuses.abilities.save"
+          ]
+        },
+        {
+          "entryId": "91c86717-c773-5149-97df-045551fbbc89",
+          "effectId": "peNRQizvyp2vL84H",
+          "name": "Radiant Strikes",
+          "targets": [
+            "system.bonuses.mwak.damage"
+          ]
+        },
+        {
+          "entryId": "73635a31-e90e-5b58-b4ac-9bd2c62b1c82",
+          "effectId": "sEWDFOuWn47L5860",
+          "name": "Sacred Weapon",
+          "targets": [
+            "name",
+            "system.damage.base.types",
+            "activities[attack].attack.bonus"
+          ]
+        },
+        {
+          "entryId": "a1348d1b-0d51-54eb-bb40-2c6988386492",
+          "effectId": "TIw25thHBYEPdKR1",
+          "name": "Reliable Talent",
+          "targets": [
+            "flags.dnd5e.reliableTalent"
+          ]
+        },
+        {
+          "entryId": "2f73f295-906e-57f1-85a1-6dc53d9cd727",
+          "effectId": "qPdh1z9RMd6oBcoj",
+          "name": "Second-Story Work",
+          "targets": [
+            "system.attributes.movement.climb"
+          ]
+        },
+        {
+          "entryId": "80b2cad4-38c2-51d5-9e71-e416b9ad60db",
+          "effectId": "FZWFvTtuOvMIj003",
+          "name": "Use Magic Device",
+          "targets": [
+            "system.attributes.attunement.max"
+          ]
+        },
+        {
+          "entryId": "83245922-0d3b-5723-b96b-efe5d268b60e",
+          "effectId": "ZoJYjZ3KGM30khz3",
+          "name": "Draconic Resilience",
+          "targets": [
+            "system.attributes.ac.calc"
+          ]
+        },
+        {
+          "entryId": "2f6a28a0-2df4-5406-98c3-2399ab265f2f",
+          "effectId": "3UaxEJx1X9kDrR65",
+          "name": "Armor of Shadows",
+          "targets": [
+            "system.attributes.ac.calc"
+          ]
+        },
+        {
+          "entryId": "a1fe0a19-0f0e-5579-8d1b-c5618cf2d5af",
+          "effectId": "IY7BiUpe3kGLWk9L",
+          "name": "Eldritch Spear",
+          "targets": [
+            "system.range.value",
+            "name"
+          ]
+        },
+        {
+          "entryId": "2ff74d72-307f-55c1-9c8c-d7ef6b7e232a",
+          "effectId": "QElum2XYhYUYQ5l2",
+          "name": "Pact of the Blade",
+          "targets": [
+            "name",
+            "system.proficient",
+            "system.properties",
+            "system.damage.base.types",
+            "system.damage.base.types",
+            "system.damage.base.types",
+            "system.damage.versatile.types",
+            "system.damage.versatile.types",
+            "system.damage.versatile.types"
+          ]
+        },
+        {
+          "entryId": "16173ecb-e6e9-5b7f-92fc-16369ab87d13",
+          "effectId": "DShZGDAUy0w9RUzS",
+          "name": "Repelling Blast",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "50992bba-a82a-5284-b446-5ecc9a414ec3",
+          "effectId": "FTQVlTQlkrgD3rwq",
+          "name": "Signature Spells",
+          "targets": [
+            "name",
+            "system.preparation.mode"
+          ]
+        },
+        {
+          "entryId": "a5d962dd-c900-50b6-bd8d-5c52157a4081",
+          "effectId": "P5SxPZNi4KPzW8dD",
+          "name": "Spell Mastery",
+          "targets": [
+            "name",
+            "system.preparation.mode"
+          ]
+        },
+        {
+          "entryId": "bbf364e0-28fa-5df5-9d0a-c07ea35c69eb",
+          "effectId": "KNWLGPsZSHtINp6L",
+          "name": "Gnomish Cunning",
+          "targets": [
+            "system.abilities.int.save.roll.mode",
+            "system.abilities.wis.save.roll.mode",
+            "system.abilities.cha.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "8a971414-1490-5685-a92b-3cd0c1841cc4",
+          "effectId": "QI7POclNlvX9a8VD",
+          "name": "Large Form",
+          "targets": [
+            "system.abilities.str.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "dbc39dde-e3ca-59ba-9439-eeaee0c9cbe2",
+          "effectId": "ge1u3EIFvsoj3jZu",
+          "name": "Powerful Build",
+          "targets": [
+            "flags.dnd5e.powerfulBuild"
+          ]
+        },
+        {
+          "entryId": "62be655c-66bd-509a-a65b-fe3db7193fb0",
+          "effectId": "HtNoV5usxEadPbqp",
+          "name": "Halfling Nimbleness",
+          "targets": [
+            "flags.dnd5e.halflingNimbleness"
+          ]
+        },
+        {
+          "entryId": "0462656c-db42-5f88-8e1e-dc78edc6e94a",
+          "effectId": "k1FDpZEBCHzRsFSA",
+          "name": "Luck",
+          "targets": [
+            "flags.dnd5e.halflingLucky"
+          ]
+        },
+        {
+          "entryId": "c805e4cd-b4c4-58fb-bc6b-0840a3874bc1",
+          "effectId": "J4bEaPvFwAGKSrPm",
+          "name": "Berserker Axe",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.attunement",
+            "system.description.value",
+            "system.magicalBonus",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "f67be6b5-cae6-53e9-90ba-de8724390d6d",
+          "effectId": "f0WvHHwmTfdkF3OP",
+          "name": "Dagger of Venom",
+          "targets": [
+            "img",
+            "activities[attack].description.chatFlavor"
+          ]
+        },
+        {
+          "entryId": "a54916b7-db84-5ccf-9820-d11913647f29",
+          "effectId": "WJSS4dAA3wvYZpRx",
+          "name": "Dancing Sword",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.attunement",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "bde3d4df-9d54-595e-834f-e8c549924700",
+          "effectId": "4l1ngEyNnOxpfTGs",
+          "name": "Defender",
+          "targets": [
+            "system.bonuses.mwak.damage",
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "bde3d4df-9d54-595e-834f-e8c549924700",
+          "effectId": "yBwZfNAoRtuUk5mz",
+          "name": "Defender",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.attunement",
+            "system.magicalBonus",
+            "system.rarity",
+            "img",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "bde3d4df-9d54-595e-834f-e8c549924700",
+          "effectId": "jiyXZKFtvIRlZfh2",
+          "name": "Defender",
+          "targets": [
+            "system.bonuses.mwak.damage",
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "bde3d4df-9d54-595e-834f-e8c549924700",
+          "effectId": "v3JBpJJorZfV3fXj",
+          "name": "Defender",
+          "targets": [
+            "system.bonuses.mwak.damage",
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "31077277-356f-5724-9aa6-786995d66615",
+          "effectId": "ZveR6kPKafjcwQdY",
+          "name": "Dragon Slayer",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.magicalBonus",
+            "activities[attack].description.chatFlavor"
+          ]
+        },
+        {
+          "entryId": "f4053f67-04e2-568d-975f-fb4b65411f81",
+          "effectId": "jQnQ2ghbt7j3nWke",
+          "name": "Energy Bow",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.attunement",
+            "system.description.value",
+            "system.properties",
+            "system.properties",
+            "system.magicalBonus",
+            "system.damage.base.types",
+            "system.damage.base.types",
+            "img",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "158fb4bf-e2ef-58f3-8a2c-ee703cac9257",
+          "effectId": "VtBOwsAVipxkP2f5",
+          "name": "Flame Tongue",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.attunement",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "158fb4bf-e2ef-58f3-8a2c-ee703cac9257",
+          "effectId": "MHnAqxEXBhUbnjPq",
+          "name": "Flame Tongue",
+          "targets": [
+            "system.damage.parts",
+            "name"
+          ]
+        },
+        {
+          "entryId": "9988387f-0b31-56df-aaae-daad1619c3d7",
+          "effectId": "KDZFGFsxEOF5WvbJ",
+          "name": "Frost Brand",
+          "targets": [
+            "system.damage.parts",
+            "system.properties",
+            "system.attunement",
+            "system.description.value",
+            "name",
+            "system.rarity",
+            "img"
+          ]
+        },
+        {
+          "entryId": "fb530d73-daaa-52e2-90d2-0cc29063b774",
+          "effectId": "ZwpawARncDIheC65",
+          "name": "Giant Slayer",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.magicalBonus"
+          ]
+        },
+        {
+          "entryId": "e5be09d0-2dd9-5250-81bc-6d020dec9eaa",
+          "effectId": "RSpASIW4HbToM7yC",
+          "name": "Hammer of Thunderbolts",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.attunement",
+            "system.properties",
+            "system.magicalBonus",
+            "system.description.value",
+            "system.price.value",
+            "system.price.denomination",
+            "img"
+          ]
+        },
+        {
+          "entryId": "e5be09d0-2dd9-5250-81bc-6d020dec9eaa",
+          "effectId": "NpHh40FxvJqKojsI",
+          "name": "Hammer of Thunderbolts",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "e5be09d0-2dd9-5250-81bc-6d020dec9eaa",
+          "effectId": "dC3xorzL0AAgy7y1",
+          "name": "Hammer of Thunderbolts",
+          "targets": [
+            "system.abilities.str.value"
+          ]
+        },
+        {
+          "entryId": "48602923-3efc-52a0-b529-d3303cc7feac",
+          "effectId": "I7Iwl7awPq2wftoF",
+          "name": "Holy Avenger",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.rarity",
+            "system.attunement",
+            "system.properties",
+            "system.magicalBonus",
+            "img",
+            "activities[attack].description.chatFlavor",
+            "system.damage.parts"
+          ]
+        },
+        {
+          "entryId": "e765390e-266b-5b74-b64c-93f545fc07dd",
+          "effectId": "3hRQ0o8Q1nmj5WwB",
+          "name": "Luck Blade",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.attunement",
+            "system.magicalBonus",
+            "system.properties",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "0043cfce-c731-5224-90f8-00e2a531ba4c",
+          "effectId": "qiwTWGRINh3WFPaA",
+          "name": "Nine Lives Stealer",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.rarity",
+            "system.properties",
+            "system.attunement",
+            "system.magicalBonus"
+          ]
+        },
+        {
+          "entryId": "5ba5d5cc-e8d3-5457-b7fd-f5eb1ac958ca",
+          "effectId": "L4ylYIFxr0vdht6M",
+          "name": "Oathbow",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.attunement",
+            "system.properties",
+            "img",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "9f6ad300-8a68-5ba1-b245-98a66600af0a",
+          "effectId": "fSXff5Y6ILs6gJT7",
+          "name": "Sword of Life Stealing",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.attunement",
+            "activities[attack].damage.critical.bonus",
+            "system.price.value",
+            "system.price.denomination",
+            "img"
+          ]
+        },
+        {
+          "entryId": "78427d86-5904-56a7-bcc5-a3e285e09ed9",
+          "effectId": "nxid1s2CZrB06HH8",
+          "name": "Sword of Sharpness",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.attunement",
+            "activities[attack].damage.critical.bonus",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "06a978b6-c92a-5597-b59d-90c9fa43bf01",
+          "effectId": "tuFnPbghL64ioL04",
+          "name": "Sword of Wounding",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.attunement",
+            "system.properties",
+            "system.damage.parts",
+            "system.description.value",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "2fcf22da-3e4b-5ee7-afe2-c222d7bdb60d",
+          "effectId": "CzJMRNHYWlVNvnJN",
+          "name": "Vicious Weapon",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.damage.base.bonus",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "0c84fd0a-aa0b-5fef-8c0b-96eb50d0acf4",
+          "effectId": "mxrAgEyDsV2h5jla",
+          "name": "Vorpal Sword",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.attunement",
+            "system.properties",
+            "system.magicalBonus",
+            "img",
+            "system.price.value",
+            "system.price.denomination",
+            "activities[attack].damage.critical.bonus"
+          ]
+        },
+        {
+          "entryId": "4bdb03c9-80c7-5ca1-9bab-6cb776961866",
+          "effectId": "8Fd1n2gyqFB5lLKd",
+          "name": "Weapon, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.magicalBonus",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "4bdb03c9-80c7-5ca1-9bab-6cb776961866",
+          "effectId": "mYkdLd1Ym0LZHNtF",
+          "name": "Weapon, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.magicalBonus",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "4bdb03c9-80c7-5ca1-9bab-6cb776961866",
+          "effectId": "rg5pxhmtyQXBw86a",
+          "name": "Weapon, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.magicalBonus",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "ad84ce2d-5ce7-51b2-a783-fcf4542246ae",
+          "effectId": "5rHVxAXfNzLO5zxx",
+          "name": "Weapon of Warning",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.attunement",
+            "system.description.value",
+            "system.properties",
+            "img",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "a82348f4-0829-5c80-8135-68bab0f1e47d",
+          "effectId": "08fHYdssxOSTW2nC",
+          "name": "Ammunition, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.magicalBonus",
+            "system.rarity"
+          ]
+        },
+        {
+          "entryId": "a82348f4-0829-5c80-8135-68bab0f1e47d",
+          "effectId": "Ck4FgoSL8VjpYhCx",
+          "name": "Ammunition, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.magicalBonus",
+            "system.rarity"
+          ]
+        },
+        {
+          "entryId": "a82348f4-0829-5c80-8135-68bab0f1e47d",
+          "effectId": "cAXvvSaUg544GENu",
+          "name": "Ammunition, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.magicalBonus",
+            "system.rarity"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "4GIkMFeZQHZnfjvq",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.rarity"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "70bFeuTndNorjLBe",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "o4aDyFCK0ekd9w8j",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "AvExH8PizzJN0jSM",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "VRMET3XgPTjBG91L",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "ku2JX8rDga8GUBul",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "ZssaQ07jWS7jFiej",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "3JnW3nSByOVKu1LW",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "ulADMO3yope7gn5R",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "MKSR9zEe2s3qVILa",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "cFNisqoGRSTHYDI4",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "3mSYXVx987sezjuS",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "BsXM9mDyGJ1R754S",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "7b4e5d0c-b566-52fa-89f1-cda7d782d540",
+          "effectId": "4NXhqKrNtDQjBcc8",
+          "name": "Ammunition of Slaying",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "68814554-95de-525b-8600-93af97358e37",
+          "effectId": "qwUNBZRXUAvDcqDw",
+          "name": "Oil of Sharpness",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.magicalBonus"
+          ]
+        },
+        {
+          "entryId": "68814554-95de-525b-8600-93af97358e37",
+          "effectId": "RcpoKs7oJMugW7ib",
+          "name": "Oil of Sharpness",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.magicalBonus"
+          ]
+        },
+        {
+          "entryId": "6780fd11-81ed-584b-8c11-1f06dfdb6266",
+          "effectId": "o6ZuvxhWeXsg50MH",
+          "name": "Pale Tincture",
+          "targets": [
+            "system.attributes.hp.max"
+          ]
+        },
+        {
+          "entryId": "c454ced4-3e93-51f9-bc56-c33d3e397688",
+          "effectId": "GIybtF2qEmtPCOZj",
+          "name": "Potion of Flying",
+          "targets": [
+            "system.attributes.movement.hover"
+          ]
+        },
+        {
+          "entryId": "33bbb018-60f8-52e9-94e3-c356f8b6fae6",
+          "effectId": "dHNT1jBXfvYuNH16",
+          "name": "Potion of Heroism",
+          "targets": [
+            "system.bonuses.abilities.save",
+            "system.bonuses.mwak.attack",
+            "system.bonuses.msak.attack",
+            "system.bonuses.rsak.attack",
+            "system.bonuses.rwak.attack"
+          ]
+        },
+        {
+          "entryId": "3e7d55e5-f418-59c5-8b55-10f9446cda91",
+          "effectId": "nqdPjlPUrizNLhug",
+          "name": "Adamantine Armor",
+          "targets": [
+            "system.properties",
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.rarity",
+            "img",
+            "system.price.value",
+            "system.price.denomination"
+          ]
+        },
+        {
+          "entryId": "3072fe11-c0e2-5a26-8089-68b674a0fc04",
+          "effectId": "6JbAzK6YBkyx73iy",
+          "name": "Armor, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.armor.magicalBonus",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "3072fe11-c0e2-5a26-8089-68b674a0fc04",
+          "effectId": "s6yzQ9QFFOgfttAH",
+          "name": "Armor, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.armor.magicalBonus",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "3072fe11-c0e2-5a26-8089-68b674a0fc04",
+          "effectId": "eyS8vFIbKlo0Sbci",
+          "name": "Armor, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.armor.magicalBonus",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1ea31cbd-dd42-5180-99e8-ec639849d873",
+          "effectId": "YreDFSu9z9mGCWt1",
+          "name": "Armor of Resistance",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.rarity",
+            "system.attunement",
+            "img",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1ea31cbd-dd42-5180-99e8-ec639849d873",
+          "effectId": "LTByr2rsRPBLLOA0",
+          "name": "Armor of Resistance",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.rarity",
+            "system.attunement",
+            "img",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1ea31cbd-dd42-5180-99e8-ec639849d873",
+          "effectId": "MqubvD3XEwB7DRST",
+          "name": "Armor of Resistance",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.rarity",
+            "system.attunement",
+            "img",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1ea31cbd-dd42-5180-99e8-ec639849d873",
+          "effectId": "lsPKUk288Jkvahsp",
+          "name": "Armor of Resistance",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.rarity",
+            "system.attunement",
+            "img",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1ea31cbd-dd42-5180-99e8-ec639849d873",
+          "effectId": "18IZ8X8zpDXyN33T",
+          "name": "Armor of Resistance",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.rarity",
+            "system.attunement",
+            "img",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1ea31cbd-dd42-5180-99e8-ec639849d873",
+          "effectId": "CfxFdUSiXkOUXym6",
+          "name": "Armor of Resistance",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.rarity",
+            "system.attunement",
+            "img",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1ea31cbd-dd42-5180-99e8-ec639849d873",
+          "effectId": "VST1qNRu1dHDzkD2",
+          "name": "Armor of Resistance",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.rarity",
+            "system.attunement",
+            "img",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1ea31cbd-dd42-5180-99e8-ec639849d873",
+          "effectId": "mmp5O2pZOxJUc2vq",
+          "name": "Armor of Resistance",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.rarity",
+            "system.attunement",
+            "img",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1ea31cbd-dd42-5180-99e8-ec639849d873",
+          "effectId": "jyWNVNHLYdxvCOQz",
+          "name": "Armor of Resistance",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.rarity",
+            "system.attunement",
+            "img",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1ea31cbd-dd42-5180-99e8-ec639849d873",
+          "effectId": "cbsuJ2tdbBuT5e8U",
+          "name": "Armor of Resistance",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.rarity",
+            "system.attunement",
+            "img",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "6c95dc74-adc3-5f4a-ba69-174001fbc357",
+          "effectId": "4JvSdW6SAx9uNYFH",
+          "name": "Armor of Vulnerability",
+          "targets": [
+            "system.traits.dr.value"
+          ]
+        },
+        {
+          "entryId": "6c95dc74-adc3-5f4a-ba69-174001fbc357",
+          "effectId": "DiTXdHv9zE9HriKI",
+          "name": "Armor of Vulnerability",
+          "targets": [
+            "system.traits.dv.value"
+          ]
+        },
+        {
+          "entryId": "6c95dc74-adc3-5f4a-ba69-174001fbc357",
+          "effectId": "4htDgvx8qAmPJhBP",
+          "name": "Armor of Vulnerability",
+          "targets": [
+            "system.traits.dv.value"
+          ]
+        },
+        {
+          "entryId": "6c95dc74-adc3-5f4a-ba69-174001fbc357",
+          "effectId": "QVheA9fgaTW5uRtU",
+          "name": "Armor of Vulnerability",
+          "targets": [
+            "name",
+            "system.unidentified.name",
+            "system.rarity",
+            "system.description.value",
+            "system.unidentified.description",
+            "system.price.value",
+            "system.price.denomination",
+            "system.properties",
+            "system.attunement"
+          ]
+        },
+        {
+          "entryId": "6c95dc74-adc3-5f4a-ba69-174001fbc357",
+          "effectId": "4KXFIUxwNwLeiv3C",
+          "name": "Armor of Vulnerability",
+          "targets": [
+            "name",
+            "system.unidentified.name",
+            "system.rarity",
+            "system.description.value",
+            "system.unidentified.description",
+            "system.price.value",
+            "system.price.denomination",
+            "system.properties",
+            "system.attunement"
+          ]
+        },
+        {
+          "entryId": "6c95dc74-adc3-5f4a-ba69-174001fbc357",
+          "effectId": "UYTGevaFyP6CwE4W",
+          "name": "Armor of Vulnerability",
+          "targets": [
+            "name",
+            "system.unidentified.name",
+            "system.rarity",
+            "system.description.value",
+            "system.unidentified.description",
+            "system.price.value",
+            "system.price.denomination",
+            "system.properties",
+            "system.attunement"
+          ]
+        },
+        {
+          "entryId": "4f6e6366-26f5-5453-97e8-433cb9cbc322",
+          "effectId": "rkijTbDVcBViZ8hs",
+          "name": "Demon Armor",
+          "targets": [
+            "name",
+            "system.description.value",
+            "system.properties",
+            "system.attunement",
+            "system.armor.magicalBonus",
+            "system.rarity",
+            "system.price.value",
+            "system.unidentified.description",
+            "img"
+          ]
+        },
+        {
+          "entryId": "4f6e6366-26f5-5453-97e8-433cb9cbc322",
+          "effectId": "pcxBoqMaubd365yy",
+          "name": "Demon Armor",
+          "targets": [
+            "system.traits.languages.value"
+          ]
+        },
+        {
+          "entryId": "e603f575-ec6b-5e8b-b4b5-336402f9de68",
+          "effectId": "8E4SvTACyo0LzFBk",
+          "name": "Dwarven Plate",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.armor.magicalBonus",
+            "system.properties"
+          ]
+        },
+        {
+          "entryId": "5bcd6c7e-1e36-563d-a29a-a7b0e7ce4bd2",
+          "effectId": "nrk34InFS4POIYtq",
+          "name": "Elven Chain",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.proficient",
+            "system.armor.magicalBonus"
+          ]
+        },
+        {
+          "entryId": "750ecb68-9b98-5b1a-a1a6-b9dabdd4837b",
+          "effectId": "iopwvJrcnzObDYSR",
+          "name": "Mithral Armor",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.strength",
+            "system.properties",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1ee532c2-a5fc-518a-9481-db118620029b",
+          "effectId": "Y44mAwCmfNroVwOJ",
+          "name": "Plate Armor of Etherealness",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.attunement",
+            "system.properties",
+            "img",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1bf9d359-ddef-5e2b-b3c5-3d3cdd671c9d",
+          "effectId": "HNruvcSEl25DRvjj",
+          "name": "Belt of Dwarvenkind",
+          "targets": [
+            "system.traits.languages.value",
+            "system.abilities.con.value"
+          ]
+        },
+        {
+          "entryId": "89575823-b775-5c51-922f-99a48170f434",
+          "effectId": "jm5ygTiAc2Vn7LNY",
+          "name": "Boots of the Winterlands",
+          "targets": [
+            "system.attributes.movement.ignoredDifficultTerrain",
+            "system.attributes.movement.ignoredDifficultTerrain"
+          ]
+        },
+        {
+          "entryId": "def7cf81-4efe-533c-9190-b6b70fcd7ab8",
+          "effectId": "qoOJIw0gTdN8DBKB",
+          "name": "Bracers of Archery",
+          "targets": [
+            "system.traits.weaponProf.value",
+            "system.traits.weaponProf.value"
+          ]
+        },
+        {
+          "entryId": "def7cf81-4efe-533c-9190-b6b70fcd7ab8",
+          "effectId": "PSGGfFEy4CjBVzyX",
+          "name": "Bracers of Archery",
+          "targets": [
+            "system.bonuses.rwak.damage"
+          ]
+        },
+        {
+          "entryId": "dc5fe408-8a2c-5a6d-9d34-da63cc30f3f1",
+          "effectId": "fMC3o8l8D2GamPbU",
+          "name": "Onyx Dog",
+          "targets": [
+            "system.traits.languages.value"
+          ]
+        },
+        {
+          "entryId": "0339b320-8a7d-57c9-9960-da24f5c06b19",
+          "effectId": "hFWmlSeGZKjnB2ZE",
+          "name": "Helm of Telepathy",
+          "targets": [
+            "system.traits.languages.custom"
+          ]
+        },
+        {
+          "entryId": "5a5a9290-679a-5ef6-948b-9438c4b3433e",
+          "effectId": "AYtAkgcEHRws0Qeo",
+          "name": "Horseshoes of a Zephyr",
+          "targets": [
+            "system.attributes.movement.ignoredDifficultTerrain"
+          ]
+        },
+        {
+          "entryId": "fa7b5c09-1732-5253-8b6c-de4afd722c3d",
+          "effectId": "7W1n7zchV0g7BKyq",
+          "name": "Manual of Bodily Health",
+          "targets": [
+            "system.abilities.con.max"
+          ]
+        },
+        {
+          "entryId": "96f8e1b1-5bb4-5d5e-892c-2eb1a55700c7",
+          "effectId": "ME2J4WX5cDLqGWDW",
+          "name": "Manual of Gainful Exercise",
+          "targets": [
+            "system.abilities.str.max"
+          ]
+        },
+        {
+          "entryId": "ade163a1-6e04-5d6a-87da-5353fd256773",
+          "effectId": "yjQAL2g65jahNoBP",
+          "name": "Manual of Quickness of Action",
+          "targets": [
+            "system.abilities.dex.max"
+          ]
+        },
+        {
+          "entryId": "23c3007a-370f-5271-b98b-88d06c3d8ecd",
+          "effectId": "4dTBPTD5GinKr7kC",
+          "name": "Ring of Free Action",
+          "targets": [
+            "system.attributes.movement.ignoredDifficultTerrain"
+          ]
+        },
+        {
+          "entryId": "81459cef-b58d-53f5-aa73-ac0998224f49",
+          "effectId": "dBl3gfYXWn7YguDb",
+          "name": "Ring of Resistance",
+          "targets": [
+            "name",
+            "img",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "81459cef-b58d-53f5-aa73-ac0998224f49",
+          "effectId": "P5fYc9OEg5GKGgkR",
+          "name": "Ring of Resistance",
+          "targets": [
+            "name",
+            "img",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "81459cef-b58d-53f5-aa73-ac0998224f49",
+          "effectId": "8IIAYzI3gqAJIBYo",
+          "name": "Ring of Resistance",
+          "targets": [
+            "name",
+            "img",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "81459cef-b58d-53f5-aa73-ac0998224f49",
+          "effectId": "ivnRnslXhD6UZH0L",
+          "name": "Ring of Resistance",
+          "targets": [
+            "name",
+            "img",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "81459cef-b58d-53f5-aa73-ac0998224f49",
+          "effectId": "96wcenml9tk62g37",
+          "name": "Ring of Resistance",
+          "targets": [
+            "name",
+            "img",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "81459cef-b58d-53f5-aa73-ac0998224f49",
+          "effectId": "9r8SX6QYbeLa780J",
+          "name": "Ring of Resistance",
+          "targets": [
+            "name",
+            "img",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "81459cef-b58d-53f5-aa73-ac0998224f49",
+          "effectId": "msSwrsX2i4sCvhLa",
+          "name": "Ring of Resistance",
+          "targets": [
+            "name",
+            "img",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "81459cef-b58d-53f5-aa73-ac0998224f49",
+          "effectId": "ls5HwdyGS36zGNsf",
+          "name": "Ring of Resistance",
+          "targets": [
+            "name",
+            "img",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "81459cef-b58d-53f5-aa73-ac0998224f49",
+          "effectId": "zgCVJEc1e9dCj7Ut",
+          "name": "Ring of Resistance",
+          "targets": [
+            "name",
+            "img",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "81459cef-b58d-53f5-aa73-ac0998224f49",
+          "effectId": "JA9aLSXZ6W3O0W9l",
+          "name": "Ring of Resistance",
+          "targets": [
+            "name",
+            "img",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "14fd7e73-f39e-5280-8bd6-5c72322c7de3",
+          "effectId": "pYCleIMCUWOJPtF9",
+          "name": "Robe of the Archmagi",
+          "targets": [
+            "system.attributes.ac.calc",
+            "system.attributes.ac.formula"
+          ]
+        },
+        {
+          "entryId": "559fbbaf-4dd9-557b-a791-db06224290c2",
+          "effectId": "nDtcdGVAy36CP4Wn",
+          "name": "Tome of Clear Thought",
+          "targets": [
+            "system.abilities.int.max"
+          ]
+        },
+        {
+          "entryId": "3742a665-d9ae-51fe-9837-cad441a0fb7d",
+          "effectId": "9npFjYvEL3twc99F",
+          "name": "Tome of Leadership and Influence",
+          "targets": [
+            "system.abilities.cha.max"
+          ]
+        },
+        {
+          "entryId": "3ee807d6-20e6-5437-913c-3bc0c575f4db",
+          "effectId": "jXvtCEBoDCydH8fa",
+          "name": "Tome of Understanding",
+          "targets": [
+            "system.abilities.wis.max"
+          ]
+        },
+        {
+          "entryId": "b82f240c-b324-5698-a2a6-2e82a4bb1731",
+          "effectId": "UaQkN55ZMKSt9LGT",
+          "name": "Wand of the War Mage, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.price.value",
+            "system.properties",
+            "system.attunement",
+            "system.magicalBonus",
+            "img"
+          ]
+        },
+        {
+          "entryId": "b82f240c-b324-5698-a2a6-2e82a4bb1731",
+          "effectId": "jqNFw2MJ4B1HG257",
+          "name": "Wand of the War Mage, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.price.value",
+            "system.properties",
+            "system.attunement",
+            "system.magicalBonus",
+            "img"
+          ]
+        },
+        {
+          "entryId": "b82f240c-b324-5698-a2a6-2e82a4bb1731",
+          "effectId": "kejXxpJFzlSWcpm1",
+          "name": "Wand of the War Mage, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.price.value",
+            "system.properties",
+            "system.attunement",
+            "system.magicalBonus",
+            "img"
+          ]
+        },
+        {
+          "entryId": "27f3fd4e-b4d8-59b0-890f-cba7f97eeafa",
+          "effectId": "GTBlnwp18lMmlhNY",
+          "name": "Dragon Scale Mail",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "27f3fd4e-b4d8-59b0-890f-cba7f97eeafa",
+          "effectId": "oAMZPSz9ScJ9kzJS",
+          "name": "Dragon Scale Mail",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "27f3fd4e-b4d8-59b0-890f-cba7f97eeafa",
+          "effectId": "YnovzwTfQAEO8okl",
+          "name": "Dragon Scale Mail",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "27f3fd4e-b4d8-59b0-890f-cba7f97eeafa",
+          "effectId": "SXYzllaQnbyxFGJu",
+          "name": "Dragon Scale Mail",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "27f3fd4e-b4d8-59b0-890f-cba7f97eeafa",
+          "effectId": "7R5dtsUNiWZhXhS3",
+          "name": "Dragon Scale Mail",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "27f3fd4e-b4d8-59b0-890f-cba7f97eeafa",
+          "effectId": "kwIXULk6aDknIZnv",
+          "name": "Dragon Scale Mail",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "27f3fd4e-b4d8-59b0-890f-cba7f97eeafa",
+          "effectId": "4MsmIVyXTFt4AKuD",
+          "name": "Dragon Scale Mail",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "27f3fd4e-b4d8-59b0-890f-cba7f97eeafa",
+          "effectId": "WnwsmlBDChjhXgAj",
+          "name": "Dragon Scale Mail",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "27f3fd4e-b4d8-59b0-890f-cba7f97eeafa",
+          "effectId": "wVh8ceMKvVud2qyr",
+          "name": "Dragon Scale Mail",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "27f3fd4e-b4d8-59b0-890f-cba7f97eeafa",
+          "effectId": "QzV7iJWMlEePDrjN",
+          "name": "Dragon Scale Mail",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "1f10a480-0775-5934-a5b7-9af18f3b934d",
+          "effectId": "9X6TAHEQJAzN96cl",
+          "name": "Shield, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.armor.magicalBonus",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1f10a480-0775-5934-a5b7-9af18f3b934d",
+          "effectId": "86wCNLX808Ta78E8",
+          "name": "Shield, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.armor.magicalBonus",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "1f10a480-0775-5934-a5b7-9af18f3b934d",
+          "effectId": "wLuGENzFYPzafiq7",
+          "name": "Shield, +1, +2, or +3",
+          "targets": [
+            "name",
+            "system.rarity",
+            "system.description.value",
+            "system.properties",
+            "system.armor.magicalBonus",
+            "system.price.value"
+          ]
+        },
+        {
+          "entryId": "8bd57eab-806e-57b1-b23c-f75724080561",
+          "effectId": "uvZy4Zzi0oPd54qs",
+          "name": "Alert",
+          "targets": [
+            "flags.dnd5e.initiativeAlert"
+          ]
+        },
+        {
+          "entryId": "5ff726fc-6b51-54e5-b112-ddd56c0b869c",
+          "effectId": "7g3RcuidZG1x5Mvm",
+          "name": "Bane",
+          "targets": [
+            "system.bonuses.abilities.save",
+            "system.bonuses.mwak.attack",
+            "system.bonuses.msak.attack",
+            "system.bonuses.rsak.attack",
+            "system.bonuses.rwak.attack"
+          ]
+        },
+        {
+          "entryId": "a89d16bb-920c-5c63-a824-1d4594623c98",
+          "effectId": "1dzvDffEh8wZ0oQy",
+          "name": "Bless",
+          "targets": [
+            "system.bonuses.abilities.save",
+            "system.bonuses.mwak.attack",
+            "system.bonuses.msak.attack",
+            "system.bonuses.rsak.attack",
+            "system.bonuses.rwak.attack"
+          ]
+        },
+        {
+          "entryId": "3a6d20aa-4ed2-5269-862e-15f11c1c4643",
+          "effectId": "ANhwNb9xKRpWs4Q2",
+          "name": "Comprehend Languages",
+          "targets": [
+            "system.traits.languages.value"
+          ]
+        },
+        {
+          "entryId": "4fb35ca0-2dec-5932-99ae-eb95aec44be4",
+          "effectId": "xvEfaqPYJUNKaM58",
+          "name": "Divine Favor",
+          "targets": [
+            "system.bonuses.mwak.damage",
+            "system.bonuses.rwak.damage"
+          ]
+        },
+        {
+          "entryId": "d0b4a032-1ea2-5542-9040-cc72ce876259",
+          "effectId": "ljMTBKPVmEnLPX1b",
+          "name": "Hex",
+          "targets": [
+            "system.abilities.str.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "d0b4a032-1ea2-5542-9040-cc72ce876259",
+          "effectId": "Mmss2SPIy7wtt2PV",
+          "name": "Hex",
+          "targets": [
+            "system.abilities.dex.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "d0b4a032-1ea2-5542-9040-cc72ce876259",
+          "effectId": "XVQwGWbC0A1svBNm",
+          "name": "Hex",
+          "targets": [
+            "system.abilities.con.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "d0b4a032-1ea2-5542-9040-cc72ce876259",
+          "effectId": "FfVB2Yyb7wfgpsQB",
+          "name": "Hex",
+          "targets": [
+            "system.abilities.int.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "d0b4a032-1ea2-5542-9040-cc72ce876259",
+          "effectId": "k2569xtIeXKRReLU",
+          "name": "Hex",
+          "targets": [
+            "system.abilities.wis.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "d0b4a032-1ea2-5542-9040-cc72ce876259",
+          "effectId": "sC2IXWDs07oTt5JN",
+          "name": "Hex",
+          "targets": [
+            "system.abilities.cha.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "df07a453-3749-57b8-bb45-a31e4a8ddac6",
+          "effectId": "I59O22yjAwzqZOhN",
+          "name": "Mage Armor",
+          "targets": [
+            "system.attributes.ac.calc"
+          ]
+        },
+        {
+          "entryId": "6430659f-bac2-5b18-acdf-246bf3d120a9",
+          "effectId": "lHx55SIuimKR3ALR",
+          "name": "Speak with Animals",
+          "targets": [
+            "system.traits.languages.custom"
+          ]
+        },
+        {
+          "entryId": "4dabfda4-f2a3-5cc6-9717-34e7630000a3",
+          "effectId": "XyGKCCrIhrFlixG8",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "4dabfda4-f2a3-5cc6-9717-34e7630000a3",
+          "effectId": "cTNQ2KRJLj4CRpQJ",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "4dabfda4-f2a3-5cc6-9717-34e7630000a3",
+          "effectId": "6hOGzq87iQntkHE5",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "4dabfda4-f2a3-5cc6-9717-34e7630000a3",
+          "effectId": "Fs7zeTW4u9SvteWO",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "4dabfda4-f2a3-5cc6-9717-34e7630000a3",
+          "effectId": "o1Gvp7nIrEHqdn3g",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "4dabfda4-f2a3-5cc6-9717-34e7630000a3",
+          "effectId": "n4jjrd9bNOaDkos7",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "4dabfda4-f2a3-5cc6-9717-34e7630000a3",
+          "effectId": "EHMDA2J47jwUUTKu",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "4dabfda4-f2a3-5cc6-9717-34e7630000a3",
+          "effectId": "YnQP5Rd6w5NwZVLN",
+          "name": "Aid",
+          "targets": [
+            "system.attributes.hp.tempmax"
+          ]
+        },
+        {
+          "entryId": "9e05245a-f0f9-56f0-928d-c85d4c7e1083",
+          "effectId": "6SL9vuAkx7nAfS5D",
+          "name": "Alter Self",
+          "targets": [
+            "system.attributes.movement.swim"
+          ]
+        },
+        {
+          "entryId": "e3811e27-2a73-5952-9844-224cba10fa1e",
+          "effectId": "Vq0t8ts0lfPoGx6U",
+          "name": "Barkskin",
+          "targets": [
+            "system.attributes.ac.min"
+          ]
+        },
+        {
+          "entryId": "06cec82d-9646-557e-9019-f236c3e6f92f",
+          "effectId": "gg9dU0SnvU03C803",
+          "name": "Enhance Ability",
+          "targets": [
+            "system.abilities.str.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "06cec82d-9646-557e-9019-f236c3e6f92f",
+          "effectId": "GGEj4zNginSIp6VV",
+          "name": "Enhance Ability",
+          "targets": [
+            "system.abilities.dex.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "06cec82d-9646-557e-9019-f236c3e6f92f",
+          "effectId": "NTaFTBr1uam93jHS",
+          "name": "Enhance Ability",
+          "targets": [
+            "system.abilities.int.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "06cec82d-9646-557e-9019-f236c3e6f92f",
+          "effectId": "EGnngHgGBzTyThW6",
+          "name": "Enhance Ability",
+          "targets": [
+            "system.abilities.wis.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "06cec82d-9646-557e-9019-f236c3e6f92f",
+          "effectId": "e02u2XLDltCT5D5x",
+          "name": "Enhance Ability",
+          "targets": [
+            "system.abilities.cha.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "00c6ec72-f8de-5763-a3cd-af3b024520ff",
+          "effectId": "Wi2E10l7n6Ka8k6u",
+          "name": "Enlarge/Reduce",
+          "targets": [
+            "system.rolls.damage.mwak.bonus",
+            "system.rolls.damage.rwak.bonus",
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.str.save.roll.mode",
+            "system.traits.size"
+          ]
+        },
+        {
+          "entryId": "00c6ec72-f8de-5763-a3cd-af3b024520ff",
+          "effectId": "NXdtOxX4HvPeodml",
+          "name": "Enlarge/Reduce",
+          "targets": [
+            "system.rolls.damage.mwak.bonus",
+            "system.rolls.damage.rwak.bonus",
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.str.save.roll.mode",
+            "system.traits.size"
+          ]
+        },
+        {
+          "entryId": "82c57cfb-cf4b-5bbb-bd0e-d296cc5ccaa1",
+          "effectId": "IMt1nMPrWppyRYMT",
+          "name": "Magic Weapon",
+          "targets": [
+            "system.properties",
+            "system.magicalBonus",
+            "name"
+          ]
+        },
+        {
+          "entryId": "82c57cfb-cf4b-5bbb-bd0e-d296cc5ccaa1",
+          "effectId": "9zA6SFF8HKk9xNn2",
+          "name": "Magic Weapon",
+          "targets": [
+            "system.properties",
+            "system.magicalBonus",
+            "name"
+          ]
+        },
+        {
+          "entryId": "82c57cfb-cf4b-5bbb-bd0e-d296cc5ccaa1",
+          "effectId": "AJQwm1dgXz7D333k",
+          "name": "Magic Weapon",
+          "targets": [
+            "system.properties",
+            "system.magicalBonus",
+            "name"
+          ]
+        },
+        {
+          "entryId": "c3f2e817-c9a4-5f75-ad18-2dd59a6d8f51",
+          "effectId": "VUqQIaiZoIzxUdf1",
+          "name": "Mirror Image",
+          "targets": [
+            "flags.dnd-players-handbook.mirrorImages"
+          ]
+        },
+        {
+          "entryId": "c3f2e817-c9a4-5f75-ad18-2dd59a6d8f51",
+          "effectId": "XcTQl9DhT9lC3bxI",
+          "name": "Mirror Image",
+          "targets": [
+            "flags.dnd-players-handbook.mirrorImages"
+          ]
+        },
+        {
+          "entryId": "c3f2e817-c9a4-5f75-ad18-2dd59a6d8f51",
+          "effectId": "uMsGEsbEZ2hckOKW",
+          "name": "Mirror Image",
+          "targets": [
+            "flags.dnd-players-handbook.mirrorImages"
+          ]
+        },
+        {
+          "entryId": "43fd6505-158c-51e4-a02a-0ad0ff6cafa3",
+          "effectId": "uaHZaHEalgWa6eoC",
+          "name": "Ray of Enfeeblement",
+          "targets": [
+            "system.bonuses.mwak.damage",
+            "system.bonuses.rwak.damage",
+            "system.bonuses.msak.damage",
+            "system.bonuses.rsak.damage",
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.str.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "efe5fcff-d9b3-5994-bf1f-de7b3718af02",
+          "effectId": "BRwB0T8buWhJAuDx",
+          "name": "See Invisibility",
+          "targets": [
+            "system.attributes.senses.special",
+            "system.attributes.senses.special"
+          ]
+        },
+        {
+          "entryId": "e97a3e1b-92cb-5222-8328-93536d81b7a3",
+          "effectId": "5fziLN2CaamManlf",
+          "name": "Beacon of Hope",
+          "targets": [
+            "system.abilities.wis.save.roll.mode",
+            "system.attributes.death.roll.mode"
+          ]
+        },
+        {
+          "entryId": "31856b4d-24b0-548f-953b-a7ce8f745bb3",
+          "effectId": "2Xjz5PKhyDferpZ7",
+          "name": "Bestow Curse",
+          "targets": [
+            "system.abilities.cha.check.roll.mode",
+            "system.abilities.cha.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "31856b4d-24b0-548f-953b-a7ce8f745bb3",
+          "effectId": "BXWN6AGeNbxrRBUZ",
+          "name": "Bestow Curse",
+          "targets": [
+            "system.abilities.con.check.roll.mode",
+            "system.abilities.con.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "31856b4d-24b0-548f-953b-a7ce8f745bb3",
+          "effectId": "pG5HdDpW8VELR1O3",
+          "name": "Bestow Curse",
+          "targets": [
+            "system.abilities.dex.check.roll.mode",
+            "system.abilities.dex.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "31856b4d-24b0-548f-953b-a7ce8f745bb3",
+          "effectId": "eA7PgIuucNGqZ1AS",
+          "name": "Bestow Curse",
+          "targets": [
+            "system.abilities.int.check.roll.mode",
+            "system.abilities.int.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "31856b4d-24b0-548f-953b-a7ce8f745bb3",
+          "effectId": "m5aRx9iXnJi2WWPU",
+          "name": "Bestow Curse",
+          "targets": [
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.str.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "31856b4d-24b0-548f-953b-a7ce8f745bb3",
+          "effectId": "qLBTtRHOpGfv4IAb",
+          "name": "Bestow Curse",
+          "targets": [
+            "system.abilities.wis.save.roll.mode",
+            "system.abilities.wis.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "dd078a87-a5b4-525d-b830-b80274b095ac",
+          "effectId": "EHFLuTHqI6cXn1zb",
+          "name": "Fly",
+          "targets": [
+            "system.attributes.movement.hover"
+          ]
+        },
+        {
+          "entryId": "0149d869-acd7-5ee7-98cd-67b2ab7b9d35",
+          "effectId": "QeYsfnjEj2T9A3C8",
+          "name": "Gaseous Form",
+          "targets": [
+            "system.attributes.movement.hover",
+            "img",
+            "system.abilities.str.save.roll.mode",
+            "system.abilities.dex.save.roll.mode",
+            "system.abilities.con.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "f64a1633-03f3-5624-8623-f33463363111",
+          "effectId": "NEFWcyysYgsE6de3",
+          "name": "Haste",
+          "targets": [
+            "system.abilities.dex.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "c6e117b6-60a3-58e1-b499-56fe4d8ac9e3",
+          "effectId": "z1lkguBohjqXRSHm",
+          "name": "Slow",
+          "targets": [
+            "system.abilities.dex.bonuses.save"
+          ]
+        },
+        {
+          "entryId": "aba15f4f-c42a-5298-8e14-0be97e05eae1",
+          "effectId": "bmESvtHHL0Su7gn4",
+          "name": "Tongues",
+          "targets": [
+            "system.traits.languages.custom"
+          ]
+        },
+        {
+          "entryId": "fdbb833c-f482-5fca-b578-69f1e1538373",
+          "effectId": "bcTPZ6dJ4kHwaBRD",
+          "name": "Freedom of Movement",
+          "targets": [
+            "system.attributes.movement.ignoredDifficultTerrain"
+          ]
+        },
+        {
+          "entryId": "ab678fd8-61ba-535d-a5ad-a20e6d4a5454",
+          "effectId": "etY0sDrXe6DcFEzc",
+          "name": "Raise Dead",
+          "targets": [
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "ab678fd8-61ba-535d-a5ad-a20e6d4a5454",
+          "effectId": "QUWVMgg2HidYsUxy",
+          "name": "Raise Dead",
+          "targets": [
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "ab678fd8-61ba-535d-a5ad-a20e6d4a5454",
+          "effectId": "vyf4vVVoGkZPyAqa",
+          "name": "Raise Dead",
+          "targets": [
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "ab678fd8-61ba-535d-a5ad-a20e6d4a5454",
+          "effectId": "0EAyGy8YaKbvgvkm",
+          "name": "Raise Dead",
+          "targets": [
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "904df115-e8b5-59ac-a269-db59f139e737",
+          "effectId": "6DciPRMecBWvJCZq",
+          "name": "Telepathic Bond",
+          "targets": [
+            "system.traits.languages.custom"
+          ]
+        },
+        {
+          "entryId": "6dec48e9-a9f7-5b36-b004-13cf61abb10d",
+          "effectId": "NH2gXEd7ryyntWKE",
+          "name": "Contingency",
+          "targets": [
+            "name"
+          ]
+        },
+        {
+          "entryId": "84fd0ee2-b66c-5451-a80e-bc5bf023b789",
+          "effectId": "yuAiVeSve8sEy6JQ",
+          "name": "Wind Walk",
+          "targets": [
+            "system.attributes.movement.hover"
+          ]
+        },
+        {
+          "entryId": "088954b7-5608-5130-bdb5-d7d0e976224f",
+          "effectId": "yC37XvN0jzIDyHTr",
+          "name": "Resurrection",
+          "targets": [
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "088954b7-5608-5130-bdb5-d7d0e976224f",
+          "effectId": "NvAysJa5PCR83GRb",
+          "name": "Resurrection",
+          "targets": [
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "088954b7-5608-5130-bdb5-d7d0e976224f",
+          "effectId": "PO5KOrBEorm2xGGz",
+          "name": "Resurrection",
+          "targets": [
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "088954b7-5608-5130-bdb5-d7d0e976224f",
+          "effectId": "xHPAupRPOI8N2VkA",
+          "name": "Resurrection",
+          "targets": [
+            "system.bonuses.mwak.attack"
+          ]
+        },
+        {
+          "entryId": "2fb34b5d-3697-52b1-9a39-dc2dcab8fd17",
+          "effectId": "csA26qg5YSsji1ZZ",
+          "name": "Holy Aura",
+          "targets": [
+            "system.abilities.str.save.roll.mode",
+            "system.abilities.dex.save.roll.mode",
+            "system.abilities.con.save.roll.mode",
+            "system.abilities.int.save.roll.mode",
+            "system.abilities.wis.save.roll.mode",
+            "system.abilities.cha.save.roll.mode"
+          ]
+        },
+        {
+          "entryId": "cdf89dd8-ed40-5c9e-a8dd-1a853b0b68ec",
+          "effectId": "P3m4C2ZVEsMzgb5q",
+          "name": "Foresight",
+          "targets": [
+            "system.abilities.str.save.roll.mode",
+            "system.abilities.dex.save.roll.mode",
+            "system.abilities.con.save.roll.mode",
+            "system.abilities.int.save.roll.mode",
+            "system.abilities.wis.save.roll.mode",
+            "system.abilities.cha.save.roll.mode",
+            "system.abilities.str.check.roll.mode",
+            "system.abilities.dex.check.roll.mode",
+            "system.abilities.con.check.roll.mode",
+            "system.abilities.int.check.roll.mode",
+            "system.abilities.wis.check.roll.mode",
+            "system.abilities.cha.check.roll.mode"
+          ]
+        },
+        {
+          "entryId": "c572eda3-6faa-55b3-b56d-b3c984e4b66b",
+          "effectId": "f16Ek2U8XKeGL7vB",
+          "name": "Wish",
+          "targets": [
+            "system.abilities.str.value"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "GezMMzvZhWXEYyGm",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.acr.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "y6aODSkiubtFt6Ap",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.ani.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "Vlfh8IFOezrSpeBZ",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.arc.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "sPkLWVpkJ7NqDQT0",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.ath.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "Je4xWElmaiSDsOjU",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.dec.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "cw02ZbuiRn6GyoEv",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.his.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "VsU5vUhMioT9pCwG",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.ins.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "UQixxmOdHUDjVYNh",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.inv.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "Cpte6tynFFJbraX2",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.itm.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "Vl1YSG1DlZvx9nSI",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.med.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "IqxGXju1tYDWoda6",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.nat.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "fCdLUO5DoSIT4wVK",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.per.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "qPowjrduxnzKpH8x",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.prc.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "E4BqoCkyoKLJbGmb",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.prf.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "jVKWknHHFuMwvTct",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.rel.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "pwFahx7uqM4DOgnu",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.slt.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "Vb4iRJ73Nw78UUMW",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.ste.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "20e78d7a-d3bb-55cb-8eb9-cf1a805cb965",
+          "effectId": "A1T0X0DUFIxx3qhE",
+          "name": "Guidance",
+          "targets": [
+            "system.skills.sur.bonuses.check"
+          ]
+        },
+        {
+          "entryId": "b0b36e7d-769e-5afe-9017-895c4f5a4405",
+          "effectId": "QPsqj6jfS0iXSrTs",
+          "name": "Shillelagh",
+          "targets": [
+            "system.damage.base.denomination",
+            "system.damage.base.types",
+            "system.damage.base.number",
+            "name",
+            "system.damage.base.custom.enabled",
+            "activities[attack].attack.ability",
+            "activities[attack].attack.bonus",
+            "system.damage.base.bonus"
+          ]
+        },
+        {
+          "entryId": "b0b36e7d-769e-5afe-9017-895c4f5a4405",
+          "effectId": "Oy8fnNNzPmehxXio",
+          "name": "Shillelagh",
+          "targets": [
+            "system.damage.base.denomination",
+            "system.damage.base.types",
+            "system.damage.base.number",
+            "name",
+            "system.damage.base.custom.enabled",
+            "activities[attack].attack.ability",
+            "activities[attack].attack.bonus",
+            "system.damage.base.bonus"
+          ]
+        },
+        {
+          "entryId": "b0b36e7d-769e-5afe-9017-895c4f5a4405",
+          "effectId": "advnpQaBnsbuv02y",
+          "name": "Shillelagh",
+          "targets": [
+            "system.damage.base.denomination",
+            "system.damage.base.types",
+            "system.damage.base.number",
+            "name",
+            "system.damage.base.custom.enabled",
+            "activities[attack].attack.ability",
+            "activities[attack].attack.bonus",
+            "system.damage.base.bonus"
+          ]
+        },
+        {
+          "entryId": "b0b36e7d-769e-5afe-9017-895c4f5a4405",
+          "effectId": "X9xoN8qHUiCc4SZR",
+          "name": "Shillelagh",
+          "targets": [
+            "system.damage.base.denomination",
+            "system.damage.base.types",
+            "system.damage.base.number",
+            "name",
+            "system.damage.base.custom.enabled",
+            "activities[attack].attack.ability",
+            "activities[attack].attack.bonus",
+            "system.damage.base.bonus"
+          ]
+        },
+        {
+          "entryId": "3f626f04-a374-5fe1-9927-758a1498750b",
+          "effectId": "WUkq6HS8v9DK6fQz",
+          "name": "Thaumaturgy",
+          "targets": [
+            "system.skills.itm.roll.mode"
+          ]
+        },
+        {
+          "entryId": "224f5ef8-f4f4-5dd4-a332-b7c537adfc43",
+          "effectId": "SouQfUgwb9LlUraq",
+          "name": "True Strike",
+          "targets": [
+            "system.damage.base.types",
+            "name",
+            "system.damage.parts",
+            "activities[attack].attack.ability"
+          ]
+        },
+        {
+          "entryId": "224f5ef8-f4f4-5dd4-a332-b7c537adfc43",
+          "effectId": "Zsx8UvC9DmdrA1E1",
+          "name": "True Strike",
+          "targets": [
+            "system.damage.base.types",
+            "name",
+            "system.damage.base.bonus"
+          ]
+        }
+      ],
+      "effectTemplates": 572,
+      "passiveEffects": 125
+    }
+  },
+  "changes": [
+    "Original data representation for Gravewright; no artwork, icons, automation code or premium packs.",
+    "Spell descriptions extracted from official SRD PDFs; other descriptions converted to plain text with runtime macros removed.",
+    "Conservative SRD-name filtering; uncertain variants omitted.",
+    "Descriptions remain English; interface localization does not translate game content.",
+    "Versioned typed formula profiles preserve spellcasting modifiers, healing, temporary HP and explicit cantrip/slot increments; unsupported contextual expressions remain manual.",
+    "Advancement references resolve only to licensed portable entries; unsupported references and contextual effects are explicitly audited. Original Dragonborn breath and Hill Dwarf toughness definitions derive solely from licensed parent SRD text."
+  ]
+}

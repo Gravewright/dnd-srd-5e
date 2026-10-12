@@ -1,0 +1,42 @@
+name: Validate system
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+env:
+  PYTHONUTF8: '1'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
+        with:
+          repository: Gravewright/gravewright
+          ref: b8486abe68c13a042315fcaf7800b51c53a55dec
+          path: host-vtt
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
+        with:
+          version: '0.12.13'
+          python-version: '3.14'
+          enable-cache: true
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24'
+      - run: uv sync --project host-vtt --locked --no-dev
+      - name: Test browser rules and translation integration
+        run: npm test
+        env:
+          GRAVEWRIGHT_TEST_HOST_ROOT: ${{ github.workspace }}/host-vtt
+      - name: Test trusted server rules with isolated storage
+        run: host-vtt/.venv/bin/python server/run_tests.py
+        env:
+          GRAVEWRIGHT_TEST_HOST_ROOT: ${{ github.workspace }}/host-vtt
+      - name: Validate translations, build and check release contents
+        run: |
+          python scripts/validate_locales.py
+          python scripts/build.py
+          python scripts/validate_package.py
+          git diff --exit-code -- system.json
