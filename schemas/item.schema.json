@@ -1,0 +1,479 @@
+{
+  "type": "object",
+  "properties": {
+    "requiresAttunement": {"type": "boolean", "default": false},
+    "magicBonus": {"type": "number", "default": 0},
+    "weaponGroup": {"type": "string"},
+    "baseWeapon": {"type": "string"},
+    "proficiencyMode": {"type": "string", "enum": ["class", "manual"]},
+    "advancement": {"type": "array", "items": {"type": "object"}},
+    "mechanicalTraits": {"type": "object"},
+    "attack_ability": {
+      "type": "string",
+      "enum": [
+        "none",
+        "auto",
+        "str",
+        "dex",
+        "con",
+        "int",
+        "wis",
+        "cha"
+      ],
+      "default": "none"
+    },
+    "proficient": {
+      "type": "boolean",
+      "default": true
+    },
+    "description": {
+      "type": "string",
+      "default": ""
+    },
+    "category": {
+      "type": "string",
+      "default": ""
+    },
+    "subtype": {
+      "type": "string",
+      "default": ""
+    },
+    "damage": {
+      "type": "string",
+      "default": ""
+    },
+    "damage_type": {
+      "type": "string",
+      "default": ""
+    },
+    "versatile": {
+      "type": "string",
+      "default": ""
+    },
+    "attack_type": {
+      "type": "string",
+      "default": ""
+    },
+    "attack_bonus": {
+      "type": "number",
+      "default": 0
+    },
+    "damage_bonus": {
+      "type": "number",
+      "default": 0
+    },
+    "range": {
+      "type": "string",
+      "default": ""
+    },
+    "base_ac": {
+      "type": "number",
+      "default": 10
+    },
+    "armor_type": {
+      "type": "string",
+      "default": ""
+    },
+    "add_dex": {
+      "type": "boolean",
+      "default": true
+    },
+    "max_dex": {
+      "type": "number",
+      "default": 2
+    },
+    "str_req": {
+      "type": "number",
+      "default": 0
+    },
+    "stealth_disadvantage": {
+      "type": "boolean",
+      "default": false
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "uses": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "value",
+            "max"
+          ]
+        }
+      ],
+      "default": 0
+    },
+    "weight": {
+      "type": "number",
+      "default": 0
+    },
+    "cost": {
+      "type": "string",
+      "default": ""
+    },
+    "level": {
+      "type": "number",
+      "default": 0
+    },
+    "school": {
+      "type": "string",
+      "default": ""
+    },
+    "casting_time": {
+      "type": "string",
+      "default": ""
+    },
+    "duration": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "permanent",
+                "rounds",
+                "minutes",
+                "session"
+              ]
+            },
+            "value": {
+              "type": "number"
+            },
+            "expires": {
+              "type": "string",
+              "enum": [
+                "manual",
+                "start",
+                "end"
+              ],
+              "default": "manual"
+            },
+            "sourceActorId": {
+              "type": "string"
+            },
+            "sourceTokenId": {
+              "type": "string"
+            },
+            "remaining": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ]
+        }
+      ],
+      "default": ""
+    },
+    "components": {
+      "type": "object"
+    },
+    "materials": {
+      "type": "string",
+      "default": ""
+    },
+    "concentration": {
+      "type": "boolean",
+      "default": false
+    },
+    "ritual": {
+      "type": "boolean",
+      "default": false
+    },
+    "resolution": {
+      "type": "string",
+      "default": ""
+    },
+    "classes": {
+      "type": "string",
+      "default": ""
+    },
+    "higher_levels": {
+      "type": "string",
+      "default": ""
+    },
+    "source": {
+      "type": "string",
+      "default": ""
+    },
+    "prerequisite": {
+      "type": "string",
+      "default": ""
+    },
+    "benefits": {
+      "type": "string",
+      "default": ""
+    },
+    "rulesEdition": {
+      "type": "string",
+      "enum": [
+        "2014",
+        "2024"
+      ]
+    },
+    "spell_ability": {
+      "type": "string",
+      "enum": [
+        "default",
+        "str",
+        "dex",
+        "con",
+        "int",
+        "wis",
+        "cha"
+      ],
+      "default": "default"
+    },
+    "trained": {
+      "type": "boolean",
+      "default": true
+    },
+    "formulaProfile": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "kind": {
+          "enum": [
+            "damage",
+            "healing",
+            "temporary"
+          ]
+        },
+        "base": {
+          "type": "object",
+          "properties": {
+            "dice": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "number": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000
+                  },
+                  "faces": {
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 1000
+                  }
+                },
+                "required": [
+                  "number",
+                  "faces"
+                ]
+              }
+            },
+            "constant": {
+              "type": "number"
+            },
+            "spellModifier": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "dice",
+            "constant",
+            "spellModifier"
+          ]
+        },
+        "critical": {
+          "type": "boolean"
+        },
+        "manual": {
+          "type": "boolean"
+        },
+        "applicationManual": {
+          "type": "boolean"
+        },
+        "scalingManual": {
+          "type": "boolean"
+        },
+        "unit": {
+          "enum": [
+            "beam",
+            "dart"
+          ]
+        },
+        "count": {
+          "type": "object",
+          "properties": {
+            "base": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "scalingmode": {
+              "enum": [
+                "cantrip",
+                "slot"
+              ]
+            },
+            "increment": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "thresholds": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              }
+            },
+            "baseLevel": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9
+            }
+          }
+        },
+        "scaling": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "cantrip",
+                "slot"
+              ]
+            },
+            "dice": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "number": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000
+                  },
+                  "faces": {
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 1000
+                  }
+                },
+                "required": [
+                  "number",
+                  "faces"
+                ]
+              }
+            },
+            "constant": {
+              "type": "number"
+            },
+            "interval": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "thresholds": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              }
+            }
+          },
+          "required": [
+            "mode",
+            "dice",
+            "constant"
+          ]
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "base"
+      ]
+    },
+    "recharge": {
+      "type": "string",
+      "enum": [
+        "none",
+        "short",
+        "long",
+        "turn"
+      ],
+      "default": "none"
+    },
+    "usesGuidance": {
+      "type": "string",
+      "default": ""
+    },
+    "actionType": {
+      "type": "string",
+      "enum": [
+        "action",
+        "bonus",
+        "reaction",
+        "long"
+      ]
+    },
+    "recovery": {
+      "type": "object",
+      "properties": {
+        "short": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "all",
+                "amount"
+              ]
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "mode"
+          ]
+        },
+        "long": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "all",
+                "amount"
+              ]
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "mode"
+          ]
+        }
+      }
+    },
+    "recoveryManual": {
+      "type": "boolean"
+    }
+  }
+}

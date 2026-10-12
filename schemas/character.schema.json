@@ -1,0 +1,1096 @@
+{
+  "type": "object",
+  "properties": {
+    "advancementLedger": {"type": "object"},
+    "mechanicalTraits": {"type": "object"},
+    "classHitPointLevels": {"type": "number", "minimum": 0},
+    "hpConModifier": {"type": "number"},
+    "weaponProficiencyMode": {"type": "string", "enum": ["class", "manual"]},
+    "weaponProficiencies": {"type": "array", "items": {"type": "string"}},
+    "toolProficiencies": {"type": "array", "items": {"type": "string"}},
+    "toolExpertise": {"type": "array", "items": {"type": "string"}},
+    "languageIds": {"type": "array", "items": {"type": "string"}},
+    "movement": {"type": "object"},
+    "senses": {"type": "object"},
+    "size": {"type": "string"},
+    "portraitFocus": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 50
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 0
+        }
+      }
+    },
+    "level": {
+      "type": "number",
+      "default": 1
+    },
+    "race": {
+      "type": "string",
+      "default": ""
+    },
+    "class": {
+      "type": "string",
+      "default": ""
+    },
+    "background": {
+      "type": "string",
+      "default": ""
+    },
+    "alignment": {
+      "type": "string",
+      "default": ""
+    },
+    "xp": {
+      "type": "number",
+      "default": 0
+    },
+    "inspiration": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "default": false
+    },
+    "prof": {
+      "type": "number",
+      "readOnly": true
+    },
+    "abilities": {
+      "type": "object",
+      "properties": {
+        "str": {
+          "type": "object",
+          "properties": {
+            "score": {
+              "type": "number",
+              "default": 10
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "dex": {
+          "type": "object",
+          "properties": {
+            "score": {
+              "type": "number",
+              "default": 10
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "con": {
+          "type": "object",
+          "properties": {
+            "score": {
+              "type": "number",
+              "default": 10
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "int": {
+          "type": "object",
+          "properties": {
+            "score": {
+              "type": "number",
+              "default": 10
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "wis": {
+          "type": "object",
+          "properties": {
+            "score": {
+              "type": "number",
+              "default": 10
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "cha": {
+          "type": "object",
+          "properties": {
+            "score": {
+              "type": "number",
+              "default": 10
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        }
+      }
+    },
+    "saves": {
+      "type": "object",
+      "properties": {
+        "str": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "dex": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "con": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "int": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "wis": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "cha": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        }
+      }
+    },
+    "skills": {
+      "type": "object",
+      "properties": {
+        "acrobatics": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "animal_handling": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "arcana": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "athletics": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "deception": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "history": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "insight": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "intimidation": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "investigation": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "medicine": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "nature": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "perception": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "performance": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "persuasion": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "religion": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "sleight_of_hand": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "stealth": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        },
+        "survival": {
+          "type": "object",
+          "properties": {
+            "prof": {
+              "type": "boolean",
+              "default": false
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false
+            },
+            "mod": {
+              "type": "number",
+              "readOnly": true
+            }
+          }
+        }
+      }
+    },
+    "hp": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "default": 10
+        },
+        "max": {
+          "type": "number",
+          "default": 10
+        },
+        "temp": {
+          "type": "number",
+          "default": 0
+        },
+        "formula": {
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
+    "ac": {
+      "type": "number",
+      "default": 10
+    },
+    "speed": {
+      "type": "number",
+      "default": 30
+    },
+    "init_misc": {
+      "type": "number",
+      "default": 0
+    },
+    "init": {
+      "type": "number",
+      "readOnly": true
+    },
+    "passive_perception": {
+      "type": "number",
+      "readOnly": true
+    },
+    "passive_investigation": {
+      "type": "number",
+      "readOnly": true
+    },
+    "passive_insight": {
+      "type": "number",
+      "readOnly": true
+    },
+    "spell": {
+      "type": "object",
+      "properties": {
+        "ability": {
+          "type": "string",
+          "default": "int"
+        },
+        "mod": {
+          "type": "number",
+          "default": 0
+        },
+        "dc": {
+          "type": "number",
+          "readOnly": true
+        },
+        "attack": {
+          "type": "number",
+          "readOnly": true
+        }
+      }
+    },
+    "slots": {
+      "type": "object"
+    },
+    "currency": {
+      "type": "object"
+    },
+    "weapons": {
+      "type": "array",
+      "default": []
+    },
+    "inventory": {
+      "type": "array",
+      "default": []
+    },
+    "spells": {
+      "type": "array",
+      "default": []
+    },
+    "features": {
+      "type": "array",
+      "default": []
+    },
+    "proficiencies": {
+      "type": "string",
+      "default": ""
+    },
+    "languages": {
+      "type": "string",
+      "default": ""
+    },
+    "personality": {
+      "type": "object"
+    },
+    "notes": {
+      "type": "string",
+      "default": ""
+    },
+    "rulesEdition": {
+      "type": "string",
+      "enum": [
+        "2014",
+        "2024"
+      ]
+    },
+    "exhaustion": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 6,
+      "default": 0
+    },
+    "hitdice": {
+      "type": "string",
+      "default": ""
+    },
+    "hitDice": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0
+        },
+        "die": {
+          "type": "string",
+          "enum": [
+            "d6",
+            "d8",
+            "d10",
+            "d12"
+          ],
+          "default": "d8"
+        }
+      }
+    },
+    "hitDicePools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0
+          },
+          "max": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0
+          },
+          "die": {
+            "type": "string",
+            "enum": [
+              "d6",
+              "d8",
+              "d10",
+              "d12"
+            ],
+            "default": "d8"
+          },
+          "id": {
+            "type": "string"
+          },
+          "className": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "acMode": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "equipment"
+      ],
+      "default": "equipment"
+    },
+    "acModeExplicit": {
+      "type": "boolean",
+      "default": false
+    },
+    "armorTraining": {
+      "type": "object",
+      "properties": {
+        "light": {
+          "type": "boolean"
+        },
+        "medium": {
+          "type": "boolean"
+        },
+        "heavy": {
+          "type": "boolean"
+        },
+        "shield": {
+          "type": "boolean"
+        }
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "blinded",
+          "charmed",
+          "deafened",
+          "frightened",
+          "grappled",
+          "incapacitated",
+          "invisible",
+          "paralyzed",
+          "petrified",
+          "poisoned",
+          "prone",
+          "restrained",
+          "stunned",
+          "unconscious",
+          "surprised"
+        ]
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "deathSavesEnabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "death": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0
+        },
+        "fail": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0
+        },
+        "stable": {
+          "type": "boolean",
+          "default": false
+        },
+        "dead": {
+          "type": "boolean",
+          "default": false
+        },
+        "unconscious": {
+          "type": "boolean",
+          "default": false
+        },
+        "knockedOut": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "concentration": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "boolean",
+          "default": false
+        },
+        "sourceId": {
+          "type": "string",
+          "default": ""
+        },
+        "pendingDC": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0
+        },
+        "pendingChecks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "dc": {
+                "type": "number",
+                "minimum": 0
+              },
+              "damage": {
+                "type": "number",
+                "minimum": 0
+              }
+            }
+          },
+          "default": []
+        }
+      }
+    },
+    "hpBaseMax": {
+      "type": "number",
+      "minimum": 0
+    },
+    "pactSlots": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0
+        },
+        "level": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5,
+          "default": 1
+        }
+      }
+    },
+    "damageTraits": {
+      "type": "object",
+      "properties": {
+        "resistances": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "acid",
+              "bludgeoning",
+              "cold",
+              "fire",
+              "force",
+              "lightning",
+              "necrotic",
+              "piercing",
+              "poison",
+              "psychic",
+              "radiant",
+              "slashing",
+              "thunder"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "vulnerabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "acid",
+              "bludgeoning",
+              "cold",
+              "fire",
+              "force",
+              "lightning",
+              "necrotic",
+              "piercing",
+              "poison",
+              "psychic",
+              "radiant",
+              "slashing",
+              "thunder"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "immunities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "acid",
+              "bludgeoning",
+              "cold",
+              "fire",
+              "force",
+              "lightning",
+              "necrotic",
+              "piercing",
+              "poison",
+              "psychic",
+              "radiant",
+              "slashing",
+              "thunder"
+            ]
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "hpMaxReduction": {
+      "type": "number",
+      "minimum": 0,
+      "default": 0
+    },
+    "hpDerivedMax": {
+      "type": "number",
+      "minimum": 0,
+      "readOnly": true
+    },
+    "abilityScoreBases": {
+      "type": "object",
+      "properties": {
+        "str": {
+          "type": "number",
+          "minimum": 0
+        },
+        "dex": {
+          "type": "number",
+          "minimum": 0
+        },
+        "con": {
+          "type": "number",
+          "minimum": 0
+        },
+        "int": {
+          "type": "number",
+          "minimum": 0
+        },
+        "wis": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cha": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "lastLongRest": {
+      "type": "number",
+      "minimum": 0
+    },
+    "casting": {
+      "type": "object",
+      "properties": {
+        "turnKey": {
+          "type": "string"
+        },
+        "spells": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "level": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 9
+              },
+              "actionType": {
+                "enum": [
+                  "action",
+                  "bonus",
+                  "reaction",
+                  "long"
+                ]
+              },
+              "slotUsed": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "minimum": 0
+          },
+          "max": {
+            "type": "number",
+            "minimum": 0
+          },
+          "recharge": {
+            "enum": [
+              "none",
+              "short",
+              "long",
+              "turn"
+            ]
+          },
+          "recovery": {
+            "type": "object",
+            "properties": {
+              "short": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "all",
+                      "amount"
+                    ]
+                  },
+                  "amount": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "mode"
+                ]
+              },
+              "long": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "all",
+                      "amount"
+                    ]
+                  },
+                  "amount": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "mode"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

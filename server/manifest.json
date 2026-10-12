@@ -1,0 +1,10 @@
+{
+  "id": "gravewright.5e-srd-server",
+  "name": "DnD 5e SRD - Server Rules",
+  "version": "0.1.0",
+  "description": "Server companion for DnD 5e SRD: system-owned initiative, combat resources and turn effects for the 2014/2024 rules. Requires Gravewright VTT 0.2.1 or newer and host-owner activation as trusted Django code.",
+  "author": "Gravewright contributors",
+  "license": "MIT AND CC-BY-4.0",
+  "sdk": {"requires": ">=1.0.0 <2.0.0", "tested": "1.0.0"},
+  "django": {"apps": ["gravewright_5e.apps.Gravewright5eConfig"]}
+}
