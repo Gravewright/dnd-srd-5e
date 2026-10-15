@@ -5,6 +5,11 @@ import {equippedItems,attunedItems} from './item-drop.js';
 const el=(doc,tag,cls,text)=>{const node=doc.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node;};
 const searchText=value=>String(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase();
 
+export function sortItemEntries(entries,locale='en',label=entry=>entry.name) {
+  const collator=new Intl.Collator(locale,{sensitivity:'base',numeric:true});
+  return [...entries].sort((left,right)=>collator.compare(label(left)||'',label(right)||''));
+}
+
 // Tab layouts are original Gravewright UI; document writes stay in the sheet's save queue.
 export function createTabs(env) {
   const {doc,t,field,node,button,iconButton,api,context,roll,editEmbedded,flush,changed}=env;
@@ -49,7 +54,7 @@ export function createTabs(env) {
       for(const key of keys){const group=el(doc,'section','gw5-item-group'),heading=el(doc,'header'),title=kind==='spells'?levelLabel(key):kind==='effects'?t(key==='active'?'activeEffects':'inactiveEffects'):key==='weapon'?t('weapons'):labelType(key);heading.append(el(doc,'h4','',title),el(doc,'span','',String(grouped.get(key).length)));group.append(heading);
         const head=el(doc,'div','gw5-browser-head');head.dataset.kind=kind;
         const columns=kind==='spells'?['name','castingTime','range','prepared','actions']:kind==='inventory'?['name','quantity','weight','equipped','actions']:kind==='effects'?['name','duration','enabled','actions']:['name','actions'];for(const label of columns)head.append(el(doc,'span','',t(label==='quantity'?'quantityShort':label)));group.append(head);
-        for(const record of grouped.get(key))group.append(row(record));groups.append(group);
+        for(const record of sortItemEntries(grouped.get(key),api.i18n.locale,record=>record.entry.name))group.append(row(record));groups.append(group);
       }
     }
     function row({entry,path,layout}){
@@ -113,7 +118,7 @@ export function createTabs(env) {
   function biography(entries){
     const grid=el(doc,'div','gw5-biography-grid'),main=el(doc,'div','gw5-biography-main'),aside=el(doc,'div','gw5-biography-aside'),identity=section('identity','gw5-bio-identity'),identityFields=el(doc,'div','gw5-identity-grid');
     for(const [path,label] of [['sheet.class','class'],['sheet.background','background'],['sheet.race',env.edition()==='2024'?'species':'race'],['sheet.alignment','alignment']])identityFields.append(field({type:'textField',path,labelKey:label}));identity.append(identityFields);main.append(identity);
-    const notes=section('storyNotes','gw5-journal gw5-story');const note=field({type:'textArea',path:'sheet.notes',labelKey:'storyNotes'});note.classList.add('gw5-journal-field','gw5-journal-field--notes');note.querySelector('textarea').rows=11;notes.append(note);main.append(notes);
+    const notes=section('storyNotes','gw5-journal gw5-story');const note=field({type:'textArea',path:'sheet.notes',labelKey:'storyNotes'});note.classList.add('gw5-journal-field','gw5-journal-field--notes');note.querySelector('textarea').rows=4;notes.append(note);main.append(notes);
     const personality=section('dnd5e.ui.personalidade','gw5-journal'),traits=el(doc,'div','gw5-personality-grid');for(const child of entries.find(n=>n.variant==='personality')?.children||[]){const f=field(child);f.classList.add('gw5-journal-field');traits.append(f);}personality.append(traits);aside.append(personality);
     const prof=entries.find(n=>n.variant==='proficiencies');if(prof){const panel=node(prof);panel.classList.add('gw5-proficiencies','gw5-journal');panel.querySelectorAll('.gw5-field').forEach(f=>f.classList.add('gw5-journal-field'));aside.append(panel);}
     const data=env.draft(),grants=section('grantedTraits','gw5-granted-traits'),facts=el(doc,'dl','gw5-item-reading-facts');

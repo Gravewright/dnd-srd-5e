@@ -1,8 +1,8 @@
 # DnD 5e SRD
 
-Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. Versão **0.1.1 Alpha**.
+Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. **0.1.2 Alpha**.
 
-[English](README.md) · [Baixar a versão 0.1.1](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.1) · [Notas da versão](docs/releases/0.1.1.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
+[English](README.md) · [Release 0.1.2](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.2) · [Notas da versão](docs/releases/0.1.2.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 A ficha Noturno combina fundo escuro, tipografia em marfim, molduras douradas e um cabeçalho ilustrado. Inclui fichas próprias de personagem, monstro e 11 tipos de itens, salvamento automático e compêndios licenciados separados por edição. Este projeto adapta o framework legado Gravewright 5e SRD 0.3.1; o nome público atual é **DnD 5e SRD**.
 
@@ -15,8 +15,8 @@ com SDK 1.x. Para português/espanhol, use o [Translator oficial 0.1.2 ou mais
 recente](https://github.com/Gravewright/translator). Inglês é o padrão. Não é
 necessário alterar o core do VTT nem instalar um módulo separado de regras.
 
-1. Instale **DnD 5e SRD** em **Sistemas** pelo Marketplace, ou selecione
-   `gravewright-5e-srd-0.1.1.zip` no instalador nativo de pacotes locais.
+1. Instale **DnD 5e SRD 0.1.2** pelo Marketplace assinado em **Sistemas**, ou use
+   `gravewright-5e-srd-0.1.2.zip` da release no instalador local nativo.
 2. Crie uma mesa com **DnD 5e SRD**. Mesas existentes podem selecionar a nova
    versão exata do pacote em **Configurações → Extensões**.
 3. O mestre define a edição padrão para novas fichas em **Configurações →
@@ -31,7 +31,36 @@ checksum SHA-256. Use o instalador do VTT, sem extrair o pacote no código-fonte
 O ID `gravewright.5e-srd`, os dados das fichas, as configurações e as cópias
 incorporadas permanecem no namespace original.
 
-Antes de desativar o complemento antigo, selecione **DnD 0.1.1 em cada mesa de
+Os builds locais de revisão foram reunidos na 0.1.2. Se outra 0.1.2 local já
+estiver instalada, selecione outra versão instalada nas mesas afetadas e remova
+aquele build pelo gerenciador nativo antes de instalar a 0.1.2 pública. O mesmo
+ID/versão não pode ser sobrescrito com bytes diferentes. Builds locais com
+numeração maior exigem selecionar a 0.1.2 manualmente.
+
+Fichas de personagens, monstros e tokens abrem inicialmente com até 1000 × 760px,
+adaptando-se à tela. O redimensionamento manual nativo continua disponível. Se
+uma janela maior já estava salva, use **Redefinir layout da janela (↺)** na barra
+do título para aplicar o novo padrão. A visão geral usa cabeçalho mais baixo,
+cartões compactos de atributos e combate e controles de vida junto dos valores
+relacionados. O texto visível mantém no mínimo 12px; conteúdo longo permite rolagem.
+
+As perícias aparecem em ordem alfabética pelo nome traduzido nas fichas de
+personagem e monstro. O seletor de atributo em cada linha salva o padrão daquela
+perícia. A janela de rolagem permite escolher outro atributo apenas para aquele
+teste, mantendo proficiência, especialização e efeitos aplicáveis. Fichas
+existentes mantêm o vínculo habitual até uma escolha ser salva. Janelas de
+rolagem abrem com a altura necessária aos controles, agrupam campos e permitem
+rolagem em telas menores.
+
+Editores de itens usam cabeçalho menor, grupos de detalhes sem molduras internas
+e campos de texto compactos que crescem com o conteúdo escrito. Resumos laterais
+vazios desaparecem. Listas ordenam nomes dentro dos grupos existentes de tipo ou
+nível de magia, considerando o idioma ativo; a ordem salva e as cópias de itens
+são preservadas. Janelas nativas mantêm redimensionamento e o botão de redefinir
+na barra de título. O VTT fornece a apresentação compartilhada do diretório de
+itens e do navegador de compêndios.
+
+Antes de desativar o complemento antigo, selecione **DnD 0.1.1 ou mais recente em cada mesa de
 DnD** que o utiliza; versões antigas do sistema ainda precisam desse módulo.
 Se o antigo Server Rules estiver instalado, **Personalizar → Instalação anterior**
 permite ao proprietário revisar e desativar o complemento pelos controles já

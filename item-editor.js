@@ -5,9 +5,18 @@ const el=(doc,tag,cls,text)=>{const node=doc.createElement(tag);if(cls)node.clas
 const typeKeys={weapon:'dnd5e.ui.arma',armor:'dnd5e.ui.armadura',equipment:'dnd5e.ui.equipamento',consumable:'dnd5e.ui.consumivel',spell:'dnd5e.ui.magia',feat:'dnd5e.ui.talento',feature:'dnd5e.ui.caracteristica',race:'dnd5e.ui.raca',background:'dnd5e.ui.antecedente',class:'dnd5e.ui.classe',effect:'dnd5e.ui.efeito'};
 const glyphs={weapon:'swords',armor:'shield',equipment:'backpack',consumable:'flask',spell:'book',feat:'star',feature:'leaf',race:'token',background:'scroll',class:'shield',effect:'sun'};
 
+// Descriptive choices are alphabetical; ability, duration and mechanical tiers
+// retain the order declared by their layout and their explicit saved values.
+export function itemFieldDefinition(node,t,locale='en') {
+  if(!['sheet.school','sheet.damage_type','sheet.category','sheet.subtype'].includes(node.path)||!node.options)return node;
+  const collator=new Intl.Collator(locale,{sensitivity:'base',numeric:true});
+  return {...node,options:[...node.options].sort((left,right)=>collator.compare(t(left.labelKey||left.label),t(right.labelKey||right.label)))};
+}
+
 // One editor for library documents and copies embedded in an actor's sheet.
 export function itemEditor(env){
-  const {doc,t,layout,type,field,button,changed:write,modifiers,resource}=env;
+  const {doc,t,layout,type,button,changed:write,modifiers,resource}=env;
+  const field=(node,...args)=>env.field(itemFieldDefinition(node,t,env.locale),...args);
   const changed=(path,value)=>{if(type==='weapon'&&path==='sheet.proficient')write('sheet.proficiencyMode','manual');write(path,value);};
   const root=el(doc,'section','gw5-item-editor');root.dataset.itemType=type;
   const all=[];function collect(node){if(node.path||node.type==='resourceField')all.push(node.path==='sheet.attack_type'?{...node,labelKey:'weaponAttackType'}:node);else for(const child of node.children||[])collect(child);}collect(layout.body);
@@ -37,10 +46,10 @@ export function itemEditor(env){
   const description=panels.get('description'),descriptionGrid=el(doc,'div','gw5-item-description-grid'),narrative=el(doc,'div','gw5-item-narrative'),aside=el(doc,'aside','gw5-item-reading-notes');descriptionGrid.append(narrative,aside);description.append(descriptionGrid);
   const descriptionNodes=all.filter(node=>node.type==='textArea'&&!['sheet.materials','sheet.equipment'].includes(node.path));
   if(!descriptionNodes.some(node=>node.path==='sheet.description'))descriptionNodes.unshift({type:'textArea',path:'sheet.description',labelKey:'dnd5e.ui.descricao'});
-  for(const node of descriptionNodes){const f=field(node,env.data(),changed);f.classList.add('gw5-item-text');f.querySelector('textarea').rows=node.path==='sheet.description'?8:4;f.querySelector('textarea').placeholder=t('itemDescriptionPlaceholder');narrative.append(f);}
+  for(const node of descriptionNodes){const f=field(node,env.data(),changed);f.classList.add('gw5-item-text');f.querySelector('textarea').rows=2;f.querySelector('textarea').placeholder=t('itemDescriptionPlaceholder');narrative.append(f);}
   const readingTitle=el(doc,'h3','',t('itemAtAGlance')),reading=el(doc,'dl','gw5-item-reading-facts');aside.append(readingTitle,reading);
   const readPaths={weapon:['sheet.category','sheet.attack_type','sheet.damage_type','sheet.versatile'],armor:['sheet.armor_type','sheet.max_dex','sheet.add_dex'],spell:['sheet.school','sheet.resolution','sheet.classes','sheet.materials'],equipment:['sheet.category'],consumable:['sheet.subtype','sheet.uses'],feat:['sheet.prerequisite'],feature:['sheet.recharge'],race:['sheet.languages','sheet.asi'],background:['sheet.skill_proficiencies','sheet.tool_proficiencies','sheet.languages'],class:['sheet.saving_throws','sheet.spellcasting_ability'],effect:['sheet.concentration']}[type]||[];
-  const tags=el(doc,'div','gw5-item-tags');aside.append(tags);const help=el(doc,'p','gw5-item-drag-hint',t('itemCopyHelp'));aside.append(help);
+  const tags=el(doc,'div','gw5-item-tags');aside.append(tags);description.append(el(doc,'p','gw5-item-drag-hint',t('itemCopyHelp')));
   const details=panels.get('details'),detailGrid=el(doc,'div','gw5-item-detail-grid');details.append(detailGrid);
   const used=new Set(['core.name','sheet.description',...descriptionNodes.map(node=>node.path),...(modifier?[modifier.path]:[])]);
   function group(label,paths,cls=''){
@@ -49,12 +58,12 @@ export function itemEditor(env){
     for(const node of nodes){used.add(node.path||node.valuePath);const rendered=node.type==='resourceField'?resource(node):field(node,env.data(),changed);if(node.type==='textArea'||node.type==='resourceField')rendered.classList.add('gw5-item-field-wide');fields.append(rendered);}return box;
   }
   const groups={
-    weapon:[['itemCombat',['sheet.category','sheet.attack_type','sheet.damage','sheet.damage_type','sheet.versatile','sheet.range','sheet.attack_ability','sheet.proficient','sheet.attack_bonus','sheet.damage_bonus']],['dnd5e.ui.propriedades',all.filter(node=>node.path?.startsWith('sheet.props.')),'gw5-item-properties'],['itemPhysical',['sheet.weight','sheet.cost']]],
-    armor:[['itemDefense',['sheet.armor_type','sheet.base_ac','sheet.add_dex','sheet.max_dex','sheet.str_req','sheet.stealth_disadvantage']],['itemPhysical',['sheet.weight','sheet.cost']]],
-    equipment:[['itemPhysical',['sheet.category','sheet.quantity','sheet.weight','sheet.cost']]],
-    consumable:[['itemConsumable',['sheet.subtype','sheet.quantity','sheet.uses','sheet.weight','sheet.cost']]],
-    spell:[['dnd5e.ui.conjuracao',['sheet.level','sheet.school','sheet.casting_time','sheet.range','sheet.duration','sheet.classes']],['itemSpellResolution',['sheet.resolution','sheet.damage','sheet.concentration','sheet.ritual']],['dnd5e.ui.componentes',['sheet.components.v','sheet.components.s','sheet.components.m','sheet.materials'],'gw5-item-properties']],
-    effect:[['itemEffectSetup',['sheet.category','sheet.duration.type','sheet.duration.value','sheet.concentration']]],
+    weapon:[['itemCombat',['sheet.category','sheet.attack_type','sheet.damage','sheet.damage_type','sheet.versatile','sheet.range','sheet.attack_ability','sheet.proficient','sheet.attack_bonus','sheet.damage_bonus']],['dnd5e.ui.propriedades',all.filter(node=>node.path?.startsWith('sheet.props.')),'gw5-item-properties'],['itemPhysical',['sheet.weight','sheet.cost','sheet.requiresAttunement','sheet.magicBonus']]],
+    armor:[['itemDefense',['sheet.armor_type','sheet.base_ac','sheet.add_dex','sheet.max_dex','sheet.str_req','sheet.stealth_disadvantage']],['itemPhysical',['sheet.weight','sheet.cost','sheet.requiresAttunement','sheet.magicBonus']]],
+    equipment:[['itemPhysical',['sheet.category','sheet.quantity','sheet.weight','sheet.cost','sheet.requiresAttunement','sheet.magicBonus']]],
+    consumable:[['itemConsumable',['sheet.subtype','sheet.quantity','sheet.uses','sheet.weight','sheet.cost','sheet.requiresAttunement','sheet.magicBonus']]],
+    spell:[['dnd5e.ui.conjuracao',['sheet.level','sheet.school','sheet.casting_time','sheet.range','sheet.duration','sheet.classes']],['itemSpellResolution',['sheet.resolution','sheet.damage','sheet.healingFormula','sheet.spell_ability','sheet.concentration','sheet.ritual']],['dnd5e.ui.componentes',['sheet.components.v','sheet.components.s','sheet.components.m','sheet.materials'],'gw5-item-properties']],
+    effect:[['itemEffectSetup',['sheet.category','sheet.duration.type','sheet.duration.value','sheet.duration.expires','sheet.concentration']]],
     feat:[['itemRequirements',['sheet.prerequisite']]],
     feature:[['itemFeatureSetup',['sheet.source','sheet.level',...all.filter(node=>node.type==='resourceField'),'sheet.recharge']]],
     race:[['itemAncestry',['sheet.subrace','sheet.size','sheet.speed','sheet.languages','sheet.asi','sheet.age_alignment']]],
@@ -70,8 +79,10 @@ export function itemEditor(env){
     eyebrow.textContent=type==='race'&&env.edition()==='2024'?t('species'):t(typeKeys[type]||'items');
     for(const {path,out}of outputs)out.textContent=valueLabel(path);
     summary.textContent=(type==='weapon'?['sheet.category','sheet.attack_type','sheet.damage_type']:type==='spell'?['sheet.school','sheet.level']:type==='armor'?['sheet.armor_type']:type==='effect'?['sheet.category']:[]).map(valueLabel).filter(value=>value&&value!=='—').join(' · ');
-    reading.replaceChildren();for(const path of readPaths){if(!definitions.has(path)||valueLabel(path)==='—')continue;const item=el(doc,'div');item.append(el(doc,'dt','',t(definitions.get(path).labelKey)),el(doc,'dd','',valueLabel(path)));reading.append(item);}
+    reading.replaceChildren();for(const path of readPaths){if(!definitions.has(path)||values.some(([fact])=>fact===path)||valueLabel(path)==='—')continue;const value=valueLabel(path),item=el(doc,'div');item.classList.toggle('gw5-item-reading-fact--long',value.length>120);item.append(el(doc,'dt','',t(definitions.get(path).labelKey)),el(doc,'dd','',value));reading.append(item);}
     tags.replaceChildren();for(const node of all.filter(node=>node.type==='checkboxField'&&get(env.data(),node.path,false)))tags.append(el(doc,'span','',t(node.labelKey)));
+    aside.hidden=!reading.childElementCount&&!tags.childElementCount;
+    aside.classList.toggle('gw5-item-reading-notes--wide',!!reading.querySelector('.gw5-item-reading-fact--long')||descriptionNodes.some(node=>String(get(env.data(),node.path,'')).length>120));
   }
   root.addEventListener('input',refresh);root.addEventListener('change',refresh);refresh();activate(active);return root;
 }

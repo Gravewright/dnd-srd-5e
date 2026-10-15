@@ -1039,5 +1039,6 @@
   "combat.manualInitiative": "Set initiative",
   "combat.missingPlan": "This interrupted turn has no duration plan. Stop and restart combat.",
   "combat.error": "The combat operation could not finish. Check the connection and retry.",
-  "combat.retry": "Retry operation"
+  "combat.retry": "Retry operation",
+  "skillAbility": "Ability for {skill}"
 }

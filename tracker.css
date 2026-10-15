@@ -2,7 +2,7 @@
 .gw5-combat .gw-combat-icon svg,.gw5-combat .gw-combat-menu__trigger svg{width:18px;height:18px;}
 .gw5-combat .gw-combat-rollbar{flex-wrap:wrap;}
 .gw5-combat .gw-combat-menu__list{max-height:min(65vh,420px);overflow-y:auto;}
-.gw5-combat-status{font-size:.78rem;color:var(--text-muted);margin:0;}
-.gw5-combat-status p{margin:0 0 6px;}
+.gw5-combat-status{font-size:12px;color:var(--text-muted);margin:var(--space-0);}
+.gw5-combat-status p{margin:var(--space-0) var(--space-0) var(--space-1);}
 .gw5-combat-sheet{width:min(1100px,calc(100vw - 26px));max-height:calc(100dvh - 42px);}
 .gw5-combat-sheet__body{min-height:0;overflow:auto;}

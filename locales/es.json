@@ -1039,5 +1039,6 @@
   "combat.manualInitiative": "Establecer iniciativa",
   "combat.missingPlan": "Este turno interrumpido no tiene un plan de duración guardado. Finaliza y reinicia el combate.",
   "combat.error": "No se pudo completar la operación de combate. Comprueba la conexión y reintenta.",
-  "combat.retry": "Reintentar operación"
+  "combat.retry": "Reintentar operación",
+  "skillAbility": "Característica de {skill}"
 }

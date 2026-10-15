@@ -1,87 +1,87 @@
 /* Monster stat blocks use the same original Noturno frame as character sheets. */
 .gw5-sheet .gw5-body.gw5-monster-body{display:block;}
-.gw5-sheet .gw5-monster{grid-column:1/-1;display:grid;gap:8px;min-width:0;}
-.gw5-sheet .gw5-monster-summary{display:flex;align-items:center;gap:13px;padding:8px 13px;border:1px solid #a68b4d59;background:linear-gradient(105deg,#4a24292b,#132a2240);}
-.gw5-sheet .gw5-monster-classification{display:flex;flex:1;flex-wrap:wrap;gap:5px 21px;min-width:0;}
-.gw5-sheet .gw5-monster-fact{display:grid;align-content:start;gap:2px;min-width:0;}
-.gw5-sheet .gw5-monster-fact-label{color:#a5b09e;font:10px/1.3 system-ui,sans-serif;letter-spacing:.3px;}
+.gw5-sheet .gw5-monster{grid-column:1/-1;display:grid;gap:var(--space-2);min-width:0;}
+.gw5-sheet .gw5-monster-summary{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-3);border:1px solid #a68b4d59;background:linear-gradient(105deg,#4a24292b,#132a2240);}
+.gw5-sheet .gw5-monster-classification{display:flex;flex:1;flex-wrap:wrap;gap:var(--space-1) var(--space-5);min-width:0;}
+.gw5-sheet .gw5-monster-fact{display:grid;align-content:start;gap:var(--space-half);min-width:0;}
+.gw5-sheet .gw5-monster-fact-label{color:#a5b09e;font:12px/1.3 system-ui,sans-serif;letter-spacing:.3px;}
 .gw5-sheet .gw5-monster-fact-value{color:#e1dfca;font:14px/1.4 Georgia,serif;overflow-wrap:anywhere;}
 .gw5-sheet .gw5-monster-fact-value--empty{color:#8c9689;}
-.gw5-sheet .gw5-monster-challenge{min-width:68px;padding-left:13px;border-left:1px solid #a68b4d59;text-align:center;}
+.gw5-sheet .gw5-monster-challenge{min-width:68px;padding-left:var(--space-3);border-left:1px solid #a68b4d59;text-align:center;}
 .gw5-sheet .gw5-monster-challenge .gw5-monster-fact-value{color:#e6cf96;font-size:23px;line-height:1.1;}
-.gw5-sheet .gw5-monster-summary>[data-gw5-monster-settings]{align-self:center;width:29px;min-height:29px;padding:5px;flex-shrink:0;}
+.gw5-sheet .gw5-monster-summary>[data-gw5-monster-settings]{align-self:center;width:29px;min-height:29px;padding:var(--space-1);flex-shrink:0;}
 .gw5-sheet .gw5-monster-summary>[data-gw5-monster-settings]>.gw5-icon{width:17px;height:17px;}
-.gw5-sheet .gw5-monster-grid{display:grid;grid-template-columns:minmax(190px,.27fr) minmax(0,.73fr);align-items:start;gap:8px;}
-.gw5-sheet .gw5-monster-aside,.gw5-sheet .gw5-monster-play{display:grid;align-content:start;gap:8px;min-width:0;}
+.gw5-sheet .gw5-monster-grid{display:grid;grid-template-columns:240px minmax(0,1fr);align-items:start;gap:var(--space-2);}
+.gw5-sheet .gw5-monster-aside,.gw5-sheet .gw5-monster-play{display:grid;align-content:start;gap:var(--space-2);min-width:0;}
 .gw5-sheet .gw5-monster-skills{min-height:0;align-content:start;}
-.gw5-sheet .gw5-monster-skills .gw5-skill{min-height:27px;}
-.gw5-sheet .gw5-monster-skills .gw5-skills-flourish{justify-self:center;width:48px;height:48px;margin:8px 0 0;color:#a68b4d66;}
-.gw5-sheet .gw5-monster-ability-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;}
+.gw5-sheet .gw5-monster-skills .gw5-skill{min-height:23px;}
+.gw5-sheet .gw5-monster-ability-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--space-1);}
 .gw5-sheet .gw5-monster-abilities{grid-template-columns:minmax(0,1fr);}
-.gw5-sheet .gw5-monster-abilities .gw5-ability{min-height:96px;}
+.gw5-sheet .gw5-monster-abilities .gw5-ability{min-height:0;}
 .gw5-sheet .gw5-monster-abilities .gw5-ability-heading>.gw5-button{white-space:nowrap;}
-.gw5-sheet .gw5-monster-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;}
-.gw5-sheet .gw5-monster-stats .gw5-stat{min-height:79px;}
-.gw5-sheet .gw5-monster-speed{align-content:center;justify-items:center;gap:3px;text-align:center;}
+.gw5-sheet .gw5-monster-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-1);}
+.gw5-sheet .gw5-monster-stats .gw5-stat{min-height:0;}
+.gw5-sheet .gw5-monster-speed{align-content:center;justify-items:start;gap:var(--space-half);text-align:left;}
+.gw5-sheet .gw5-monster-speed-label{grid-column:2;}
 .gw5-sheet .gw5-monster-speed .gw5-icon{width:20px;height:20px;}
-.gw5-sheet .gw5-monster-speed-label{color:#bac0ac;font-size:11px;}
+.gw5-sheet .gw5-monster-speed-label{color:#bac0ac;font-size:12px;}
 .gw5-sheet .gw5-monster-speed output{color:#e8ddbc;font:19px/1.2 Georgia,serif;overflow-wrap:anywhere;}
-.gw5-sheet .gw5-monster-resources{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(145px,1fr);align-items:start;gap:8px;}
+.gw5-sheet .gw5-monster-resources{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(145px,1fr);align-items:start;gap:var(--space-2);}
 .gw5-sheet .gw5-monster-health .gw5-resource--hp{grid-template-columns:minmax(0,1fr) 76px;}
 .gw5-sheet .gw5-monster-health .gw5-hp-values input{font-size:25px;}
-.gw5-sheet .gw5-monster-health .gw5-hp-side .gw5-field{font-size:10px;}
+.gw5-sheet .gw5-monster-health .gw5-hp-side .gw5-field{font-size:12px;}
 .gw5-sheet .gw5-monster-health .gw5-hp-side input{font-size:17px;}
 .gw5-sheet .gw5-monster-legendary-resources{display:block;}
 .gw5-sheet .gw5-monster-legendary-resources>summary{color:#e2cf9e;font:15px/1.35 Georgia,serif;cursor:pointer;}
-.gw5-sheet .gw5-monster-legendary-counters{display:grid;gap:8px;margin-top:8px;}
-.gw5-sheet .gw5-monster-legendary-counters .gw5-field{display:grid;grid-template-columns:minmax(0,1fr) 43px;align-items:center;gap:8px;font-size:11px;}
-.gw5-sheet .gw5-monster-legendary-counters input{min-height:27px;padding:3px;text-align:center;color:#e6cf96;font-size:17px;}
-.gw5-sheet .gw5-monster-defense-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 13px;}
+.gw5-sheet .gw5-monster-legendary-counters{display:grid;gap:var(--space-2);margin-top:var(--space-2);}
+.gw5-sheet .gw5-monster-legendary-counters .gw5-field{display:grid;grid-template-columns:minmax(0,1fr) 43px;align-items:center;gap:var(--space-2);font-size:12px;}
+.gw5-sheet .gw5-monster-legendary-counters input{min-height:27px;padding:var(--space-half);text-align:center;color:#e6cf96;font-size:17px;}
+.gw5-sheet .gw5-monster-defense-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-2) var(--space-3);}
 .gw5-sheet .gw5-monster-defense-wide{grid-column:1/-1;}
 .gw5-sheet .gw5-monster-defense-wide .gw5-monster-fact-value{font-size:13px;white-space:pre-wrap;}
-.gw5-sheet .gw5-monster :is(.gw5-monster-attacks,.gw5-monster-features)>.gw5-list{gap:5px;}
-.gw5-sheet .gw5-monster .gw5-item{display:flex;flex-wrap:wrap;align-items:center;gap:5px 8px;margin:0;padding:7px 8px;border:1px solid #a68b4d40;border-radius:2px;background:#14221b42;}
+.gw5-sheet .gw5-monster :is(.gw5-monster-attacks,.gw5-monster-features)>.gw5-list{gap:var(--space-1);}
+.gw5-sheet .gw5-monster .gw5-item{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-1) var(--space-2);margin:var(--space-0);padding:var(--space-2) var(--space-2);border:1px solid #a68b4d40;border-radius:var(--radius-sm);background:#14221b42;}
 .gw5-sheet .gw5-monster .gw5-weapons .gw5-collection-head,.gw5-sheet .gw5-monster .gw5-weapon-row{display:grid;grid-template-columns:minmax(0,1fr) 44px 70px 60px 116px;}
 .gw5-sheet .gw5-monster .gw5-item>strong{flex:1 1 120px;color:#e6dcc0;font-size:14px;}
 .gw5-sheet .gw5-monster .gw5-item .gw5-item-detail{color:#aab6a3;font-size:12px;}
-.gw5-sheet .gw5-monster .gw5-item-actions{display:flex;flex-wrap:nowrap;gap:4px;margin-left:auto;}
-.gw5-sheet .gw5-monster .gw5-item-actions .gw5-button{width:27px;min-height:27px;padding:4px;}
+.gw5-sheet .gw5-monster .gw5-item-actions{display:flex;flex-wrap:nowrap;gap:var(--space-1);margin-left:auto;}
+.gw5-sheet .gw5-monster .gw5-item-actions .gw5-button{width:27px;min-height:27px;padding:var(--space-1);}
 .gw5-sheet .gw5-monster .gw5-item-actions .gw5-icon{width:17px;height:17px;}
-.gw5-sheet .gw5-monster .gw5-item-description{flex-basis:100%;margin:0;color:#aab6a3;font:13px/1.5 Georgia,serif;white-space:pre-wrap;}
-.gw5-sheet .gw5-monster .gw5-empty{margin:0;padding:5px 0;color:#8f9a8c;font-size:12px;}
-.gw5-sheet .gw5-monster-prose{display:block;min-width:0;padding:8px 10px;border:1px solid #a68b4d40;background:linear-gradient(120deg,#28352221,#07111366);}
-.gw5-sheet .gw5-monster-prose>summary{position:relative;min-height:26px;padding-right:35px;color:#dcc895;font:16px/1.5 Georgia,serif;cursor:pointer;}
-.gw5-sheet .gw5-monster-prose>summary>button{position:absolute;right:0;top:0;width:26px;min-height:26px;padding:4px;border-color:transparent;background:transparent;}
+.gw5-sheet .gw5-monster .gw5-item-description{flex-basis:100%;margin:var(--space-0);color:#aab6a3;font:13px/1.5 Georgia,serif;white-space:pre-wrap;}
+.gw5-sheet .gw5-monster .gw5-empty{margin:var(--space-0);padding:var(--space-1) var(--space-0);color:#8f9a8c;font-size:12px;}
+.gw5-sheet .gw5-monster-prose{display:block;min-width:0;padding:var(--space-2) var(--space-2);border:1px solid #a68b4d40;background:linear-gradient(120deg,#28352221,#07111366);}
+.gw5-sheet .gw5-monster-prose>summary{position:relative;min-height:26px;padding-right:var(--space-8);color:#dcc895;font:16px/1.5 Georgia,serif;cursor:pointer;}
+.gw5-sheet .gw5-monster-prose>summary>button{position:absolute;right:0;top:0;width:26px;min-height:26px;padding:var(--space-1);border-color:transparent;background:transparent;}
 .gw5-sheet .gw5-monster-prose>summary>button .gw5-icon{width:17px;height:17px;}
-.gw5-sheet .gw5-monster-prose-text{margin-top:8px;padding-top:8px;border-top:1px solid #a68b4d33;color:#c4cfb9;font:13px/1.6 Georgia,serif;white-space:pre-wrap;overflow-wrap:anywhere;}
-.gw5-modal .gw5-monster-settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;}
+.gw5-sheet .gw5-monster-prose-text{margin-top:var(--space-2);padding-top:var(--space-2);border-top:1px solid #a68b4d33;color:#c4cfb9;font:13px/1.6 Georgia,serif;white-space:pre-wrap;overflow-wrap:anywhere;}
+.gw5-modal .gw5-monster-settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-3);}
 .gw5-modal .gw5-monster-setting-wide{grid-column:1/-1;}
 .gw5-modal .gw5-monster-settings textarea{min-height:160px;font:14px/1.6 Georgia,serif;}
 .gw5-modal .gw5-monster-settings:has(.gw5-monster-settings-grid>.gw5-field:only-child) .gw5-monster-settings-grid{grid-template-columns:minmax(0,1fr);}
-.gw5-modal .gw5-monster-settings-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:8px;border-top:1px solid #a68b4d44;}
+.gw5-modal .gw5-monster-settings-footer{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);padding-top:var(--space-2);border-top:1px solid #a68b4d44;}
 @container gw5 (max-width:800px){
  .gw5-sheet .gw5-monster .gw5-weapons .gw5-collection-head{display:none;}
  .gw5-sheet .gw5-monster .gw5-weapon-row{display:flex;flex-wrap:wrap;}
 }
 @container gw5 (max-width:720px){
- .gw5-sheet .gw5-monster-grid{grid-template-columns:minmax(180px,.31fr) minmax(0,.69fr);}
- .gw5-sheet .gw5-monster-classification{gap:5px 13px;}
- .gw5-sheet .gw5-monster-ability-grid{gap:4px;}
- .gw5-sheet .gw5-monster-abilities .gw5-ability{min-height:90px;padding:5px 3px;}
- .gw5-sheet .gw5-monster-abilities .gw5-ability input{font-size:25px;}
- .gw5-sheet .gw5-monster-abilities .gw5-ability .gw5-mod{font-size:20px;}
- .gw5-sheet .gw5-monster-abilities .gw5-ability-heading{gap:2px;}
- .gw5-sheet .gw5-monster-abilities .gw5-ability-heading>.gw5-button{padding:2px 0;font-size:11px;}
+ .gw5-sheet .gw5-monster-grid{grid-template-columns:208px minmax(0,1fr);}
+ .gw5-sheet .gw5-monster-classification{gap:var(--space-1) var(--space-3);}
+ .gw5-sheet .gw5-monster-ability-grid{gap:var(--space-1);}
+ .gw5-sheet .gw5-monster-abilities .gw5-ability{min-height:0;padding:var(--space-1) var(--space-half);}
+ .gw5-sheet .gw5-monster-abilities .gw5-ability input{font-size:24px;}
+ .gw5-sheet .gw5-monster-abilities .gw5-ability .gw5-mod{font-size:16px;}
+ .gw5-sheet .gw5-monster-abilities .gw5-ability-heading{gap:var(--space-half);}
+ .gw5-sheet .gw5-monster-abilities .gw5-ability-heading>.gw5-button{padding:var(--space-half) var(--space-0);font-size:12px;}
  .gw5-sheet .gw5-monster-resources{grid-template-columns:minmax(0,1fr);}
- .gw5-sheet .gw5-monster-legendary-counters{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;}
- .gw5-sheet .gw5-monster-stats .gw5-stat{min-height:75px;padding-inline:4px;}
+ .gw5-sheet .gw5-monster-legendary-counters{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-3);}
+ .gw5-sheet .gw5-monster-stats .gw5-stat{min-height:0;padding-inline:var(--space-1);}
  .gw5-sheet .gw5-monster-speed output{font-size:16px;}
 }
 @container gw5 (max-width:540px){
- .gw5-sheet .gw5-monster-summary{gap:8px;padding:8px;}
- .gw5-sheet .gw5-monster-classification{gap:5px 10px;}
+ .gw5-sheet .gw5-monster-summary{gap:var(--space-2);padding:var(--space-2);}
+ .gw5-sheet .gw5-monster-classification{gap:var(--space-1) var(--space-2);}
  .gw5-sheet .gw5-monster-fact-value{font-size:13px;}
- .gw5-sheet .gw5-monster-challenge{min-width:55px;padding-left:8px;}
+ .gw5-sheet .gw5-monster-challenge{min-width:55px;padding-left:var(--space-2);}
  .gw5-sheet .gw5-monster-grid{grid-template-columns:minmax(0,1fr);}
  .gw5-sheet .gw5-monster-play{order:0;}
  .gw5-sheet .gw5-monster-aside{order:1;}
@@ -92,18 +92,20 @@
 }
 @container gw5 (max-width:400px){
  .gw5-sheet .gw5-monster-ability-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
- .gw5-sheet .gw5-monster-abilities .gw5-ability{min-height:86px;}
- .gw5-sheet .gw5-monster-abilities .gw5-ability input{font-size:28px;}
- .gw5-sheet .gw5-monster-classification{display:grid;gap:4px;}
- .gw5-sheet .gw5-monster-classification .gw5-monster-fact{grid-template-columns:auto minmax(0,1fr);align-items:baseline;gap:8px;}
- .gw5-sheet .gw5-monster-stats .gw5-stat .gw5-field{font-size:10px;}
+ .gw5-sheet .gw5-monster-abilities .gw5-ability{min-height:0;}
+ .gw5-sheet .gw5-monster-abilities .gw5-ability input{font-size:24px;}
+ .gw5-sheet .gw5-monster-classification{display:grid;gap:var(--space-1);}
+ .gw5-sheet .gw5-monster-classification .gw5-monster-fact{grid-template-columns:auto minmax(0,1fr);align-items:baseline;gap:var(--space-2);}
+ .gw5-sheet .gw5-monster-stats .gw5-stat .gw5-field{font-size:12px;}
  .gw5-sheet .gw5-monster-stats .gw5-stat .gw5-field--stat-action{font-size:0;}
  .gw5-sheet .gw5-monster-stats .gw5-stat input,.gw5-sheet .gw5-monster-stats .gw5-stat output{font-size:24px;}
  .gw5-sheet .gw5-monster-stats .gw5-monster-speed output{font-size:15px;}
  .gw5-sheet .gw5-monster-defense-values{grid-template-columns:minmax(0,1fr);}
 }
-@container gw5 (max-width:340px){
+@container gw5 (max-width:420px){
  .gw5-sheet .gw5-monster-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@container gw5 (max-width:340px){
  .gw5-sheet .gw5-monster-legendary-counters{grid-template-columns:minmax(0,1fr);}
 }
 @media(max-width:450px){.gw5-modal .gw5-monster-settings-grid{grid-template-columns:minmax(0,1fr);}}
