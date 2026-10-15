@@ -309,14 +309,14 @@ def smoke(seed,output):
         row=tracker.locator(f'[data-gw5-token-id="{seed["linkedToken"]}"]')
         row.locator('.gw-combat-menu__trigger').click();action(row,'open-sheet').click()
         sheet=gm.locator('.gw5-combat-sheet');expect(sheet.locator('.gw5-sheet')).to_be_visible(timeout=15000)
-        sheet.locator('.gw5-modal-title button').click();expect(sheet).to_have_count(0)
+        sheet.locator('.gw5-close').click();expect(sheet).to_have_count(0)
         enemy=tracker.locator(f'[data-gw5-token-id="{seed["monsterToken"]}"]')
         enemy.locator('.gw-combat-menu__trigger').click();action(enemy,'open-sheet').click()
         monster_sheet=gm.locator('.gw5-combat-sheet');expect(monster_sheet.locator('.gw5-monster')).to_be_visible(timeout=15000)
         name=monster_sheet.locator('[data-gw5-path="core.name"]');name.fill('Monster edit flushed on close')
         # Close immediately, before the autosave debounce; the existing native
         # modal flush contract must wait for this package sheet's pending save.
-        monster_sheet.locator('.gw5-modal-title button').click();expect(monster_sheet).to_have_count(0,timeout=15000)
+        monster_sheet.locator('.gw5-close').click();expect(monster_sheet).to_have_count(0,timeout=15000)
         assert actor(gm,seed['monster'])['name']=='Monster edit flushed on close'
 
         tracker.screenshot(path=str(output/'tracker-desktop.png'))
@@ -346,11 +346,18 @@ def main():
     local_temp.mkdir(parents=True,exist_ok=True);local_cache.mkdir(parents=True,exist_ok=True)
     os.environ.update({'TEMP':str(local_temp),'TMP':str(local_temp),'TMPDIR':str(local_temp),'XDG_CACHE_HOME':str(local_cache)})
     initial=fingerprint(root/'.env');server=log=None
+    source_archive_sha=fingerprint(args.archive.resolve())
     try:
         if args.seed:seed=json.loads(args.seed.read_text(encoding='utf-8'))
         else:server,log,seed=start_fixture(root,output,args.archive.resolve(),args.port)
+        installed_archives=list((Path(seed['fixture'])/'modules'/'archives').glob('*.zip'))
+        if len(installed_archives)!=1:raise AssertionError('Expected exactly one installed system archive in the isolated fixture.')
+        installed_archive_sha=fingerprint(installed_archives[0])
+        if not args.seed and installed_archive_sha!=source_archive_sha:
+            raise AssertionError('The fixture installed different bytes from the archive fingerprint captured before startup.')
         result=(benchmark if args.benchmark else smoke)(seed,output)
-        result['archiveSha256']=fingerprint(args.archive.resolve())
+        result['archiveSha256']=installed_archive_sha
+        result['sourceArchiveSha256']=source_archive_sha
         (output/'result.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
         print(json.dumps({'result':result['result'],'output':str(output),'fixture':seed['fixture']}))
     finally:

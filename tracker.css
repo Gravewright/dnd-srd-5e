@@ -1,4 +1,4 @@
-.gw5-combat{height:100%;min-height:0;--combat-current:#4ade80;--combat-next:#facc15;}
+.gw-combat-panel.gw5-combat{height:100%;min-height:0;--combat-current:#4ade80;--combat-next:#facc15;}
 .gw5-combat .gw-combat-icon svg,.gw5-combat .gw-combat-menu__trigger svg{width:18px;height:18px;}
 .gw5-combat .gw-combat-rollbar{flex-wrap:wrap;}
 .gw5-combat .gw-combat-menu__list{max-height:min(65vh,420px);overflow-y:auto;}
