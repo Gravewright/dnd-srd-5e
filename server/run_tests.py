@@ -1,4 +1,4 @@
-"""Run the opt-in backend against a temporary database without reading .env."""
+"""Check historical server reference code in isolation; not the system runtime."""
 import os
 from pathlib import Path
 import sys

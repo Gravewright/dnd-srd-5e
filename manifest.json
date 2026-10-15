@@ -1,8 +1,8 @@
 {
   "id": "gravewright.5e-srd",
   "name": "DnD 5e SRD",
-  "version": "0.1.0",
-  "description": "DnD 5e SRD for Gravewright: character, monster and item sheets, licensed SRD compendiums, and selectable 2014/2024 rules. Requires Gravewright VTT 0.2.1 or newer and the trusted server companion.",
+  "version": "0.1.1",
+  "description": "DnD 5e SRD for Gravewright VTT 0.2.3: one browser system with character, monster and item sheets, licensed SRD compendiums, selectable 2014/2024 rules and package-owned automation.",
   "author": "Ricardo Tristão; Gravewright contributors",
   "license": "MIT AND CC-BY-4.0",
   "sdk": {
@@ -100,7 +100,7 @@
     "combat": {
       "formula": "1d20 + @init",
       "manualInput": "number",
-      "requiresProvider": true
+      "requiresProvider": false
     }
   }
 }

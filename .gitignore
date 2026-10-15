@@ -10,3 +10,4 @@ data/
 host-vtt/
 test-results/
 .DS_Store
+*.log

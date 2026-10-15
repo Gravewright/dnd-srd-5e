@@ -1,4 +1,4 @@
-"""Build deterministic browser and trusted-server packages without local fixtures."""
+"""Build one deterministic browser system without local or historical fixtures."""
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -11,6 +11,8 @@ from validate_locales import load_locales
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME = {'assets', 'compendiums', 'content', 'layouts', 'locales', 'mappings', 'rules', 'schemas', 'docs'}
 SUFFIXES = {'.js', '.json', '.css', '.md', '.txt', '.webp', '.svg'}
+ROOT_DATA = {'manifest.json', 'system.json', 'LICENSE.md', 'NOTICE.md', 'README.md',
+             'README.pt-BR.md', 'CONTENT_POLICY.md', 'AUTOMATION.md'}
 EXCLUDED = {'.git', 'dist', 'tests', 'scripts', 'server', 'node_modules', '__pycache__', '.venv'}
 read = lambda path: json.loads(path.read_text(encoding='utf-8-sig'))
 
@@ -33,24 +35,11 @@ def browser_files(root=ROOT):
             if path.is_symlink() or path.is_junction():
                 raise ValueError(f'Package directories cannot be links: {path.name}')
             selected.extend(p for p in path.rglob('*') if p.is_file())
-        elif path.is_file() and path.suffix in SUFFIXES and not path.name.startswith('.'):
+        elif path.is_file() and (path.suffix in {'.js', '.css'} or path.name in ROOT_DATA):
             selected.append(path)
     return {p.relative_to(root).as_posix(): checked(p, root) for p in sorted(selected)
-            if p.suffix in SUFFIXES and not any(part in EXCLUDED or part.startswith('.env')
+            if p.suffix in SUFFIXES and not any(part in EXCLUDED or part.startswith('.')
                                                for part in p.relative_to(root).parts)}
-
-
-def server_files(root=ROOT):
-    server = root / 'server'
-    result = {'LICENSE.md': checked(root / 'LICENSE.md', root),
-              'NOTICE.md': checked(server / 'NOTICE.md', root)}
-    for path in sorted(server.rglob('*')):
-        relative = path.relative_to(server)
-        if (path.is_file() and not any(part in EXCLUDED for part in relative.parts)
-                and path.name not in {'tests.py', 'run_tests.py', 'NOTICE.md'}
-                and path.suffix in {'.py', '.json', '.md', '.txt'}):
-            result[relative.as_posix()] = checked(path, root)
-    return result
 
 
 def write_archive(target, files, stamp):
@@ -78,12 +67,15 @@ def write_archive(target, files, stamp):
 
 
 def build(root=ROOT):
-    manifest, server = read(root / 'manifest.json'), read(root / 'server/manifest.json')
+    root = Path(root).resolve()
+    manifest, package = read(root / 'manifest.json'), read(root / 'package.json')
     version = manifest['version']
-    if manifest['id'] != 'gravewright.5e-srd' or server['id'] != 'gravewright.5e-srd-server':
+    if manifest['id'] != 'gravewright.5e-srd':
         raise ValueError('Package identifiers must retain campaign compatibility')
-    if version != server['version'] or len(version.split('.')) != 3 or not all(p.isdigit() for p in version.split('.')):
-        raise ValueError('Browser and server must use the same numeric release version')
+    if version != package['version'] or len(version.split('.')) != 3 or not all(p.isdigit() for p in version.split('.')):
+        raise ValueError('Manifest and package must use the same numeric release version')
+    if 'django' in manifest or manifest['system']['combat'].get('requiresProvider') is not False:
+        raise ValueError('The system must run in the browser on the released VTT 0.2.3 without a server provider')
     data = {
         'schemas': {p.name.removesuffix('.schema.json'): read(p) for p in sorted((root / 'schemas').glob('*.json'))},
         'layouts': {p.relative_to(root / 'layouts').as_posix().removesuffix('.sheet.gw.json'): read(p) for p in sorted((root / 'layouts').rglob('*.json'))},
@@ -96,8 +88,7 @@ def build(root=ROOT):
         raise ValueError('SOURCE_DATE_EPOCH is outside the ZIP timestamp range')
     output = root / 'dist'
     output.mkdir(exist_ok=True)
-    return [write_archive(output / f'{prefix}-{version}.zip', files, moment.timetuple()[:6])
-            for prefix, files in [('gravewright-5e-srd', browser_files(root)), ('gravewright-5e-srd-server', server_files(root))]]
+    return [write_archive(output / f'gravewright-5e-srd-{version}.zip', browser_files(root), moment.timetuple()[:6])]
 
 
 if __name__ == '__main__':
