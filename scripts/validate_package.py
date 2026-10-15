@@ -6,17 +6,17 @@ from pathlib import Path
 import re
 import zipfile
 
-from build import ROOT, browser_files, read, server_files
+from build import ROOT, browser_files, read
 from validate_locales import load_locales
 
 
 def validate(root=ROOT):
-    browser, server = read(root / 'manifest.json'), read(root / 'server/manifest.json')
+    root = Path(root).resolve()
+    browser = read(root / 'manifest.json')
     assert browser['id'] == 'gravewright.5e-srd' and browser['name'] == 'DnD 5e SRD'
-    assert server['id'] == 'gravewright.5e-srd-server' and server['name'] == 'DnD 5e SRD - Server Rules'
-    assert browser['version'] == server['version'] == read(root / 'package.json')['version']
-    assert browser['system']['combat']['requiresProvider'] is True
-    assert server['django']['apps'] == ['gravewright_5e.apps.Gravewright5eConfig']
+    assert browser['version'] == read(root / 'package.json')['version']
+    assert 'django' not in browser
+    assert browser['system']['combat']['requiresProvider'] is False
     system = read(root / 'system.json')
     assert system['locales'] == load_locales(root / 'locales'), 'Rebuild system.json after editing catalogs'
     assert system['actions'] == read(root / 'rules/actions.gw.json')['actions']
@@ -51,7 +51,7 @@ def validate(root=ROOT):
         assert dict(counts) == provenance['counts'][edition]
         totals[edition] = {'packs': len(collection['packs']), 'documents': len(ids)}
     reports = []
-    for prefix, files in [('gravewright-5e-srd', browser_files(root)), ('gravewright-5e-srd-server', server_files(root))]:
+    for prefix, files in [('gravewright-5e-srd', browser_files(root))]:
         path = root / 'dist' / f'{prefix}-{browser["version"]}.zip'
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         assert path.with_suffix('.zip.sha256').read_text().strip() == f'{digest}  {path.name}'
@@ -60,10 +60,9 @@ def validate(root=ROOT):
             for name, source in files.items():
                 assert archive.read(name) == source.read_bytes(), name
             assert {'manifest.json', 'LICENSE.md', 'NOTICE.md'} <= set(archive.namelist())
-            assert json.loads(archive.read('manifest.json')) == (server if prefix.endswith('-server') else browser)
-            if not prefix.endswith('-server'):
-                assert 'compendiums/FOUNDRY-DATA-LICENSE.txt' in archive.namelist()
-                assert not any(name.endswith('.py') for name in archive.namelist())
+            assert json.loads(archive.read('manifest.json')) == browser
+            assert 'compendiums/FOUNDRY-DATA-LICENSE.txt' in archive.namelist()
+            assert not any(name.endswith(('.py', '.pyc', '.pyd')) or name.startswith(('server/', 'scripts/', 'tests/')) for name in archive.namelist())
         reports.append({'name': path.name, 'bytes': path.stat().st_size, 'sha256': digest, 'files': len(files)})
     return {'version': browser['version'], 'compendiums': totals, 'archives': reports}
 

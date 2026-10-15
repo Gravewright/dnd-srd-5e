@@ -102,16 +102,19 @@ test('regional and absent-Translator fallbacks use the module catalog without bo
 
 test('real system activation registers translations for mounts and reopening, then its lifetime removes them',async t=>{
   locale('pt-BR');
-  const {life,i18n}=activation(t),stylePaths=[],eventNames=[];
+  const {life,i18n}=activation(t),stylePaths=[],eventNames=[],registrations=[];
   await system.start({
     i18n,signal:life.signal,
     assets:{json:async path=>{assert.equal(path,'system.json');return {schemas:{},layouts:{},actions:{},locales:catalogs};}},
     styles:{use:path=>stylePaths.push(path)},
-    api:{i18n,events:{on:name=>eventNames.push(name)}},
+    api:{i18n,events:{on:name=>{eventNames.push(name);return ()=>{};}}},
   });
   t.after(()=>system.stop());
-  assert.deepEqual(stylePaths,['styles.css','monster.css']);
+  assert.deepEqual(stylePaths,['styles.css','monster.css','tracker.css']);
   assert.deepEqual(eventNames,['compendiums.changed']);
+  system.register({register:(domain,options)=>registrations.push([domain,options.mode,typeof options.mount])});
+  assert.deepEqual(registrations,[['actor.sheet','replace','function'],['item.sheet','replace','function'],
+    ['chat.log','augment','function'],['combat.tracker','replace','function']]);
   const first=new Lifetime(),reopened=new Lifetime();
   t.after(()=>first.close());t.after(()=>reopened.close());
   const firstSurface=createTranslator(moduleId,first),secondSurface=createTranslator(moduleId,reopened);
@@ -132,6 +135,18 @@ test('the system detects an unsupported host before attempting assets or any tra
     await assert.rejects(()=>system.start({...context,assets}),/official Translator i18n API/);
   }
   assert.equal(assetsRead,false);
+});
+
+test('cancelled activation does not register catalogs, styles or listeners after its assets resolve',async()=>{
+  const controller=new AbortController();
+  let touched=false;
+  const unexpected=()=>{touched=true;};
+  const i18n={t:key=>key,register:unexpected};
+  await assert.rejects(()=>system.start({signal:controller.signal,i18n,
+    api:{i18n,events:{on:unexpected}},styles:{use:unexpected},
+    assets:{json:async()=>{controller.abort();return {locales:catalogs};}},
+  }),{code:'cancelled'});
+  assert.equal(touched,false);
 });
 
 test('module listeners follow locale events and catalog disposal without leaking after surface close',async t=>{

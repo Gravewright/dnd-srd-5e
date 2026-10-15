@@ -103,7 +103,7 @@ export async function mountSheet(block, system, isItem=false) {
       if(drops===dropQueue&&upload===uploadPromise&&!work.size)return;
     }
   }
-  root.closest('.gw-window,.item-sheet')?.addEventListener('gravewright:sheet-flush',event=>event.detail.waitUntil(flushAll().catch(e=>{error(e);throw e;})),{signal});
+  root.closest('.gw-window,.item-sheet,.gw5-combat-sheet')?.addEventListener('gravewright:sheet-flush',event=>event.detail.waitUntil(flushAll().catch(e=>{error(e);throw e;})),{signal});
   signal.addEventListener('abort',()=>clearTimeout(timer),{once:true});
   function managedModal(title,opener=actionSource||doc.activeElement){
     const entryId=opener?.closest('[data-entry-id]')?.dataset.entryId;
@@ -543,7 +543,7 @@ export async function mountSheet(block, system, isItem=false) {
       else content.append(...renderTab(tab,entries));
       shell.append(content);
     }else {draft.rulesEdition??=edition;shell.append(itemEditor({doc,t,layout,type,field,button,modifiers,resource,changed,data:()=>draft,name:()=>name,edition:()=>draft.rulesEdition||edition,state:itemState}));}
-    const footer=element(doc,'footer','gw5-footer');for(const indicator of indicators)if(!indicator.isConnected)indicators.delete(indicator);retry=button(t('retrySave'),flush,!view.canEdit);retry.classList.add('gw5-save-retry');footer.append(element(doc,'small','','DnD 5e SRD · 0.1.0'),saveIndicator(),retry);status();shell.append(footer);
+    const footer=element(doc,'footer','gw5-footer');for(const indicator of indicators)if(!indicator.isConnected)indicators.delete(indicator);retry=button(t('retrySave'),flush,!view.canEdit);retry.classList.add('gw5-save-retry');footer.append(element(doc,'small','','DnD 5e SRD · 0.1.1'),saveIndicator(),retry);status();shell.append(footer);
   }
   const automation=createAutomationUI({doc,t,field,button,api,context,modal:managedModal,data:()=>draft,edition:()=>edition,canEdit:()=>view.canEdit,changed,roll,commit:async next=>{draft=derive(next===undefined?draft:structuredClone(next),type,schema,edition);mark();await flush();render();}});
   function advancementParent(id){return Object.values(draft.advancementLedger?.parents||{}).find(parent=>parent.owned?.[0]===id);}

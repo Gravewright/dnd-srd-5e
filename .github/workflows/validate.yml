@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
         with:
           repository: Gravewright/gravewright
-          ref: b8486abe68c13a042315fcaf7800b51c53a55dec
+          ref: db15638f65e8f9e02e28b6b7616274006a92c436
           path: host-vtt
           persist-credentials: false
       - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
@@ -30,13 +30,15 @@ jobs:
         run: npm test
         env:
           GRAVEWRIGHT_TEST_HOST_ROOT: ${{ github.workspace }}/host-vtt
-      - name: Test trusted server rules with isolated storage
-        run: host-vtt/.venv/bin/python server/run_tests.py
-        env:
-          GRAVEWRIGHT_TEST_HOST_ROOT: ${{ github.workspace }}/host-vtt
       - name: Validate translations, build and check release contents
         run: |
           python scripts/validate_locales.py
           python scripts/build.py
           python scripts/validate_package.py
           git diff --exit-code -- system.json
+      - name: Test the single system archive and original VTT 0.2.3 contracts
+        run: |
+          python -m unittest discover -s tests -p test_package.py -v
+          host-vtt/.venv/bin/python tests/run_host_tests.py
+        env:
+          GRAVEWRIGHT_TEST_HOST_ROOT: ${{ github.workspace }}/host-vtt

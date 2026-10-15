@@ -1,8 +1,8 @@
 # DnD 5e SRD
 
-A fifth-edition game system for Gravewright VTT, with selectable **2014 / SRD 5.1** and **2024 / SRD 5.2.1** rules. First release: **0.1.0 Alpha**.
+A fifth-edition game system for Gravewright VTT, with selectable **2014 / SRD 5.1** and **2024 / SRD 5.2.1** rules. Release **0.1.1 Alpha**.
 
-[Português brasileiro](README.pt-BR.md) · [Download 0.1.0](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.0) · [Release notes](docs/releases/0.1.0.md) · [Report an issue](https://github.com/Gravewright/dnd-srd-5e/issues)
+[Português brasileiro](README.pt-BR.md) · [Download 0.1.1](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.1) · [Release notes](docs/releases/0.1.1.md) · [Report an issue](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 The Noturno sheet brings a dark background, ivory typography, gold frames and an illustrated character header. Character, monster and item sheets use native Gravewright windows, automatic saving and chat rolls. The system includes licensed, edition-separated SRD compendiums and declarative automation for supported rules.
 
@@ -12,24 +12,38 @@ This is an independent project, not affiliated with or endorsed by Wizards of th
 
 | Component | Required version | Purpose |
 | --- | --- | --- |
-| [Gravewright VTT](https://github.com/Gravewright/gravewright/releases/tag/v0.2.1) | **0.2.1 or newer**, SDK 1.x | Native sheets, compendiums, modal lifecycle and generic server providers |
-| **DnD 5e SRD** | **0.1.0** | Browser system and licensed content |
-| **DnD 5e SRD - Server Rules** | **0.1.0** | Trusted Django companion for initiative and turn automation |
-| [Official Translator](https://github.com/Gravewright/translator) | **0.1.2 or newer** for localized use | English, Brazilian Portuguese and Spanish interface through the official API |
+| [Gravewright VTT](https://github.com/Gravewright/gravewright/releases/tag/v0.2.3) | **Released 0.2.3**, SDK 1.x | Native documents, compendiums, dice, combat and modals |
+| **DnD 5e SRD** | **0.1.1** | One browser system with sheets, licensed content and automation |
+| [Official Translator](https://github.com/Gravewright/translator) | **0.1.2 or newer** for localized use | English, Brazilian Portuguese and Spanish through the official API |
 
-English is the fallback without an active language package. VTT 0.2.0 lacks contracts required by this system. The SDK requirement remains `>=1.0.0 <2.0.0`; that range alone does not express the minimum VTT release.
+English is the default without an active language package. The system runs on
+the published VTT 0.2.3 without a core patch or a separately installed rules module.
 
 ## Install and choose an edition
 
-1. In the official Marketplace, install **DnD 5e SRD** under **Systems**. Alternatively, download `gravewright-5e-srd-0.1.0.zip` from the release and install it as a local system package.
-2. As the host owner, install **DnD 5e SRD - Server Rules** under **Modules**, or use `gravewright-5e-srd-server-0.1.0.zip`. Explicitly enable its trusted Django extension and complete the managed Runner restart. This package executes system-owned Python code; installing browser JavaScript does not enable it. See [the companion documentation](server/README.md).
-3. Install and activate the official Translator for Portuguese or Spanish. Create a table using **DnD 5e SRD** and enable Translator in that table's extensions.
-4. The GM chooses the default edition for new sheets in **Settings → Extensions → Customize**. Each sheet retains its own explicit edition: **2014 / SRD 5.1** or **2024 / SRD 5.2.1**.
-5. Set each player's language in their account preferences. Grant compendium read access through the native permissions when players need it.
+1. Install **DnD 5e SRD** from the Marketplace under **Systems**, or select
+   `gravewright-5e-srd-0.1.1.zip` in the native local system installer.
+2. Create a table using **DnD 5e SRD**. Existing tables can select the new exact
+   package version in **Settings → Extensions**.
+3. The GM chooses the default edition for new sheets in **Settings → Extensions
+   → Customize**. Each sheet retains **2014 / SRD 5.1** or **2024 / SRD 5.2.1**.
+4. For Portuguese or Spanish, install and activate the official Translator and
+   choose your account language. Grant compendium read access through native
+   permissions when players need it.
 
-The release provides SHA-256 files beside both ZIPs. Verify the checksum before local installation. Do not extract either ZIP into the VTT source tree; use the native package installer.
+One system ZIP contains character, monster and item sheets, compendiums,
+translations, settings, initiative and supported turn automation. Its SHA-256
+sidecar accompanies the download. Install through the VTT; do not extract the ZIP
+into the VTT source tree. The stable system ID `gravewright.5e-srd` preserves
+existing character data, table settings and embedded copies.
 
-Technical IDs (`gravewright.5e-srd`, `gravewright.5e-srd-server`) and ZIP basenames remain stable. Existing installations and documents retain their identity after the display-name change. System and companion version **0.1.0** are independent of VTT version **0.2.1**.
+Before disabling an old companion, select **DnD 0.1.1 in every DnD table** that
+uses it; older system versions still require that server module.
+If the old Server Rules companion is installed, **Customize → Previous installation**
+allows the host owner to review and disable it using existing VTT management
+controls. That historical deactivation restarts the host. Removing the old module
+requires a separate confirmation after reviewing affected tables. A fresh 0.1.1
+installation has no server-code activation step.
 
 ## Play
 
@@ -43,7 +57,7 @@ Technical IDs (`gravewright.5e-srd`, `gravewright.5e-srd-server`) and ZIP basena
 - **Automatic saving:** revision-controlled writes, visible errors and retry, with pending changes flushed before closing. Independent tokens retain independent sheet data.
 - **Localization:** English, Brazilian Portuguese and Spanish interface through Translator's module-scoped catalogs. User-authored names, descriptions and English SRD content are preserved.
 
-The browser implementation lives in this repository, including `rules.js`; server rules live in `server/gravewright_5e/`. The VTT core provides generic permissions, documents, persistence, transactions and provider contracts. It contains no D&D rules or content.
+All current rules run from this package, including `rules.js`, `combat-rules.js` and `combat-controller.js`. The VTT core provides generic permissions, documents, dice, persistence and combat contracts. It contains no D&D rules or content.
 
 ## Content and automation boundaries
 
@@ -59,43 +73,65 @@ Changing a sheet's edition does not convert imported classes, items, spell text 
 
 ## Update and troubleshoot
 
-Back up the VTT database, media and configuration before updating. Update the browser system and server companion together, confirm server-code activation, and reload open pages. Updating a compendium does not overwrite independent copies already embedded in character sheets.
+Preserve your VTT database, media and configuration when updating the system.
+Reload open table pages after selecting the new package version. Compendium
+updates never overwrite independent copies already embedded in character sheets.
+
+The GM advances turns using the package combat tracker. Its operation journal,
+native document revisions and retry receipts let interrupted work resume without
+repeating completed steps. Different sheets are recoverable writes, not one
+shared database transaction. Moving backward does not undo resolved outcomes.
+Automation does not run in the background after all table clients close.
 
 | Symptom | Check |
 | --- | --- |
-| Missing compendiums | The table uses the approved, active system version; the GM has granted players read permission |
-| Initiative or effects report a missing provider | The host owner installed/enabled the companion and the Runner restart completed |
-| Interface stays in English | Translator is active for the table, the account language is selected, and the page was reloaded |
-| SRD item descriptions remain English | Expected: interface localization does not translate game content in 0.1.0 |
-| An equipment bonus is absent | Equipment/attunement state, armor mode, sheet edition and supported declarative metadata |
-| Save fails | Keep the sheet open, restore connectivity and retry; resolve the visible error before reloading |
+| Compendiums are missing | The table uses an installed active system version and the GM has granted player read access |
+| Previous server module detected | The host owner can open Previous installation in Customize and review migration |
+| Interface stays English | Activate Translator, choose your account language and reload; SRD content stays English |
+| Interrupted combat operation | Restore connectivity and use the tracker's retry action before issuing another advance |
+| Save fails | Keep the sheet open and resolve the visible error before closing or reloading |
 
-For [issue reports](https://github.com/Gravewright/dnd-srd-5e/issues), include VTT, system, companion and Translator versions; the rules edition; and reproduction steps. Remove secrets and personal information from logs.
+For [issue reports](https://github.com/Gravewright/dnd-srd-5e/issues), include VTT,
+system and Translator versions, rules edition and reproduction steps. Remove
+secrets and personal information from logs.
 
 ## Develop and package
 
-Run from this repository's root with **Node.js 22+**. The standard-library build and package validation tools require **Python 3.12+**. A separate **VTT 0.2.1+ checkout** is required by the JavaScript integration tests as well as the backend suite; the VTT backend requires **Python 3.14+** and its own dependencies. No npm dependencies are needed.
-
-For example, in PowerShell, prepare a sibling host checkout and its Python environment, then run this system's tests and build:
+Use **Node.js 22+** and **Python 3.12+** for build tools. Native host integration
+requires the **Python 3.14+** environment of a separate unchanged VTT **0.2.3**
+checkout. There are no npm dependencies.
 
 ```powershell
-git clone --branch v0.2.1 --depth 1 https://github.com/Gravewright/gravewright.git ../gravewright
+git clone --branch v0.2.3 --depth 1 https://github.com/Gravewright/gravewright.git ../gravewright
 $env:GRAVEWRIGHT_TEST_HOST_ROOT = (Resolve-Path ../gravewright).Path
 uv sync --project "$env:GRAVEWRIGHT_TEST_HOST_ROOT" --locked
-npm test
-& "$env:GRAVEWRIGHT_TEST_HOST_ROOT\.venv\Scripts\python.exe" -X utf8 server/run_tests.py
 python scripts/validate_locales.py
 python scripts/build.py
 python scripts/validate_package.py
+npm test
+& "$env:GRAVEWRIGHT_TEST_HOST_ROOT\.venv\Scripts\python.exe" -X utf8 tests/run_host_tests.py
 ```
 
-Reuse an existing compatible host checkout instead of cloning if one is available. On POSIX shells, use `export GRAVEWRIGHT_TEST_HOST_ROOT=/path/to/gravewright` before `npm test`, and use that host's `.venv/bin/python` for `server/run_tests.py`. The integration tests import the real host API; `npm test` is not independent of the host source.
+Use an existing checkout if available. On POSIX, export the same host variable
+and use that host's `.venv/bin/python`. JavaScript integration imports the actual
+host translation adapter; no host code is bundled.
 
-The build validates catalogs and generates `system.json` from the authoring schemas, layouts, locales and actions. Do not edit that generated file directly. `dist/` receives separate browser/server ZIPs and their SHA-256 files; development scripts and tests are excluded. ZIP timestamps use `SOURCE_DATE_EPOCH`, defaulting to `1791849600`, so unchanged sources produce deterministic artifacts. `validate_package.py` then checks the generated archives, compiled system data and content provenance offline.
+Build regenerates `system.json` from schemas, layouts, locales and actions and
+writes **one browser system ZIP** plus its checksum under `dist/`. It excludes
+Python, tools, tests, fixtures and the historical `server/` source. ZIP timestamps
+use `SOURCE_DATE_EPOCH`, defaulting to `1791849600`, so identical source bytes
+produce the same archive. Validation checks compiled data, bytes, licenses and
+the unchanged content provenance offline.
 
-See [server/README.md](server/README.md) for backend setup. Optional source-conversion tests additionally require the pinned licensed source cache; [compendiums/README.md](compendiums/README.md) documents rebuilding and the `GRAVEWRIGHT_SRD_CACHE` / `GRAVEWRIGHT_SRD_TOOLS` overrides. These source downloads are unnecessary for the ordinary JavaScript/backend tests and package build.
+Optional converter tests need the pinned licensed source cache documented in
+[compendiums/README.md](compendiums/README.md). Those downloads are unnecessary
+for ordinary rules, native-host tests and packaging. Historical Python reference
+checks are documented in [server/README.md](server/README.md) and are not the
+current system runtime.
 
-End-to-end scripts under `tests/e2e/` require an already prepared disposable VTT fixture and Playwright. They do not provision or protect a production instance. Inspect each script's fixture expectations and set `GRAVEWRIGHT_REVIEW_URL` before using them.
+`tests/e2e/review_server.py` creates disposable browser fixtures with isolated
+databases, media, modules and synthetic accounts. Older E2E scripts expect their
+documented review seed and local URL; never point them at a production table.
 
 ## Licenses
 

@@ -1,10 +1,16 @@
-# Automações, avanços e limites — 0.1.0
+# Automações, avanços e limites — 0.1.1
 
-As regras são implementadas exclusivamente neste sistema: `rules.js` na ficha
-e `server/gravewright_5e/combat.py` no servidor. O host executa callbacks
-registrados para o ID selecionado, sem conhecer atributos, condições, edições,
-sintonia, resistências, morte ou concentração. As regressões específicas de 5e
-ficam em `tests/` e `server/gravewright_5e/tests.py` deste módulo.
+As regras atuais são implementadas exclusivamente no pacote de sistema para o
+navegador: `rules.js`, `combat-rules.js`, `combat-controller.js` e `tracker.js`.
+O host 0.2.3 já publicado fornece documentos, dados, permissões, rolagens,
+turnos e persistência genéricos. Não há módulo Python necessário à release.
+O código histórico em `server/` é referência de testes e não entra no ZIP.
+
+O mestre conduz a iniciativa e os turnos pelo tracker do pacote. Operações
+persistidas usam revisões nativas e recibos para retomar etapas interrompidas
+sem repetir as já concluídas. Fichas diferentes não compartilham uma transação
+única, e não há execução em segundo plano após todos fecharem a mesa. Voltar
+no combate não desfaz resultados ou recursos já resolvidos.
 
 O sistema conserva a edição de cada item em `data.rulesEdition`. A edição da
 ficha controla regras gerais, como exaustão e descanso; não converte o texto nem

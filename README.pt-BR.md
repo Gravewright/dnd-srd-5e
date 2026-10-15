@@ -1,8 +1,8 @@
 # DnD 5e SRD
 
-Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. Primeira versão **0.1.0 Alpha**.
+Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. Versão **0.1.1 Alpha**.
 
-[English](README.md) · [Baixar a versão 0.1.0](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.0) · [Notas da versão](docs/releases/0.1.0.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
+[English](README.md) · [Baixar a versão 0.1.1](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.1) · [Notas da versão](docs/releases/0.1.1.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 A ficha Noturno combina fundo escuro, tipografia em marfim, molduras douradas e um cabeçalho ilustrado. Inclui fichas próprias de personagem, monstro e 11 tipos de itens, salvamento automático e compêndios licenciados separados por edição. Este projeto adapta o framework legado Gravewright 5e SRD 0.3.1; o nome público atual é **DnD 5e SRD**.
 
@@ -10,24 +10,34 @@ Projeto independente, sem afiliação ou endosso da Wizards of the Coast ou do F
 
 ## Instalar e escolher uma edição
 
-Requisitos: [Gravewright VTT 0.2.1 ou mais recente](https://github.com/Gravewright/gravewright/releases/tag/v0.2.1), SDK 1.x, [Translator oficial 0.1.2 ou mais recente](https://github.com/Gravewright/translator) para português/espanhol e o companion de servidor desta mesma versão. O idioma de fallback é inglês.
+Funciona no [Gravewright VTT **0.2.3 já publicado**](https://github.com/Gravewright/gravewright/releases/tag/v0.2.3),
+com SDK 1.x. Para português/espanhol, use o [Translator oficial 0.1.2 ou mais
+recente](https://github.com/Gravewright/translator). Inglês é o padrão. Não é
+necessário alterar o core do VTT nem instalar um módulo separado de regras.
 
-1. No Marketplace oficial, instale **DnD 5e SRD** em **Sistemas**. Para instalação local, baixe `gravewright-5e-srd-0.1.0.zip` na release e selecione-o nessa área.
-2. Como proprietário do host, instale também **DnD 5e SRD - Server Rules** (`gravewright-5e-srd-server-0.1.0.zip`) em **Módulos** e ative sua extensão Django confiável. Essa ativação executa código Python do sistema e reinicia o servidor pelo Runner gerenciado; instalar apenas o sistema de navegador não a ativa. Veja [a documentação do companion](server/README.md).
-3. Instale e ative o Translator oficial para usar português ou espanhol. Crie uma mesa usando **DnD 5e SRD** e ative o Translator também nas extensões da mesa.
-4. Em **Configurações → Extensões → Personalizar**, o mestre define a edição padrão para novas fichas.
-5. Cada ficha mantém uma escolha explícita: **2014 / SRD 5.1** ou **2024 / SRD 5.2.1**. Itens também identificam sua edição. Trocar a edição não converte classes, magias ou descrições existentes.
+1. Instale **DnD 5e SRD** em **Sistemas** pelo Marketplace, ou selecione
+   `gravewright-5e-srd-0.1.1.zip` no instalador nativo de pacotes locais.
+2. Crie uma mesa com **DnD 5e SRD**. Mesas existentes podem selecionar a nova
+   versão exata do pacote em **Configurações → Extensões**.
+3. O mestre define a edição padrão para novas fichas em **Configurações →
+   Extensões → Personalizar**. Cada ficha mantém sua edição explícita: **2014 /
+   SRD 5.1** ou **2024 / SRD 5.2.1**. Trocar a edição não converte itens existentes.
+4. Para usar português ou espanhol, instale e ative o Translator e escolha o
+   idioma na conta. O mestre concede leitura dos compêndios pelas permissões nativas.
 
-Todas as regras ficam neste sistema: a interface usa `rules.js` e o backend
-usa `server/gravewright_5e/combat.py`. O core do VTT apenas fornece contratos
-genéricos para registro, dados, permissões, transações e persistência. Não há
-perfil D&D embutido no host. Sem a extensão de servidor, o combate informa a
-dependência ausente. Consulte [o backend](server/README.md) para instalação por
-código-fonte e testes isolados.
+Um único ZIP reúne fichas de personagens, monstros e itens, compêndios,
+traduções, configurações, iniciativa e automações de turno. O download inclui
+checksum SHA-256. Use o instalador do VTT, sem extrair o pacote no código-fonte.
+O ID `gravewright.5e-srd`, os dados das fichas, as configurações e as cópias
+incorporadas permanecem no namespace original.
 
-O mínimo é **VTT 0.2.1**, que oferece `system.combat`, `content.compendiums`, a API oficial de tradução e gravação antes de fechar fichas de item. O instalador VTT 0.2.0 não fornece todos esses contratos. O SDK permanece 1.0.0; o intervalo de SDK sozinho não identifica a versão mínima do VTT.
-
-Os nomes técnicos dos ZIPs e os IDs `gravewright.5e-srd` e `gravewright.5e-srd-server` foram preservados para manter a identidade de instalações e documentos existentes. A versão do sistema e do companion é **0.1.0**; ela é independente da versão 0.2.1 do VTT.
+Antes de desativar o complemento antigo, selecione **DnD 0.1.1 em cada mesa de
+DnD** que o utiliza; versões antigas do sistema ainda precisam desse módulo.
+Se o antigo Server Rules estiver instalado, **Personalizar → Instalação anterior**
+permite ao proprietário revisar e desativar o complemento pelos controles já
+existentes do VTT. Essa desativação histórica reinicia o host; remover o módulo
+exige outra confirmação após ver as mesas afetadas. Uma instalação nova da 0.1.1
+não exige ativação de código de servidor.
 
 ## Implementado
 
@@ -36,7 +46,7 @@ Os nomes técnicos dos ZIPs e os IDs `gravewright.5e-srd` e `gravewright.5e-srd-
 - Atributos, proficiências, especialização, salvaguardas, perícias, valores passivos e conjuração derivados.
 - Rolagens públicas ou para o mestre; vantagem/desvantagem, dados e modificadores extras.
 - Vida e PV temporários nas barras nativas. Dano consome PV temporários primeiro. Ficha, token e gerenciador usam os mesmos recursos.
-- Iniciativa pelo gerenciador nativo, preparada pelo backend do sistema com os dados atuais da ficha e do token.
+- Iniciativa e automações de turnos pelo tracker do próprio sistema, com os dados atuais da ficha e do token e as permissões nativas.
 - Armas, inventário, características, magias e efeitos por cópias incorporadas de itens da biblioteca. Arrastar e soltar em qualquer área da ficha verifica acesso de leitura pelo servidor e encaminha o item à coleção correspondente. Itens de 2014, de 2024 e sem edição podem ser usados nas fichas das duas versões, mantendo seus dados e sua edição de origem.
 - Modificadores de efeitos para rolagens, CA e dano recebido. Efeitos ativos são editados pelo mestre. Aplicação de uma condição ao token usa a descrição do efeito, exibida pelos tooltips nativos.
 - Perfis de exaustão: 2014 impõe desvantagens conforme o nível; 2024 aplica penalidade de duas vezes o nível a testes de d20. Deslocamento efetivo reflete os perfis distintos.
@@ -75,62 +85,40 @@ As fórmulas e mapeamentos declarativos originais estão preservados para consul
 
 ## Desenvolver e empacotar
 
-Execute na raiz do checkout de [Gravewright/dnd-srd-5e](https://github.com/Gravewright/dnd-srd-5e), com **Node.js 22+**. As ferramentas de build e validação, feitas apenas com a biblioteca padrão, requerem **Python 3.12+**. Os testes de integração JavaScript e a suíte do backend precisam de um **checkout separado do VTT 0.2.1+**; o backend do VTT exige **Python 3.14+** e suas próprias dependências. Não há dependências de npm.
-
-Exemplo em PowerShell, preparando um checkout do host ao lado deste repositório:
+Use **Node.js 22+** e **Python 3.12+** nas ferramentas. A integração nativa exige
+o ambiente **Python 3.14+** de um checkout separado e inalterado do **VTT 0.2.3**.
+Não há dependências de npm.
 
 ```powershell
-git clone --branch v0.2.1 --depth 1 https://github.com/Gravewright/gravewright.git ../gravewright
+git clone --branch v0.2.3 --depth 1 https://github.com/Gravewright/gravewright.git ../gravewright
 $env:GRAVEWRIGHT_TEST_HOST_ROOT = (Resolve-Path ../gravewright).Path
 uv sync --project "$env:GRAVEWRIGHT_TEST_HOST_ROOT" --locked
-npm test
-& "$env:GRAVEWRIGHT_TEST_HOST_ROOT\.venv\Scripts\python.exe" -X utf8 server/run_tests.py
 python scripts/validate_locales.py
 python scripts/build.py
 python scripts/validate_package.py
+npm test
+& "$env:GRAVEWRIGHT_TEST_HOST_ROOT\.venv\Scripts\python.exe" -X utf8 tests/run_host_tests.py
 ```
 
-Reutilize um checkout compatível já existente em vez de clonar, se disponível. Em shells POSIX, use `export GRAVEWRIGHT_TEST_HOST_ROOT=/caminho/do/gravewright` antes de `npm test` e o `.venv/bin/python` desse host para `server/run_tests.py`. A integração importa a API real do host; `npm test` não é independente do código-fonte do VTT. Veja também [server/README.md](server/README.md).
+Reutilize um checkout existente quando disponível. Em POSIX, exporte a mesma
+variável e use o `.venv/bin/python` do host. Os testes de integração importam o
+adaptador real de tradução; não há código do host dentro deste sistema.
 
-O build agrega os catálogos, layouts e schemas em `system.json` para carregamento por uma única requisição. Python, testes e ferramentas de desenvolvimento ficam fora do ZIP. `dist/` recebe os pacotes e os SHA-256. Não edite `system.json` manualmente. As datas internas dos ZIPs usam `SOURCE_DATE_EPOCH`, com padrão `1791849600`, permitindo artefatos determinísticos para fontes iguais. Depois do build, `validate_package.py` confere offline os arquivos gerados, dados compilados e procedência do conteúdo.
+O build valida os catálogos, regenera `system.json` a partir dos schemas,
+layouts, traduções e ações e gera **um único ZIP de sistema para navegador** com
+checksum SHA-256. Python, ferramentas, testes, fixtures e o diretório histórico
+`server/` são excluídos. Os timestamps usam `SOURCE_DATE_EPOCH`, com padrão
+`1791849600`, para produzir artefatos determinísticos. A validação confere bytes,
+dados compilados, licenças e a procedência original dos compêndios offline.
 
-Os testes opcionais de conversão e a reconstrução do catálogo precisam também das fontes licenciadas fixadas e dependências de ferramentas indicadas em [compendiums/README.md](compendiums/README.md), com overrides `GRAVEWRIGHT_SRD_CACHE` e `GRAVEWRIGHT_SRD_TOOLS`. Esses downloads não são necessários para os testes JavaScript/backend nem para empacotar os JSONs já versionados.
+Testes opcionais de conversão exigem o cache licenciado fixado descrito em
+[compendiums/README.md](compendiums/README.md). Esses downloads não são necessários
+para testar regras, contratos nativos ou empacotar. O código Python histórico
+de [server/README.md](server/README.md) é apenas referência de desenvolvimento.
 
-O Foundry foi consultado como referência de arquitetura e é a fonte estruturada licenciada dos compêndios adaptados. Não foram incorporados seu runtime, recursos gráficos ou traduções. Veja [NOTICE.md](NOTICE.md) para a procedência, licenças e créditos de conteúdo, e [LICENSE.md](LICENSE.md) para o código original.
-
-## Apresentação da ficha
-
-A ficha noturna organiza perícias à esquerda e atributos, combate e recursos à direita. Cada atributo tem um checkbox de proficiência em salvaguardas; ao rolar, escolha entre teste de atributo e salvaguarda. Os indicadores de combate usam toda a largura da coluna, com PV e magia na linha seguinte. A barra de PV reflete as barras nativas, incluindo alterações feitas pelos controles rápidos. Espaços de magia podem ser usados ou recuperados pelos marcadores na visão geral; sua configuração fica na aba Magias. Identidade, regras e imagens têm editores próprios para manter a visão geral focada no jogo.
-
-Ao lado das abas, **Descanso curto** e **Descanso longo** abrem a confirmação dos benefícios conforme a edição da ficha. No curto, escolha quais Dados de Vida gastar, por classe; as rolagens aparecem no chat e a cura fica em prévia até confirmar. Cancelar descarta a prévia. Concluir aplica e salva os PV, Dados de Vida, espaços de Magia de Pacto e recursos com recuperação declarada. O longo recupera também os espaços comuns de magia, encerra PV temporários e aplica as demais recuperações da edição. O relógio do mundo e a conclusão do descanso são confirmados pela mesa. A escolha de edição e os ajustes de exaustão, inspiração, armadura e Dados de Vida ficam em **Editar identidade → Configurações do DnD 5e SRD**.
-
-O layout acompanha a largura da própria janela, reorganizando os quadros ao redimensionar e mantendo rolagem vertical interna. Não reduz toda a ficha para caber em uma tela pequena. Retratos vêm das imagens do personagem; o fundo decorativo é original, criado com assistência de IA para o Gravewright.
-
-O retrato no cabeçalho alinha pelo topo por padrão. Em **Token → Enquadramento do cabeçalho**, os ajustes horizontal e vertical mostram uma prévia e salvam o recorte na ficha. Isso não altera o arquivo enviado nem o enquadramento do token no mapa.
-
-Magias ficam agrupadas por círculo, com busca, filtros de preparação/ritual/concentração e espaços de magia próximos ao resumo de conjuração. **Configurar espaços** mostra os nove círculos para edição; no uso normal aparecem apenas os que têm espaços. O inventário reúne armas e equipamentos por tipo, com quantidade, peso, equipado e moedas. A biografia organiza identidade, história, personalidade e proficiências em painéis de leitura; descrições de itens podem ser expandidas nas listas. Efeitos são separados entre ativos e inativos, com duração informativa e ativação manual pelo mestre.
-
-Campos da ficha, itens independentes e itens incorporados salvam automaticamente após uma breve pausa na digitação. O rodapé informa alterações pendentes, salvamento, sucesso ou erro. Trocar de aba e fechar a janela aguardam as gravações; **Concluir** nos editores apenas aguarda e fecha. Erros mantêm as alterações em memória e impedem o fechamento pelo editor. O controle de revisões rejeita gravações conflitantes, sem sobrescrever silenciosamente outra edição. Nas durações 5e, a contagem é manual por padrão. Uma duração em rodadas com expiração explícita no início ou fim de turno usa o turno da origem configurada; editar a duração ou reativar o efeito reinicia sua contagem.
-
-## Biblioteca e editor de itens
-
-O diretório de Itens usa linhas compactas, busca integrada e pastas hierárquicas. **Criar item** abre uma modal para nome e tipo; após a criação, abre o editor completo. Clique no nome para abrir a ficha. Duplicar, mover, permissões e excluir ficam no menu de ações, respeitando o acesso do usuário.
-
-O editor Noturno é compartilhado entre os documentos da biblioteca e as cópias da ficha. **Descrição** apresenta o texto e um resumo das propriedades; **Detalhes** reúne os campos próprios de cada um dos 11 tipos. Efeitos também têm uma aba de modificadores. As janelas acompanham a tela, com rolagem interna e salvamento automático, inclusive ao fechar com Escape.
-
-Editores, rolagens, configurações e confirmações usam o componente de modal do VTT por `api.ui.openModal`, sem elementos HTML `<dialog>`. Uma confirmação abre sobre sua janela de origem, preservando os dados e devolvendo o foco ao fechar; o fechamento aguarda o salvamento automático.
-
-Arraste um item da biblioteca para qualquer área da ficha, inclusive o cabeçalho ou uma aba diferente. Armas e equipamentos vão para o inventário, magias para Magias, talentos, características, espécies, antecedentes e classes para a lista da Biografia, e efeitos para Efeitos. Armas também aparecem na visão geral; nos monstros, armas vão para Ataques e talentos/características para Características. A ficha abre a aba correspondente, limpa a busca e o filtro dessa lista e destaca a nova cópia. Não há botões de adicionar itens na ficha.
-
-O mestre também pode arrastar uma entrada do compêndio diretamente para a ficha; tipo, mesa, permissão e edições suportadas são verificados antes da inclusão. Uma ficha de 2024 aceita itens de 2014, e uma ficha de 2014 aceita itens de 2024. O arraste preserva a edição, as regras e a procedência do item; não converte o conteúdo nem muda o perfil de regras do personagem. Quando o item possui avanços, a aplicação apresenta as escolhas e os benefícios antes de concluir. Alterar a cópia não modifica o original. Jogadores precisam ter leitura do item e edição da ficha; copiar entradas diretamente dos compêndios e adicionar efeitos continuam reservados ao mestre. Tipos sem uma coleção correspondente no layout são rejeitados. Fechar a ficha aguarda a inclusão e seu salvamento.
-
-Os avanços carregam somente suas dependências recursivas e alternativas de escolha, em lotes autorizados de até 100 documentos. As cópias lidas são reutilizadas durante a sessão da mesa e invalidadas quando o catálogo visível muda. Não é necessário carregar as duas edições completas para aplicar uma raça ou um equipamento. A leitura do item de origem continua sendo verificada a cada arraste; os dados enviados no gesto não concedem acesso.
-
-Os nomes traduzidos e os ícones dos tipos de item são declarados pelo sistema em `manifest.json` (`labelKey` e `icon`). O diretório nativo consulta o catálogo de tradução registrado pelo módulo, inclusive quando ele é registrado após a montagem do diretório ou removido ao desativar a extensão.
-
-Armas dos compêndios usam cálculo automático do atributo: Força para corpo a corpo, Destreza para ataques à distância e o maior modificador nas armas com acuidade. O editor permite escolher um atributo explícito ou o modo manual e indicar proficiência com a arma. Classes aplicadas podem fornecer proficiências por grupo ou arma; uma alteração explícita no checkbox mantém a escolha manual daquele item. Bônus mágicos se somam ao ataque e ao dano, respeitando a sintonia declarada; a proficiência afeta apenas o ataque. Itens antigos mantêm o modo manual até serem configurados. Os detalhes da rolagem permitem dano versátil com duas mãos e segunda arma; mãos disponíveis, ataques secundários e demais exceções continuam exigindo contexto da mesa.
-
-A ficha de monstros compartilha o cabeçalho e o estilo Noturno. Perícias ficam à esquerda; atributos, indicadores de combate, PV e ataques ficam à direita. Tipo, tamanho, alinhamento, desafio, proficiência, deslocamento, sentidos, idiomas e defesas são ajustados na modal **Detalhes da criatura**. Traços e ações em texto têm leitura própria e edição em modal; recursos lendários podem ser expandidos quando necessários. Ataques e características continuam aceitando itens arrastados, com cópias independentes e salvamento automático.
+`tests/e2e/review_server.py` cria mesas descartáveis com banco, mídia, módulos
+e contas sintéticas isolados. Scripts antigos exigem o seed e a URL local
+documentados; não devem ser apontados para uma mesa de produção.
 
 ## Verificação do compêndio
 
@@ -140,15 +128,25 @@ Os scripts em `tests/e2e/` usam Playwright e exigem um VTT descartável já prep
 
 ## Atualizar, dados e problemas comuns
 
-Faça backup da base de dados, mídia e configuração do VTT antes de atualizar o sistema e o companion. Atualize os dois para a mesma versão, confirme a ativação do código de servidor e recarregue as páginas. Cópias de itens já incorporadas nas fichas mantêm seus dados; uma atualização do catálogo não reescreve essas cópias. Não existe conversão automática de campanhas do framework legado nem entre edições das regras.
+Preserve a base de dados, mídia e configuração do VTT ao atualizar o sistema.
+Recarregue as páginas após selecionar a versão nova. Uma atualização do catálogo
+não altera cópias já incorporadas nas fichas, nem converte campanhas ou edições.
 
-- **Compêndios ausentes:** confira se a mesa usa este sistema ativo e aprovado; o mestre precisa conceder leitura aos jogadores nas permissões dos compêndios.
-- **Iniciativa ou efeitos informam dependência ausente:** o proprietário do host deve instalar e ativar o companion de servidor e concluir o reinício do Runner.
-- **Interface permanece em inglês:** ative o Translator oficial para a mesa, selecione o idioma na conta e recarregue. Os textos de itens do catálogo continuam em inglês nesta versão.
-- **Uma regra não é aplicada:** confira a edição da ficha, equipamento/sintonia e os metadados declarados do item. Consulte [AUTOMATION.md](AUTOMATION.md) para os limites; importar a descrição não executa todos os seus efeitos.
-- **Falha ao salvar:** a ficha conserva as alterações em memória e mostra uma opção de tentar novamente. Restabeleça a conexão e resolva o erro antes de fechar ou recarregar.
+O mestre avança os turnos pelo tracker do pacote. Planos de operação persistidos,
+revisões de documentos e recibos de retry permitem retomar etapas interrompidas
+sem repetir as concluídas. Gravações em fichas diferentes são etapas recuperáveis,
+e não uma transação única. Voltar no combate não desfaz os resultados resolvidos.
+A automação não executa em segundo plano após todos fecharem a mesa.
 
-Ao [reportar um problema](https://github.com/Gravewright/dnd-srd-5e/issues), informe as versões do VTT, sistema, companion e Translator, a edição escolhida e passos para reproduzir. Omitir segredos e dados pessoais dos logs.
+- **Compêndios ausentes:** confira o sistema ativo da mesa e as permissões de leitura.
+- **Módulo de servidor anterior detectado:** o proprietário pode revisar a migração em Personalizar → Instalação anterior.
+- **Interface permanece em inglês:** ative o Translator e selecione o idioma na conta; os textos dos compêndios continuam em inglês.
+- **Operação de combate interrompida:** restabeleça a conexão e use a ação de tentar novamente antes de avançar outro turno.
+- **Falha ao salvar:** mantenha a ficha aberta e resolva o erro visível antes de fechar ou recarregar.
+
+Ao [reportar um problema](https://github.com/Gravewright/dnd-srd-5e/issues), informe
+as versões do VTT, sistema e Translator, a edição escolhida e passos para reproduzir.
+Remova segredos e dados pessoais dos logs.
 
 ## Licenças
 
