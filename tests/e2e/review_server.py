@@ -57,7 +57,7 @@ def configure_environment(root,fixture,port):
     sys.path.insert(0,str(root))
 
 
-def create_fixture(root,fixture,archive):
+def create_fixture(root,fixture,archive,translator_archive=None):
     from zipfile import ZipFile
     from jsonschema.validators import validator_for
     schema=json.loads((root/'gravewright/modules/contracts/schemas/manifest.json').read_text(encoding='utf-8'))
@@ -105,6 +105,12 @@ def create_fixture(root,fixture,archive):
     for name,user in users.items():
         client=Client();client.force_login(user)
         sessions[name]={'name':settings.SESSION_COOKIE_NAME,'value':client.cookies[settings.SESSION_COOKIE_NAME].value}
+    if translator_archive:
+        translator=host().install_local(translator_archive.read_bytes(),expected_type='module')
+        if translator['id']!='gravewright.translator':raise RuntimeError('Use the official Translator package for locale reviews.')
+        client=Client();client.force_login(users['gm'])
+        response=client.post('/api/module-packages/activation',{'id':translator['id'],'version':translator['version'],'enabled':True},content_type='application/json')
+        if response.status_code!=200:raise RuntimeError(f'Translator fixture activation failed: {response.content.decode()}')
     sessions['editor']=sessions['player']
     return {'kind':'dnd-isolated-review','fixture':str(fixture),'host':str(root),'module':str(MODULE),
             'package':{'id':package['id'],'version':package['version']},'campaign':str(campaign.pk),'table':str(campaign.pk),
@@ -117,6 +123,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--host-root')
     parser.add_argument('--archive',type=Path,default=default_archive())
+    parser.add_argument('--translator-archive',type=Path,help='Optional official Translator ZIP for native locale preferences.')
     parser.add_argument('--fixture',type=Path)
     parser.add_argument('--seed',type=Path)
     parser.add_argument('--port',type=int,default=30029)
@@ -129,7 +136,7 @@ def main():
     if not archive.is_file():raise RuntimeError(f'Build the DnD archive first: {archive}')
     port=available_port(args.port)
     configure_environment(root,fixture,port)
-    seed=create_fixture(root,fixture,archive)
+    seed=create_fixture(root,fixture,archive,args.translator_archive.resolve() if args.translator_archive else None)
     seed['base']=f'http://127.0.0.1:{port}'
     seed_file=(args.seed or fixture/'seed.json').resolve()
     seed_file.parent.mkdir(parents=True,exist_ok=True)

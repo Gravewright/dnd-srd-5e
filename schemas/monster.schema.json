@@ -290,6 +290,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -307,6 +318,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -324,6 +346,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -341,6 +374,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -358,6 +402,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -375,6 +430,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -392,6 +458,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -409,6 +486,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -426,6 +514,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -443,6 +542,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -460,6 +570,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -477,6 +598,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -494,6 +626,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -511,6 +654,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -528,6 +682,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -545,6 +710,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -562,6 +738,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         },
@@ -579,6 +766,17 @@
             "mod": {
               "type": "number",
               "readOnly": true
+            },
+            "ability": {
+              "type": "string",
+              "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+              ]
             }
           }
         }

@@ -1,6 +1,15 @@
 // Original Gravewright rules. Identifiers and formulas are data, never executable code.
 export const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 export const SKILLS = {acrobatics:'dex',animal_handling:'wis',arcana:'int',athletics:'str',deception:'cha',history:'int',insight:'wis',intimidation:'cha',investigation:'int',medicine:'wis',nature:'int',perception:'wis',performance:'cha',persuasion:'cha',religion:'int',sleight_of_hand:'dex',stealth:'dex',survival:'wis'};
+export function skillAbility(d,skill,override) {
+  const ability=ABILITIES.includes(override)?override:get(d,`skills.${skill}.ability`);
+  return ABILITIES.includes(ability)?ability:SKILLS[skill];
+}
+export function skillModifier(d,skill,override) {
+  const ability=skillAbility(d,skill,override),multiplier=get(d,`skills.${skill}.expert`,false)?2:get(d,`skills.${skill}.prof`,false)?1:0;
+  const modifier=get(d,`abilities.${ability}.mod`,null);
+  return (modifier===null?mod(effectiveAbilityScore(d,ability)):numeric(modifier))+numeric(d.prof)*multiplier;
+}
 const blocked = new Set(['__proto__','prototype','constructor']);
 export const CONDITIONS=['blinded','charmed','deafened','frightened','grappled','incapacitated','invisible','paralyzed','petrified','poisoned','prone','restrained','stunned','unconscious','surprised'];
 export const DAMAGE_TYPES=['acid','bludgeoning','cold','fire','force','lightning','necrotic','piercing','poison','psychic','radiant','slashing','thunder'];
@@ -328,10 +337,11 @@ export function derive(raw, type, schema, edition) {
     set(d,`abilities.${ability}.mod`,mod(get(d,`abilities.${ability}.effectiveScore`,10)));
     set(d,`saves.${ability}.mod`,get(d,`abilities.${ability}.mod`,0) + (get(d,`saves.${ability}.prof`,false) ? numeric(d.prof) : 0));
   }
-  for (const [skill, ability] of Object.entries(SKILLS)) {
+  for (const skill of Object.keys(SKILLS)) {
+    // Optional links retain the original ability until the owner chooses one.
+    if(!ABILITIES.includes(get(d,`skills.${skill}.ability`)))delete d.skills[skill].ability;
     if(get(d,`skills.${skill}.expert`,false))set(d,`skills.${skill}.prof`,true);
-    const multiplier = get(d,`skills.${skill}.expert`,false) ? 2 : get(d,`skills.${skill}.prof`,false) ? 1 : 0;
-    set(d,`skills.${skill}.mod`,get(d,`abilities.${ability}.mod`,0) + numeric(d.prof)*multiplier);
+    set(d,`skills.${skill}.mod`,skillModifier(d,skill));
   }
   // Only class advancement opts into retroactive Constitution changes. Manual
   // HP sheets and monster stat blocks keep their recorded maximum.
@@ -451,8 +461,9 @@ export function rollContext(d,action,options={}) {
   if(edition==='2014'&&d.exhaustion>=1&&category==='roll.check')disadvantage=true;
   if(edition==='2014'&&d.exhaustion>=3&&(category==='roll.attack'||category==='roll.save'))disadvantage=true;
   if((conditions.has('poisoned')||conditions.has('frightened')&&options.fearSourceVisible)&&(category==='roll.check'||category==='roll.attack'))disadvantage=true;
-  if(armor?.untrained&&(id==='weapon.attack'&&['str','dex'].includes(weaponBonuses(d,options.item).ability)||/(?:check|save)\.(str|dex)$/.test(id)||id.startsWith('roll.skill.')&&['str','dex'].includes(SKILLS[id.slice(11)])||id==='roll.initiative'))disadvantage=true;
-  if(id==='roll.skill.stealth'&&armor?.stealthDisadvantage)disadvantage=true;
+  const skill=id.startsWith('roll.skill.')?id.slice(11):null,ability=skill?skillAbility(d,skill,options.skillAbility):null;
+  if(armor?.untrained&&(id==='weapon.attack'&&['str','dex'].includes(weaponBonuses(d,options.item).ability)||/(?:check|save)\.(str|dex)$/.test(id)||skill&&['str','dex'].includes(ability)||id==='roll.initiative'))disadvantage=true;
+  if(skill==='stealth'&&ability==='dex'&&armor?.stealthDisadvantage)disadvantage=true;
   if(id==='roll.save.dex'&&conditions.has('restrained'))disadvantage=true;
   if(id==='roll.initiative'&&edition==='2024'){if(conditions.has('surprised')||conditions.has('incapacitated'))disadvantage=true;if(conditions.has('invisible'))advantage=true;}
   if(category==='roll.attack') {
@@ -538,7 +549,8 @@ export function spellCast(d,item,{slotLevel,ritual=false,free=false,pool='slots'
 export function rollFormula(action,d,options={}) {
   const {item,mode='normal',extraModifier=0,extraDice='',edition=d.rulesEdition||'2014',critical=false,slotLevel,twoHanded=false}=options;
   let formula = action.formula;
-  if(action.id==='weapon.attack')formula=`1d20 + ${weaponBonuses(d,item,options).attackBonus}`;
+  if(action.id?.startsWith('roll.skill.')&&Object.hasOwn(SKILLS,action.id.slice(11)))formula=`1d20 + ${skillModifier(d,action.id.slice(11),options.skillAbility)}`;
+  else if(action.id==='weapon.attack')formula=`1d20 + ${weaponBonuses(d,item,options).attackBonus}`;
   else if(action.id==='spell.attack')formula=`1d20 + ${numeric(d.prof)+(ABILITIES.includes(item?.data?.spell_ability)?get(d,`abilities.${item.data.spell_ability}.mod`,0):numeric(d.spell?.mod))}`;
   else if(action.id?.startsWith('spell.')&&/damage|healing|temporary/.test(action.id))formula=spellFormula(d,item,{slotLevel});
   else if(/^feature\.(damage|healing|temporary)$/.test(action.id)){

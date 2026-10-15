@@ -47,7 +47,7 @@ export function renderMonster(env){
   const grid=element(doc,'div','gw5-monster-grid'),aside=element(doc,'aside','gw5-monster-aside'),play=element(doc,'div','gw5-monster-play');root.append(grid);grid.append(aside,play);
   const skills=section('dnd5e.ui.pericias','gw5-skills gw5-monster-skills'),head=element(doc,'div','gw5-skill-head');
   head.append(element(doc,'span','gw5-skill-head-name',t('skill')),element(doc,'span','gw5-skill-head-ability',t('ability')),element(doc,'span','gw5-skill-head-bonus',t('bonus')));skills.append(head);
-  for(const entry of leaves.filter(entry=>entry.type==='rollableStat'))skills.append(render(entry));
+  for(const entry of env.sortSkills(leaves.filter(entry=>entry.type==='rollableStat')))skills.append(render(entry));
   const flourish=icon(doc,'leaf');flourish.classList.add('gw5-skills-flourish');skills.append(flourish);aside.append(skills);
 
   const abilities=section('dnd5e.ui.atributos','gw5-monster-abilities'),abilityGrid=element(doc,'div','gw5-monster-ability-grid');

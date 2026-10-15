@@ -1,8 +1,8 @@
 # DnD 5e SRD
 
-A fifth-edition game system for Gravewright VTT, with selectable **2014 / SRD 5.1** and **2024 / SRD 5.2.1** rules. Release **0.1.1 Alpha**.
+A fifth-edition game system for Gravewright VTT, with selectable **2014 / SRD 5.1** and **2024 / SRD 5.2.1** rules. **0.1.2 Alpha**.
 
-[Português brasileiro](README.pt-BR.md) · [Download 0.1.1](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.1) · [Release notes](docs/releases/0.1.1.md) · [Report an issue](https://github.com/Gravewright/dnd-srd-5e/issues)
+[Português brasileiro](README.pt-BR.md) · [Release 0.1.2](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.2) · [Release notes](docs/releases/0.1.2.md) · [Report an issue](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 The Noturno sheet brings a dark background, ivory typography, gold frames and an illustrated character header. Character, monster and item sheets use native Gravewright windows, automatic saving and chat rolls. The system includes licensed, edition-separated SRD compendiums and declarative automation for supported rules.
 
@@ -13,7 +13,7 @@ This is an independent project, not affiliated with or endorsed by Wizards of th
 | Component | Required version | Purpose |
 | --- | --- | --- |
 | [Gravewright VTT](https://github.com/Gravewright/gravewright/releases/tag/v0.2.3) | **Released 0.2.3**, SDK 1.x | Native documents, compendiums, dice, combat and modals |
-| **DnD 5e SRD** | **0.1.1** | One browser system with sheets, licensed content and automation |
+| **DnD 5e SRD** | **0.1.2** | One browser system with sheets, licensed content and automation |
 | [Official Translator](https://github.com/Gravewright/translator) | **0.1.2 or newer** for localized use | English, Brazilian Portuguese and Spanish through the official API |
 
 English is the default without an active language package. The system runs on
@@ -21,8 +21,9 @@ the published VTT 0.2.3 without a core patch or a separately installed rules mod
 
 ## Install and choose an edition
 
-1. Install **DnD 5e SRD** from the Marketplace under **Systems**, or select
-   `gravewright-5e-srd-0.1.1.zip` in the native local system installer.
+1. Install **DnD 5e SRD 0.1.2** from the signed Marketplace under **Systems**, or
+   install `gravewright-5e-srd-0.1.2.zip` from the release using the native local
+   system installer.
 2. Create a table using **DnD 5e SRD**. Existing tables can select the new exact
    package version in **Settings → Extensions**.
 3. The GM chooses the default edition for new sheets in **Settings → Extensions
@@ -37,12 +38,39 @@ sidecar accompanies the download. Install through the VTT; do not extract the ZI
 into the VTT source tree. The stable system ID `gravewright.5e-srd` preserves
 existing character data, table settings and embedded copies.
 
-Before disabling an old companion, select **DnD 0.1.1 in every DnD table** that
+Unpublished local review builds are consolidated into 0.1.2. If a different local
+0.1.2 is already installed, use native package management to remove that build
+after switching affected tables to another installed version, then install the
+public 0.1.2. Installed ID/version pairs cannot be overwritten with different
+bytes. Higher local review versions require selecting 0.1.2 manually.
+
+Actor and token sheets initially open at up to 1000 × 760px and adapt to the
+viewport. Native manual resizing remains available. If a previous larger window
+size was saved, use **Reset window layout (↺)** in its title bar to apply the new
+default. The overview uses a shorter banner, compact ability and combat cards,
+and life controls arranged beside their related values. Visible text stays at
+least 12px; long content remains scrollable.
+
+Skills appear alphabetically by their translated name in character and monster
+sheets. The attribute selector in each row saves that skill's default ability.
+The skill roll window can choose another ability for that roll alone, retaining
+proficiency, expertise and applicable effects. Existing sheets keep the standard
+ability until a selection is saved. Roll windows open at the height their
+controls require, with compact field groups and scrolling on smaller screens.
+
+Item editors use a smaller header, unframed detail groups and compact text fields
+that grow with authored content. Empty reading sidebars disappear. Item lists
+sort names within their existing type or spell-level groups, using the active
+language; stored collection order and item copies are preserved. Native item
+windows keep resizing and the title-bar reset control. The host owns the shared
+item directory and compendium browser presentation.
+
+Before disabling an old companion, select **DnD 0.1.1 or newer in every DnD table** that
 uses it; older system versions still require that server module.
 If the old Server Rules companion is installed, **Customize → Previous installation**
 allows the host owner to review and disable it using existing VTT management
 controls. That historical deactivation restarts the host. Removing the old module
-requires a separate confirmation after reviewing affected tables. A fresh 0.1.1
+requires a separate confirmation after reviewing affected tables. A fresh 0.1.1-or-newer
 installation has no server-code activation step.
 
 ## Play

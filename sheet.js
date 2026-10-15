@@ -1,8 +1,8 @@
-import {SKILLS,derive,defaults,get,set,edit,numeric,signed,damage,heal,deathSave,concentrationSave,effectiveSpeed,rollFormula,rollContext,weaponBonuses,spellRollKind,hitDicePools,automaticFailure} from './rules.js';
+import {ABILITIES,SKILLS,skillAbility,derive,defaults,get,set,edit,numeric,signed,damage,heal,deathSave,concentrationSave,effectiveSpeed,rollFormula,rollContext,weaponBonuses,spellRollKind,hitDicePools,automaticFailure} from './rules.js';
 import {rollResult,rollOutcome,heroicDice,heroicReroll} from './automation.js';
 import {createAutomationUI} from './automation-ui.js';
 import {icon} from './icons.js';
-import {createTabs} from './tabs.js';
+import {createTabs,sortItemEntries} from './tabs.js';
 import {itemEditor} from './item-editor.js';
 import {acceptsItemDrop,droppedItem,itemDestination,ownedItem} from './item-drop.js';
 import {renderMonster} from './monster.js';
@@ -10,6 +10,13 @@ import {chooseAdvancement} from './advancement-ui.js';
 import {removeAdvancement,syncAdvancementLevel} from './advancement.js';
 
 const SIZE_KEYS={tiny:'sizeTiny',small:'sizeSmall',medium:'sizeMedium',large:'sizeLarge',huge:'sizeHuge',gargantuan:'sizeGargantuan'};
+const ABILITY_LABELS={str:'dnd5e.ui.forca',dex:'dnd5e.ui.destreza',con:'dnd5e.ui.constituicao',int:'dnd5e.ui.inteligencia',wis:'dnd5e.ui.sabedoria',cha:'dnd5e.ui.carisma'};
+const ABILITY_ABBR={str:'for',dex:'des',con:'con',int:'int',wis:'sab',cha:'car'};
+
+export function sortSkillEntries(entries,t,locale='en') {
+  const collator=new Intl.Collator(locale,{sensitivity:'base',numeric:true});
+  return [...entries].sort((left,right)=>collator.compare(t(left.labelKey),t(right.labelKey)));
+}
 
 function element(doc,tag,cls,text) { const e=doc.createElement(tag); if(cls)e.className=cls; if(text!==undefined)e.textContent=text; return e; }
 export function openModal(api,doc,title,signal,closeLabel='Close',opener=doc.activeElement) {
@@ -170,6 +177,7 @@ export async function mountSheet(block, system, isItem=false) {
     await refreshEdition();await flush();
     const metadata=system.actions[actionId];if(!metadata)return;
     const d=managedModal(t(metadata.label?.startsWith('@')?'roll':metadata.label||'roll'),opener);
+    d.classList.add('gw5-roll-modal');
     let submitting,finishRoll,deferFinish=false;
     const settle=async()=>{await submitting;if(!deferFinish)await finishRoll?.();};
     rollWindows.set(d,settle);
@@ -177,12 +185,15 @@ export async function mountSheet(block, system, isItem=false) {
     d.addEventListener('close',()=>rollWindows.delete(d),{once:true});
     const form=element(doc,'form','gw5-modal-body');d.append(form);
     const options={kind:'check',mode:'normal',extraModifier:0,extraDice:'',visibility:'public',critical:lastAttacks.get(item?.id)==='critical',...overrides};
+    const skill=actionId.startsWith('roll.skill.')?actionId.slice(11):null;
+    if(skill)options.skillAbility=skillAbility(draft,skill);
     if(options.concentration){options.kind='save';options.dc=draft.concentration?.pendingDC;}
     const select=(key,label,choices)=>{
       const wrap=element(doc,'label','gw5-field',t(label)),input=element(doc,'select');input.name=key;
       for(const [value,text] of choices){const option=element(doc,'option','',t(text));option.value=value;input.append(option);}
-      wrap.append(input);form.append(wrap);input.onchange=()=>options[key]=input.value;return input;
+      input.value=String(options[key]??choices[0]?.[0]??'');wrap.append(input);form.append(wrap);input.onchange=()=>options[key]=input.value;return input;
     };
+    if(skill)select('skillAbility','ability',ABILITIES.map(value=>[value,ABILITY_LABELS[value]]));
     if(ability&&!options.concentration){
       const kind=select('kind','kind',[['check','abilityCheck'],['save','dnd5e.ui.salvaguarda']]);
       options.kind=actionId.startsWith('roll.save.')?'save':'check';kind.value=options.kind;
@@ -215,7 +226,7 @@ export async function mountSheet(block, system, isItem=false) {
       input.oninput=()=>options[key]=type==='number'?numeric(input.value):input.value;wrap.append(input);form.append(wrap);
     }
     select('visibility','dnd5e.ui.visibilidade',[['public','public'],['gm','gm']]);
-    const message=element(doc,'p','gw5-notice');message.role='alert';form.append(message);
+    const message=element(doc,'p','gw5-notice');message.role='alert';message.hidden=true;form.append(message);
     const submit=element(doc,'button','gw5-button',t('roll'));submit.type='submit';form.append(submit);
     form.onsubmit=event=>{
       event.preventDefault();if(submitting)return;
@@ -224,8 +235,8 @@ export async function mountSheet(block, system, isItem=false) {
         await refreshEdition();
         const id=ability?`roll.${options.kind}.${ability}`:actionId,action={...system.actions[id],id};
         const context=rollContext(draft,action,{...options,item,edition});options.criticalOnHit=context.critical;
-        if(context.immune){message.textContent=t('saveImmune');submit.disabled=false;return;}
-        if(automaticFailure(draft,action)){message.textContent=t('automaticFailure');submit.disabled=false;return;}
+        if(context.immune){message.textContent=t('saveImmune');message.hidden=false;submit.disabled=false;return;}
+        if(automaticFailure(draft,action)){message.textContent=t('automaticFailure');message.hidden=false;submit.disabled=false;return;}
         const kind=actionId.includes('damage')?(item?.type==='spell'?spellRollKind(item):'damage'):actionId.endsWith('.healing')?'healing':actionId.endsWith('.temporary')?'temporary':null;
         let expression=rollFormula(action,draft,{...options,item,edition});
         if(['damage','healing','temporary'].includes(kind))expression=`max(0, ${expression})`;
@@ -275,7 +286,7 @@ export async function mountSheet(block, system, isItem=false) {
         deferFinish=!!(stateful&&edition==='2024'&&draft.inspiration&&heroicDice(parsed.result).length);
         if(deferFinish)pendingResolutions.add(finish);else await finish();
         show();d.close();
-      }catch(e){message.textContent=t(e.code&&api.i18n.has(e.code)?e.code:'rollError');}finally{submit.disabled=false;}
+      }catch(e){message.textContent=t(e.code&&api.i18n.has(e.code)?e.code:'rollError');message.hidden=false;}finally{submit.disabled=false;}
       })();submitting=task;work.add(task);
       void task.finally(()=>{work.delete(task);submitting=undefined;});
     };
@@ -315,7 +326,7 @@ export async function mountSheet(block, system, isItem=false) {
     if(entry.type==='effect'&&!copy.duration)copy.duration={type:'permanent',value:0};
     const embeddedChanged=(path,value)=>{if(!view.canEdit)return;if(path==='core.name')copyName=String(value);else {set(copy,path,value);if(['sheet.damage','sheet.healingFormula'].includes(path))delete copy.formulaProfile;if(path.startsWith('sheet.duration.')&&copy.duration)delete copy.duration.remaining;}commit({...entry,...(path.startsWith('sheet.duration.')?{duration:undefined}:{}),name:copyName,data:structuredClone(copy)},path,value);};
     const embeddedLayout=system.layouts[`items/${entry.type}`];
-    if(embeddedLayout){const editor=itemEditor({doc,t,layout:embeddedLayout,type:entry.type,field,button,modifiers,resource:node=>resource(node,copy,embeddedChanged),changed:embeddedChanged,data:()=>copy,name:()=>copyName,edition:()=>copy.rulesEdition||edition});editor.classList.add('gw5-sheet');form.append(editor);}else form.append(field({type:'textArea',path:'sheet.description',labelKey:'description'},copy,embeddedChanged));
+    if(embeddedLayout){const editor=itemEditor({doc,t,locale:api.i18n.locale,layout:embeddedLayout,type:entry.type,field,button,modifiers,resource:node=>resource(node,copy,embeddedChanged),changed:embeddedChanged,data:()=>copy,name:()=>copyName,edition:()=>copy.rulesEdition||edition});editor.classList.add('gw5-sheet');form.append(editor);}else form.append(field({type:'textArea',path:'sheet.description',labelKey:'description'},copy,embeddedChanged));
     const footer=element(doc,'footer','gw5-footer');footer.append(saveIndicator(),button(t('done'),async()=>{await flush();d.close();}));form.append(footer);
     d.addEventListener('close',()=>onClose(),{once:true});
     form.onsubmit=event=>event.preventDefault();
@@ -331,7 +342,7 @@ export async function mountSheet(block, system, isItem=false) {
     }
     const canEdit=view.canEdit && (node.path!=='sheet.effects'||context.role==='gm');
     if(!entries.length)div.append(element(doc,'p','gw5-empty',t(node.emptyTextKey||'empty')));
-    for(const [index,entry] of entries.entries()) {
+    for(const entry of sortItemEntries(entries,api.i18n.locale)) {
       const row=element(doc,'article','gw5-item'),title=element(doc,'strong','',entry.name);row.dataset.entryId=entry.id;row.append(title);
       if(weapons){row.classList.add('gw5-weapon-row');title.prepend(icon(doc,'swords'));}
       if(entry.data?.description)title.title=entry.data.description;
@@ -387,8 +398,13 @@ export async function mountSheet(block, system, isItem=false) {
       for(const [path,label] of [[n.profPath,'proficient'],[n.expertPath,'expert']])if(path){const proficiency=field({type:'checkboxField',path,labelKey:label});if(label==='expert')proficiency.classList.add('gw5-expertise');row.append(proficiency);}
       row.append(button(t(n.labelKey),()=>roll(n.interaction?.action||n.rollAction),!view.canEdit));
       const skill=n.modPath?.match(/^sheet\.skills\.([^.]+)\.mod$/)?.[1];
-      const ability=SKILLS[skill];
-      if(ability){const labels={str:'for',dex:'des',con:'con',int:'int',wis:'sab',cha:'car'};row.append(element(doc,'span','gw5-skill-ability',t(`dnd5e.abbr.${labels[ability]}`)));}
+      if(Object.hasOwn(SKILLS,skill||'')){
+        row.dataset.gw5Skill=skill;
+        const input=element(doc,'select','gw5-skill-ability'),label=t('skillAbility',{skill:t(n.labelKey)});
+        input.dataset.gw5Path=`sheet.skills.${skill}.ability`;input.setAttribute('aria-label',label);input.title=label;input.disabled=!view.canEdit;
+        for(const ability of ABILITIES){const option=element(doc,'option','',t(`dnd5e.abbr.${ABILITY_ABBR[ability]}`));option.value=ability;option.title=t(ABILITY_LABELS[ability]);input.append(option);}
+        input.value=skillAbility(draft,skill);input.addEventListener('change',()=>changed(input.dataset.gw5Path,input.value),{signal});row.append(input);
+      }
       if(n.modPath){const out=element(doc,'output','',signed(get(draft,n.modPath,0)));out.dataset.gw5Computed=n.modPath;out.dataset.gw5Signed='true';row.append(out);}return row;
     }
     if(n.type==='combatStat') {
@@ -409,7 +425,7 @@ export async function mountSheet(block, system, isItem=false) {
     }
     const box=element(doc,'section',n.type==='row'||n.type==='grid'?'gw5-row':`gw5-section gw5-${n.variant||'section'}`);
     if(n.labelKey)box.append(element(doc,'h3','',t(n.labelKey)));
-    for(const child of n.children||[])box.append(node(child));
+    for(const child of n.variant==='skills'?sortSkillEntries(n.children||[],t,api.i18n.locale):n.children||[])box.append(node(child));
     return box;
   }
   function header() {
@@ -539,11 +555,11 @@ export async function mountSheet(block, system, isItem=false) {
         const notes=element(doc,'section','gw5-section gw5-quick-notes');notes.append(element(doc,'h3','',t('quickNotes')),field({type:'textArea',path:'sheet.notes',labelKey:'quickNotes'}));bottom.append(notes);play.append(bottom);
         const additional=element(doc,'details','gw5-additional');additional.append(element(doc,'summary','',t('moreResources')));
         for(const variant of ['vitals','equipment'])additional.append(node(entries.find(n=>n.variant===variant)));play.append(additional);content.append(play);
-      }else if(tab==='main'&&type==='monster'){content.classList.add('gw5-monster-body');content.append(renderMonster({doc,t,node,field,button,iconButton,resource,layout,draft:()=>draft,view:()=>view,edition:()=>edition,roll,changed,flush,openModal:managedModal,saveIndicator,onUpdate:render,sizeLabel}));}
+      }else if(tab==='main'&&type==='monster'){content.classList.add('gw5-monster-body');content.append(renderMonster({doc,t,node,field,button,iconButton,resource,layout,sortSkills:entries=>sortSkillEntries(entries,t,api.i18n.locale),draft:()=>draft,view:()=>view,edition:()=>edition,roll,changed,flush,openModal:managedModal,saveIndicator,onUpdate:render,sizeLabel}));}
       else content.append(...renderTab(tab,entries));
       shell.append(content);
-    }else {draft.rulesEdition??=edition;shell.append(itemEditor({doc,t,layout,type,field,button,modifiers,resource,changed,data:()=>draft,name:()=>name,edition:()=>draft.rulesEdition||edition,state:itemState}));}
-    const footer=element(doc,'footer','gw5-footer');for(const indicator of indicators)if(!indicator.isConnected)indicators.delete(indicator);retry=button(t('retrySave'),flush,!view.canEdit);retry.classList.add('gw5-save-retry');footer.append(element(doc,'small','','DnD 5e SRD · 0.1.1'),saveIndicator(),retry);status();shell.append(footer);
+    }else {draft.rulesEdition??=edition;shell.append(itemEditor({doc,t,locale:api.i18n.locale,layout,type,field,button,modifiers,resource,changed,data:()=>draft,name:()=>name,edition:()=>draft.rulesEdition||edition,state:itemState}));}
+    const footer=element(doc,'footer','gw5-footer');for(const indicator of indicators)if(!indicator.isConnected)indicators.delete(indicator);retry=button(t('retrySave'),flush,!view.canEdit);retry.classList.add('gw5-save-retry');footer.append(element(doc,'small','','DnD 5e SRD · 0.1.2'),saveIndicator(),retry);status();shell.append(footer);
   }
   const automation=createAutomationUI({doc,t,field,button,api,context,modal:managedModal,data:()=>draft,edition:()=>edition,canEdit:()=>view.canEdit,changed,roll,commit:async next=>{draft=derive(next===undefined?draft:structuredClone(next),type,schema,edition);mark();await flush();render();}});
   function advancementParent(id){return Object.values(draft.advancementLedger?.parents||{}).find(parent=>parent.owned?.[0]===id);}
