@@ -16,11 +16,11 @@ export function fixture({entries,data={}}={}) {
   const tokens=[{id:'linked',actorId:'hero',conditions:[]},{id:'snapshot',actorId:'hero',conditions:[],independent:true},
     {id:'enemy',actorId:'monster',conditions:[]}];
   docs.set('snapshot',{...clone(docs.get('hero')),tokenId:'snapshot',name:'Independent Hero'});
-  const native={sceneId:'scene',encounterId:'encounter-1',active:true,round:1,turn:0,version:1,
+  const native={sceneId:'scene',encounterId:'encounter-1',active:true,round:1,turn:0,version:1,history:[],
     config:{formula:'1d20 + @init',input:'roll',can_roll:true},combatants:entries||[
       {id:'linked',actor_id:'hero',token_id:'linked',name:'Hero',initiative:20},
       {id:'enemy',actor_id:'monster',token_id:'enemy',name:'Monster',initiative:10}]};
-  const hooks={storage:null,beforeNative:null,afterNative:null,canEdit:true};
+  const hooks={storage:null,beforeNative:null,afterNative:null,diceResult:null,canEdit:true};
   let revision=0;
   const mapFor=(scope,user)=>scope==='table'?maps.table:(maps.users.get(user)||maps.users.set(user,new Map()).get(user));
   const storage=(scope,user)=>({
@@ -52,7 +52,8 @@ export function fixture({entries,data={}}={}) {
     let result;
     if(domain==='dice') {
       const sides=Number(payload.expression.match(/d(\d+)/)?.[1]||6);
-      result={roll:{result:{value:{value:sides===20?12:Math.min(sides,4)}}}};
+      const total=hooks.diceResult?await hooks.diceResult(call):sides===20?12:Math.min(sides,4);
+      result={roll:{result:{value:{value:total}}}};
     } else if(domain==='actors') {
       const doc=resolve(payload.actorId,payload.tokenId);
       if(payload.version!==doc.version||payload.sheetVersion!==doc.sheetVersion)throw error('conflict');
@@ -74,7 +75,15 @@ export function fixture({entries,data={}}={}) {
       else if(method==='stop'){native.active=false;native.round=0;native.turn=0;}
       else if(method==='setInitiative') {
         const entry=native.combatants.find(entry=>payload.tokenId?entry.token_id===payload.tokenId:entry.actor_id===payload.actorId&&!entry.token_id);
-        if(!entry)throw error('not_found');entry.initiative=payload.value;
+        if(!entry)throw error('not_found');
+        const current=native.combatants[native.turn]?.id;
+        entry.initiative=payload.value;
+        const score=entry=>Number.isFinite(entry.initiative)?entry.initiative:-Infinity;
+        native.combatants.sort((left,right)=>score(right)-score(left));
+        native.turn=native.active?Math.max(0,native.combatants.findIndex(entry=>entry.id===current)):0;
+      } else if(method==='setTurn') {
+        const index=native.combatants.findIndex(entry=>payload.tokenId?entry.token_id===payload.tokenId:entry.actor_id===payload.actorId&&!entry.token_id);
+        if(index<0)throw error('not_found');native.turn=index;
       } else if(method==='configure')native.config.formula=payload.formula;
       native.version++;result={nativeAction:method,...clone(native)};
     }
@@ -82,7 +91,7 @@ export function fixture({entries,data={}}={}) {
     await hooks.afterNative?.(call);return clone(result);
   }
   const managers=[];
-  function controller({user='gm',gm=true,compatibility={assertReady:async()=>{}}}={}) {
+  function client({user='gm',gm=true,compatibility={assertReady:async()=>{}}}={}) {
     const api={combat:{state:async()=>clone(native)},
       actors:{state:async()=>({is_gm:gm,players:[{id:'player'}],actors:[
         {id:'hero',permissions:{player:'owner'}},{id:'monster',permissions:{}}]}),
@@ -92,10 +101,13 @@ export function fixture({entries,data={}}={}) {
       dice:{roll:(expression,options,receipt)=>command('dice','roll',{expression,...options},receipt)}};
     for(const method of ['nextTurn','nextRound','previousTurn','previousRound','start','stop','setInitiative','configure','toggle','remove','add','moveUp','moveDown','setTurn'])
       api.combat[method]=(payload,options)=>command('combat',method,payload,options);
-    const value=createCombatController({api,storage:{user:storage('user',user),table:storage('table',user)},sceneId:'scene',compatibility});
+    return {api,storage:{user:storage('user',user),table:storage('table',user)},compatibility};
+  }
+  function controller(options={}) {
+    const value=createCombatController({...client(options),sceneId:'scene'});
     managers.push(value);return value;
   }
-  return {controller,native,docs,tokens,hooks,maps,calls,accepted,receipts,managers,sheetReads,
+  return {controller,client,native,docs,tokens,hooks,maps,calls,accepted,receipts,managers,sheetReads,
     count:(domain,method)=>accepted.filter(call=>call.domain===domain&&call.method===method).length,
     public:()=>maps.table.get('combat.scene.scene')?.value,
     edit(id,change){const doc=docs.get(id);change(doc.data);doc.version++;doc.sheetVersion++;}};

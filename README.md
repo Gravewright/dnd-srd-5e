@@ -1,8 +1,8 @@
 # DnD 5e SRD
 
-A fifth-edition game system for Gravewright VTT, with selectable **2014 / SRD 5.1** and **2024 / SRD 5.2.1** rules. **0.1.2 Alpha**.
+A fifth-edition game system for Gravewright VTT, with selectable **2014 / SRD 5.1** and **2024 / SRD 5.2.1** rules. **0.1.6 Alpha**.
 
-[Português brasileiro](README.pt-BR.md) · [Release 0.1.2](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.2) · [Release notes](docs/releases/0.1.2.md) · [Report an issue](https://github.com/Gravewright/dnd-srd-5e/issues)
+[Português brasileiro](README.pt-BR.md) · [Download 0.1.6](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.6) · [Release notes](docs/releases/0.1.6.md) · [Report an issue](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 The Noturno sheet brings a dark background, ivory typography, gold frames and an illustrated character header. Character, monster and item sheets use native Gravewright windows, automatic saving and chat rolls. The system includes licensed, edition-separated SRD compendiums and declarative automation for supported rules.
 
@@ -13,7 +13,7 @@ This is an independent project, not affiliated with or endorsed by Wizards of th
 | Component | Required version | Purpose |
 | --- | --- | --- |
 | [Gravewright VTT](https://github.com/Gravewright/gravewright/releases/tag/v0.2.3) | **Released 0.2.3**, SDK 1.x | Native documents, compendiums, dice, combat and modals |
-| **DnD 5e SRD** | **0.1.2** | One browser system with sheets, licensed content and automation |
+| **DnD 5e SRD** | **0.1.6 Alpha** | One browser system with sheets, licensed content and automation |
 | [Official Translator](https://github.com/Gravewright/translator) | **0.1.2 or newer** for localized use | English, Brazilian Portuguese and Spanish through the official API |
 
 English is the default without an active language package. The system runs on
@@ -21,9 +21,11 @@ the published VTT 0.2.3 without a core patch or a separately installed rules mod
 
 ## Install and choose an edition
 
-1. Install **DnD 5e SRD 0.1.2** from the signed Marketplace under **Systems**, or
-   install `gravewright-5e-srd-0.1.2.zip` from the release using the native local
-   system installer.
+1. As host owner, download
+   [`gravewright-5e-srd-0.1.6.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.1.6/gravewright-5e-srd-0.1.6.zip)
+   from the GitHub release and install it through the running host's native
+   local system installer. The Marketplace version may differ until its catalog
+   is updated.
 2. Create a table using **DnD 5e SRD**. Existing tables can select the new exact
    package version in **Settings → Extensions**.
 3. The GM chooses the default edition for new sheets in **Settings → Extensions
@@ -38,11 +40,22 @@ sidecar accompanies the download. Install through the VTT; do not extract the ZI
 into the VTT source tree. The stable system ID `gravewright.5e-srd` preserves
 existing character data, table settings and embedded copies.
 
-Unpublished local review builds are consolidated into 0.1.2. If a different local
-0.1.2 is already installed, use native package management to remove that build
-after switching affected tables to another installed version, then install the
-public 0.1.2. Installed ID/version pairs cannot be overwritten with different
-bytes. Higher local review versions require selecting 0.1.2 manually.
+Version 0.1.6 installs alongside earlier releases, including local builds
+0.1.3–0.1.5. Select 0.1.6 in the table's extensions and reload open table pages
+to load the correction; restarting the host alone does not change that
+selection. Keep the previous version installed for rollback by selecting it
+again. Installed ID/version pairs are immutable and cannot be overwritten with
+different bytes.
+
+Confirm that the selected package's scripts load successfully in the browser.
+Installing through the running host gives its server process access to the
+extracted files; copying a source folder or restarting alone does not validate
+the installed assets. Combatant three-dot menus stay within the viewport and
+scroll internally when needed, including on the last row of a short tracker.
+They remain open when the browser finishes scrolling the selected row into
+view. Use arrow keys, Home or End to navigate, and Escape to close and return
+focus to the button. Clicking outside, scrolling again or resizing closes the
+menu.
 
 Actor and token sheets initially open at up to 1000 × 760px and adapt to the
 viewport. Native manual resizing remains available. If a previous larger window
@@ -105,10 +118,23 @@ Preserve your VTT database, media and configuration when updating the system.
 Reload open table pages after selecting the new package version. Compendium
 updates never overwrite independent copies already embedded in character sheets.
 
-The GM advances turns using the package combat tracker. Its operation journal,
-native document revisions and retry receipts let interrupted work resume without
-repeating completed steps. Different sheets are recoverable writes, not one
-shared database transaction. Moving backward does not undo resolved outcomes.
+The GM advances turns using the package combat tracker. After every completed
+**Roll all initiatives**, active combat selects the first participant in the
+server's final initiative order. This includes hidden or defeated participants;
+ties retain the server's existing order. Individual, NPC-only and missing-only
+initiative rolls preserve the current participant. Rolling before combat starts
+does not start it. Selecting the first participant keeps the current round and
+does not advance effect clocks.
+
+Progress messages such as **Rolling initiatives…** and **Advancing turn…**
+describe normal work; the retry action stays hidden while local work runs. A
+shared operation marker alone does not indicate failure. The warning about an
+incomplete operation is reserved for failed operations, with recovery available
+to the responsible GM when work can resume. The tracker's operation journal,
+native document revisions and receipts reuse each step's UUID on retry, so
+interrupted work resumes without repeating completed rolls or turn selection.
+Different sheets are recoverable writes, not one shared database transaction.
+Moving backward does not undo resolved outcomes.
 Automation does not run in the background after all table clients close.
 
 | Symptom | Check |

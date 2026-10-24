@@ -12,6 +12,15 @@ sem repetir as já concluídas. Fichas diferentes não compartilham uma transaç
 única, e não há execução em segundo plano após todos fecharem a mesa. Voltar
 no combate não desfaz resultados ou recursos já resolvidos.
 
+Ao concluir **Rolar todas as iniciativas**, um combate ativo seleciona o primeiro
+participante da ordem final do servidor, inclusive se estiver oculto ou derrotado.
+Empates conservam a ordem nativa. Rolagens individuais, somente de PNJs e somente
+de iniciativas ausentes preservam o participante atual. Essa seleção não avança a
+rodada nem os relógios de efeitos, e rolar em um combate inativo não o inicia.
+O tracker mostra progresso durante a execução normal; o aviso de operação
+incompleta fica reservado a falhas. Retomar uma operação usa os mesmos recibos e
+resultados de rolagens já concluídas.
+
 O sistema conserva a edição de cada item em `data.rulesEdition`. A edição da
 ficha controla regras gerais, como exaustão e descanso; não converte o texto nem
 a fórmula de uma magia importada de outra edição. Campos antigos e fórmulas

@@ -3,6 +3,14 @@ import {mountSheet,openModal} from './sheet.js';
 import {openLegacyMigration} from './legacy-ui.js';
 
 const identity=entry=>entry.token_id?{tokenId:entry.token_id}:{actorId:entry.actor_id};
+const progressKey=action=>{
+  if(action.startsWith('initiative/roll-')||action.startsWith('initiative-'))return 'combat.progressInitiative';
+  if(action.startsWith('turn/')||['native-nextTurn','native-previousTurn','native-setTurn'].includes(action))return 'combat.progressTurn';
+  if(action.startsWith('round/')||['native-nextRound','native-previousRound'].includes(action))return 'combat.progressRound';
+  if(['start','native-start'].includes(action))return 'combat.progressStart';
+  if(['end','native-stop'].includes(action))return 'combat.progressStop';
+  return 'combat.progressUpdate';
+};
 const paths={play:'m8 4 12 8-12 8Z',stop:'M5 5h14v14H5Z',pause:'M8 5v14M16 5v14',previous:'m15 5-7 7 7 7',next:'m9 5 7 7-7 7',
   previousRound:'M4 10a8 8 0 1 1 1 8M4 3v7h7',nextRound:'M20 10a8 8 0 1 0-1 8M20 3v7h-7',
   dice:'M4 4h16v16H4ZM8 8h.01M16 8h.01M12 12h.01M8 16h.01M16 16h.01',npcs:'M7 18v-3a7 7 0 1 1 10 0v3H7ZM10 18v4M14 18v4M8 10h1M15 10h1',
@@ -19,8 +27,11 @@ export async function mountTracker(block,system) {
   shell.addEventListener('click',event=>event.stopPropagation(),{signal});
   shell.addEventListener('change',event=>event.stopPropagation(),{signal});
   const target=doc.createElement('div');target.className='gw-combat-panel__state';shell.append(target);root.append(shell);
-  let current,busy=false,disposed=false,errorKey='',lastTask,reloading,dirty=false,lastPublic='',poll;
+  let current,busy=false,disposed=false,errorKey='',lastTask,reloading,dirty=false,lastPublic='',poll,progress='combat.progressUpdate';
+  const publicState=value=>JSON.stringify([value.tracker,value.canResume]);
+  const pendingProgress=()=>current?.tracker.stopping?'combat.progressStop':progressKey(current?.tracker.operation?.kind||'');
   const subscriptions=[],modals=new Set();
+  let actionMenu;
   const el=(tag,cls,text)=>{const node=doc.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=String(text);return node;};
   function glyph(name) {
     const svg=doc.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 24 24');
@@ -32,7 +43,58 @@ export async function mountTracker(block,system) {
     const node=el('button',icon?'gw-combat-icon':'gw5-button');node.type='button';node.dataset.gw5CombatAction=action;
     node.title=t(key);node.setAttribute('aria-label',t(key));node.disabled=disabled||busy;
     if(primary)node.classList.add('gw-combat-icon--primary');if(danger)node.classList.add('gw-combat-icon--danger');
-    node.append(icon?glyph(icon):doc.createTextNode(t(key)));node.onclick=event=>{event.stopPropagation();void run(task);};return node;
+    node.append(icon?glyph(icon):doc.createTextNode(t(key)));node.onclick=event=>{event.stopPropagation();void run(task,action==='retry'?pendingProgress():progressKey(action));};return node;
+  }
+  function dismissActions(restore=false) {
+    const menu=actionMenu;
+    if(!menu)return;
+    actionMenu=null;menu.events.abort();menu.node.remove();menu.trigger.setAttribute('aria-expanded','false');
+    if(restore&&menu.trigger.isConnected)menu.trigger.focus({preventScroll:true});
+  }
+  function showActions(trigger,entries,last=false) {
+    if(disposed||busy||!trigger.isConnected)return;
+    if(actionMenu?.trigger===trigger){dismissActions(true);return;}
+    dismissActions();
+    const view=doc.defaultView,events=new AbortController(),options={signal:events.signal};
+    const scrollPosition=node=>node===doc||node===view
+      ? [doc.scrollingElement?.scrollLeft??view.scrollX??0,doc.scrollingElement?.scrollTop??view.scrollY??0]
+      : [node.scrollLeft||0,node.scrollTop||0];
+    const scrollPositions=new Map([[doc,scrollPosition(doc)],[view,scrollPosition(view)]]);
+    for(let node=trigger.parentElement;node;node=node.parentElement)scrollPositions.set(node,scrollPosition(node));
+    const popup=el('div','gw5-combat gw5-combat-menu directory-context-menu'),list=el('div','gw-combat-menu__list');
+    popup.setAttribute('translate','no');list.setAttribute('role','menu');list.setAttribute('aria-label',t('combat.actions'));
+    for(const [action,key,task,disabled]of entries) {
+      const item=button(action,key,()=>{dismissActions();return task();},{disabled});
+      item.className='gw-combat-menu-item';item.setAttribute('role','menuitem');item.dataset.gw5CombatantId=trigger.dataset.gw5CombatMenu;
+      list.append(item);
+    }
+    popup.append(list);doc.body.append(popup);actionMenu={node:popup,trigger,events};trigger.setAttribute('aria-expanded','true');
+    const box=popup.getBoundingClientRect(),anchor=trigger.getBoundingClientRect(),margin=8;
+    const below=anchor.bottom+4,top=below+box.height<=view.innerHeight-margin?below:anchor.top-box.height-4;
+    popup.style.left=Math.max(margin,Math.min(anchor.right-box.width,view.innerWidth-box.width-margin))+'px';
+    popup.style.top=Math.max(margin,Math.min(top,view.innerHeight-box.height-margin))+'px';
+    const choices=()=>[...list.querySelectorAll('button:not(:disabled)')];
+    const enabled=choices();enabled[last?enabled.length-1:0]?.focus();
+    const outside=event=>{if(!popup.contains(event.target)&&!trigger.contains(event.target))dismissActions();};
+    doc.addEventListener('pointerdown',outside,{...options,capture:true});
+    doc.addEventListener('contextmenu',outside,options);
+    doc.addEventListener('scroll',event=>{
+      if(popup.contains(event.target))return;
+      const previous=scrollPositions.get(event.target),position=scrollPosition(event.target);
+      // Browsers may deliver the trigger's scroll-into-view event after opening.
+      // Only a later movement of an ancestor can invalidate this placement.
+      if(previous&&position.some((value,index)=>value!==previous[index]))dismissActions();
+    },{...options,capture:true});
+    view.addEventListener('resize',()=>dismissActions(),options);
+    doc.addEventListener('keydown',event=>{
+      if(event.key==='Escape'){event.preventDefault();event.stopPropagation();dismissActions(true);return;}
+      if(event.key==='Tab'){dismissActions(true);return;}
+      if(!['ArrowDown','ArrowUp','Home','End'].includes(event.key))return;
+      event.preventDefault();const items=choices(),index=items.indexOf(doc.activeElement);
+      items[event.key==='Home'?0:event.key==='End'?items.length-1:(index+(event.key==='ArrowUp'?-1:1)+items.length)%items.length]?.focus();
+    },options);
+    doc.addEventListener('gravewright:directory-menu',event=>{if(event.detail!==popup)dismissActions();},options);
+    doc.dispatchEvent(new CustomEvent('gravewright:directory-menu',{detail:popup}));
   }
   function errorMessage(error) {
     if(error.code==='legacy-server-active')return 'legacy.active';
@@ -46,16 +108,16 @@ export async function mountTracker(block,system) {
     if(disposed)return;
     if(reloading){dirty=true;return reloading;}
     reloading=(async()=>{
-      do {dirty=false;current=await controller.refresh();lastPublic=JSON.stringify(current.tracker);if(!disposed)render();}while(dirty&&!disposed);
+      do {dirty=false;current=await controller.refresh();lastPublic=publicState(current);if(!disposed)render();}while(dirty&&!disposed);
     })().catch(error=>{if(!disposed){errorKey=errorMessage(error);render();}}).finally(()=>{reloading=null;});
     return reloading;
   }
-  async function run(task) {
+  async function run(task,status='combat.progressUpdate') {
     if(busy||disposed)return;
-    busy=true;errorKey='';lastTask=task;render();
+    busy=true;progress=status;errorKey='';lastTask=task;render();
     // Controller commands already finish with an authenticated refresh. Avoid a
     // second network wait after opening a modal: its submit must be usable now.
-    try {await task();if(!disposed){current=controller.snapshot();lastPublic=JSON.stringify(current.tracker);}lastTask=null;}
+    try {await task();if(!disposed){errorKey='';current=controller.snapshot();lastPublic=publicState(current);}lastTask=null;}
     catch(error){if(!disposed){errorKey=errorMessage(error);current=controller.snapshot();}}
     finally {busy=false;if(!disposed)render();}
   }
@@ -115,13 +177,11 @@ export async function mountTracker(block,system) {
     catch(error){window.close(true);throw error;}
   }
   function actions(entry,locked) {
-    const wrap=el('div','gw-combat-combatant__actions'),menu=el('details','gw-combat-menu'),trigger=el('summary','gw-combat-menu__trigger');
-    trigger.title=t('combat.actions');trigger.setAttribute('aria-label',t('combat.actions'));trigger.append(glyph('actions'));menu.append(trigger);
-    const list=el('div','gw-combat-menu__list');
-    const item=(action,key,task,disabled=false)=>{
-      const node=button(action,key,task,{disabled});node.className='gw-combat-menu-item';node.dataset.gw5CombatantId=entry.id;
-      node.addEventListener('click',()=>{menu.open=false;});list.append(node);
-    };
+    const wrap=el('div','gw-combat-combatant__actions'),trigger=el('button','gw-combat-menu__trigger'),entries=[];
+    trigger.type='button';trigger.disabled=busy;trigger.dataset.gw5CombatMenu=entry.id;
+    trigger.title=t('combat.actions');trigger.setAttribute('aria-label',t('combat.actions'));trigger.setAttribute('aria-haspopup','menu');
+    trigger.setAttribute('aria-expanded','false');trigger.append(glyph('actions'));
+    const item=(action,key,task,disabled=false)=>entries.push([action,key,task,disabled]);
     item('token/sheet','combat.openSheet',()=>openSheet(entry));
     if(current.isGM) {
       const command=(method,payload={})=>()=>controller.execute(method,{...identity(entry),...payload});
@@ -133,7 +193,11 @@ export async function mountTracker(block,system) {
       item('flags/defeated',entry.defeated?'combat.restore':'combat.defeat',command('toggle',{defeated:!entry.defeated}),locked);
       item('combatants/remove','combat.remove',command('remove'),locked);
     }
-    menu.append(list);wrap.append(menu);return wrap;
+    trigger.onclick=event=>{event.stopPropagation();showActions(trigger,entries);};
+    trigger.onkeydown=event=>{if(['ArrowDown','ArrowUp'].includes(event.key)){
+      event.preventDefault();event.stopPropagation();showActions(trigger,entries,event.key==='ArrowUp');
+    }};
+    wrap.append(trigger);return wrap;
   }
   function combatant(entry,locked) {
     const row=el('article','gw-combat-combatant');row.dataset.gw5CombatantId=entry.id;row.dataset.gw5TokenId=entry.token_id||'';
@@ -170,6 +234,8 @@ export async function mountTracker(block,system) {
   }
   function render() {
     if(disposed)return;
+    const menuReturn=actionMenu?.trigger.dataset.gw5CombatMenu;
+    dismissActions();
     const focused=doc.activeElement,focusKey=focused?.closest?.('.gw5-combat')===shell?focused.dataset.gw5CombatAction:null;
     target.replaceChildren();target.setAttribute('aria-busy',String(busy));
     if(!current) {target.append(el('p','gw5-notice',t(errorKey||'combat.loading')));if(errorKey)target.append(button('retry','combat.retry',refresh));return;}
@@ -195,26 +261,32 @@ export async function mountTracker(block,system) {
     }
     if(paused)target.append(el('p','gw5-combat-status',t('combat.paused')));
     if(!isGM)target.append(el('p','gw5-combat-status',t('combat.gmControls')));
-    if(errorKey||pending) {
-      const notice=el('div','gw5-combat-status');notice.role=errorKey?'alert':'status';notice.append(el('p','',t(errorKey||'combat.pending')));
-      if(isGM)notice.append(button('retry','combat.retry',()=>pending?controller.retry():lastTask?lastTask():controller.retry()));target.append(notice);
+    if(errorKey||busy||pending) {
+      const notice=el('div','gw5-combat-status');notice.role=errorKey?'alert':'status';notice.append(el('p','',t(errorKey||(busy?progress:pendingProgress()))));
+      if(errorKey&&pending&&current.canResume)notice.append(el('p','',t('combat.pending')));
+      if(isGM&&!busy) {
+        if(current.canResume)notice.append(button('retry',errorKey?'combat.retry':'combat.resumePending',()=>controller.retry()));
+        else if(!pending&&errorKey)notice.append(button('retry','combat.retry',lastTask||refresh));
+      }
+      target.append(notice);
     }
     const legacy=system.compatibility?.current;
     if(legacy&&legacy.state!=='absent')target.append(button('legacy','legacy.title',()=>openLegacyMigration(block,system)));
     const list=el('div','gw-combat-list');if(!state.combatants.length)list.append(el('p','tool-empty gw-combat-empty',t('combat.empty')));
     for(const entry of state.combatants)list.append(combatant(entry,locked));target.append(list);
+    if(menuReturn&&!busy)target.querySelector(`[data-gw5-combat-menu="${menuReturn}"]`)?.focus({preventScroll:true});
     if(focusKey)target.querySelector(`[data-gw5-combat-action="${focusKey}"]:not(:disabled)`)?.focus();
   }
   for(const event of ['combat.changed','actors.changed','tokens.changed'])subscriptions.push(api.events.on(event,()=>{void refresh();}));
   subscriptions.push(api.i18n.onChange(()=>render()));
   if(system.compatibility)subscriptions.push(system.compatibility.subscribe(()=>render()));
-  function dispose(){if(disposed)return;disposed=true;clearInterval(poll);for(const unsubscribe of subscriptions)unsubscribe?.();for(const window of modals)window.close(true);shell.remove();}
+  function dispose(){if(disposed)return;disposed=true;dismissActions();clearInterval(poll);for(const unsubscribe of subscriptions)unsubscribe?.();for(const window of modals)window.close(true);shell.remove();}
   signal.addEventListener('abort',dispose,{once:true});
   await refresh();
   if(disposed)return dispose;
   poll=setInterval(()=>{
     if(disposed||busy||!root.isConnected||!root.getClientRects().length)return;
-    void controller.syncPublic().then(snapshot=>{if(disposed)return;const value=JSON.stringify(snapshot.tracker);if(value!==lastPublic){lastPublic=value;current=snapshot;render();}})
+    void controller.syncPublic().then(snapshot=>{if(disposed)return;const value=publicState(snapshot);if(value!==lastPublic){lastPublic=value;current=snapshot;render();}})
       .catch(error=>{if(!disposed){errorKey=errorMessage(error);render();}});
   },2000);
   return dispose;

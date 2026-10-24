@@ -1,8 +1,8 @@
 # DnD 5e SRD
 
-Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. **0.1.2 Alpha**.
+Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. **0.1.6 Alpha**.
 
-[English](README.md) · [Release 0.1.2](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.2) · [Notas da versão](docs/releases/0.1.2.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
+[English](README.md) · [Baixar 0.1.6](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.6) · [Notas da release](docs/releases/0.1.6.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 A ficha Noturno combina fundo escuro, tipografia em marfim, molduras douradas e um cabeçalho ilustrado. Inclui fichas próprias de personagem, monstro e 11 tipos de itens, salvamento automático e compêndios licenciados separados por edição. Este projeto adapta o framework legado Gravewright 5e SRD 0.3.1; o nome público atual é **DnD 5e SRD**.
 
@@ -15,8 +15,11 @@ com SDK 1.x. Para português/espanhol, use o [Translator oficial 0.1.2 ou mais
 recente](https://github.com/Gravewright/translator). Inglês é o padrão. Não é
 necessário alterar o core do VTT nem instalar um módulo separado de regras.
 
-1. Instale **DnD 5e SRD 0.1.2** pelo Marketplace assinado em **Sistemas**, ou use
-   `gravewright-5e-srd-0.1.2.zip` da release no instalador local nativo.
+1. Como proprietário do host, baixe
+   [`gravewright-5e-srd-0.1.6.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.1.6/gravewright-5e-srd-0.1.6.zip)
+   da release no GitHub e instale pelo instalador local nativo de sistemas do
+   host em execução. A versão do Marketplace pode ser diferente até a atualização
+   de seu catálogo.
 2. Crie uma mesa com **DnD 5e SRD**. Mesas existentes podem selecionar a nova
    versão exata do pacote em **Configurações → Extensões**.
 3. O mestre define a edição padrão para novas fichas em **Configurações →
@@ -31,11 +34,21 @@ checksum SHA-256. Use o instalador do VTT, sem extrair o pacote no código-fonte
 O ID `gravewright.5e-srd`, os dados das fichas, as configurações e as cópias
 incorporadas permanecem no namespace original.
 
-Os builds locais de revisão foram reunidos na 0.1.2. Se outra 0.1.2 local já
-estiver instalada, selecione outra versão instalada nas mesas afetadas e remova
-aquele build pelo gerenciador nativo antes de instalar a 0.1.2 pública. O mesmo
-ID/versão não pode ser sobrescrito com bytes diferentes. Builds locais com
-numeração maior exigem selecionar a 0.1.2 manualmente.
+A versão 0.1.6 instala ao lado das anteriores, incluindo os builds locais
+0.1.3–0.1.5. Selecione 0.1.6 nas extensões da mesa e recarregue as páginas abertas
+para carregar a correção; reiniciar o servidor sozinho não altera essa seleção.
+Mantenha a versão anterior instalada para poder selecioná-la em uma reversão.
+O mesmo ID/versão é imutável e não pode ser sobrescrito com bytes diferentes.
+
+Confirme que os scripts do pacote selecionado carregam corretamente no navegador.
+Instalar pelo host em execução permite que o processo do servidor acesse os
+arquivos extraídos; copiar a pasta do fonte ou somente reiniciar não valida os
+assets instalados. Os menus de três pontos dos combatentes ficam dentro da área
+visível e permitem rolagem interna quando necessário, inclusive na última linha
+de um tracker baixo. Eles permanecem abertos quando o navegador termina de
+trazer a linha selecionada para a área visível. Use as setas, Home ou End para
+navegar e Escape para fechar e devolver o foco ao botão. Clicar fora, rolar
+novamente ou redimensionar fecha o menu.
 
 Fichas de personagens, monstros e tokens abrem inicialmente com até 1000 × 760px,
 adaptando-se à tela. O redimensionamento manual nativo continua disponível. Se
@@ -161,10 +174,23 @@ Preserve a base de dados, mídia e configuração do VTT ao atualizar o sistema.
 Recarregue as páginas após selecionar a versão nova. Uma atualização do catálogo
 não altera cópias já incorporadas nas fichas, nem converte campanhas ou edições.
 
-O mestre avança os turnos pelo tracker do pacote. Planos de operação persistidos,
-revisões de documentos e recibos de retry permitem retomar etapas interrompidas
-sem repetir as concluídas. Gravações em fichas diferentes são etapas recuperáveis,
-e não uma transação única. Voltar no combate não desfaz os resultados resolvidos.
+O mestre avança os turnos pelo tracker do pacote. Após cada conclusão de
+**Rolar todas as iniciativas**, o combate ativo seleciona o primeiro participante
+da ordem final do servidor. Isso inclui participantes ocultos ou derrotados;
+empates mantêm a ordem existente do servidor. Rolagens individuais, somente de
+PNJs ou somente de iniciativas ausentes preservam o participante atual. Rolar
+antes de iniciar o combate não o inicia. Selecionar o primeiro participante
+mantém a rodada atual e não avança os relógios de efeitos.
+
+Mensagens como **Rolando iniciativas…** e **Avançando turno…** indicam trabalho
+normal em andamento; a ação de tentar novamente fica oculta durante a execução
+local. Uma marca compartilhada de operação, sozinha, não indica falha. O aviso
+de operação incompleta fica reservado a operações que falharam, com recuperação
+disponível ao mestre responsável quando há trabalho retomável. Planos de
+operação persistidos, revisões de documentos e recibos reutilizam o UUID de cada
+etapa nas tentativas, permitindo retomar sem repetir rolagens ou seleções de
+turno já concluídas. Gravações em fichas diferentes são etapas recuperáveis, e
+não uma transação única. Voltar no combate não desfaz os resultados resolvidos.
 A automação não executa em segundo plano após todos fecharem a mesa.
 
 - **Compêndios ausentes:** confira o sistema ativo da mesa e as permissões de leitura.

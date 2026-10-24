@@ -231,6 +231,158 @@ test('initiative respects scopes, canonical conditions, editions and hidden priv
   assert.match(rolls[1].payload.expression,/2d20kl1/);assert.equal(rolls[1].payload.visibility,'public');
 });
 
+test('rolling all initiatives starts at the highest result and visits every token in order',async()=>{
+  const entries=[{id:'linked',actor_id:'hero',token_id:'linked',initiative:null},
+    ...['enemy','enemy-2','enemy-3','enemy-4'].map(id=>({id,actor_id:'monster',token_id:id,initiative:null}))];
+  const value=fixture({entries}),results=[7,20,16,14,2];
+  value.tokens.push(...['enemy-2','enemy-3','enemy-4'].map(id=>({id,actorId:'monster',conditions:[]})));
+  value.hooks.diceResult=()=>results.shift();
+  const controller=value.controller();await controller.rollInitiative('all');
+  assert.deepEqual(value.native.combatants.map(entry=>entry.initiative),[20,16,14,7,2]);
+  assert.equal(value.native.combatants[value.native.turn].id,'enemy');
+  assert.equal(value.count('dice','roll'),5);assert.equal(value.count('combat','setInitiative'),5);
+  assert.equal(value.count('combat','setTurn'),1);
+  assert.equal(new Set(value.accepted.filter(call=>call.method==='setInitiative').map(call=>call.payload.tokenId)).size,5);
+  const visited=[];
+  for(let index=0;index<5;index++) {
+    visited.push(value.native.combatants[value.native.turn].initiative);
+    await controller.next();
+  }
+  assert.deepEqual(visited,[20,16,14,7,2]);assert.equal(value.native.round,2);assert.equal(value.native.turn,0);
+});
+
+test('only rolling all initiatives changes the current participant after sorting',async()=>{
+  for(const scope of ['all','one','npcs','missing']) {
+    const value=fixture();value.native.combatants[0].initiative=7;
+    if(scope==='missing')value.native.combatants[1].initiative=null;
+    value.hooks.diceResult=()=>scope==='all'&&value.count('dice','roll')===0?7:20;
+    const selected=structuredClone(value.native.combatants[1]);
+    await value.controller().rollInitiative(scope,selected);
+    assert.equal(value.native.combatants[0].id,'enemy');
+    assert.equal(value.native.combatants[value.native.turn].id,scope==='all'?'enemy':'linked');
+    assert.equal(value.count('combat','setTurn'),scope==='all'?1:0);
+  }
+});
+
+test('selecting the highest initiative preserves encounter, round, history and effect clocks',async()=>{
+  const value=fixture({data:{hero:{effects:[duration(),periodic()]},monster:{effects:[duration(),periodic()]}}});
+  value.native.round=3;value.native.history=[{round:2,turn:1,tokenId:'enemy'}];
+  const before=structuredClone({encounterId:value.native.encounterId,round:value.native.round,
+    history:value.native.history,documents:[...value.docs]});
+  value.hooks.diceResult=()=>value.count('dice','roll')===0?7:20;
+  await value.controller().rollInitiative('all');
+  assert.equal(value.native.combatants[value.native.turn].id,'enemy');
+  assert.deepEqual({encounterId:value.native.encounterId,round:value.native.round,
+    history:value.native.history,documents:[...value.docs]},before);
+  assert.equal(value.count('actors','saveSheet'),0);assert.equal(value.count('combat','nextTurn'),0);
+  assert.equal(value.count('combat','nextRound'),0);
+});
+
+test('the final initiative selection uses native ordering for ties, hidden and defeated leaders',async()=>{
+  for(const tied of [false,true]) {
+    const value=fixture();value.native.turn=tied?1:0;
+    value.native.combatants[1].hidden=true;value.native.combatants[1].defeated=true;
+    value.hooks.diceResult=()=>tied?12:value.count('dice','roll')===0?7:20;
+    await value.controller().rollInitiative('all');
+    assert.equal(value.native.turn,0);
+    assert.equal(value.accepted.find(call=>call.method==='setTurn').payload.tokenId,value.native.combatants[0].token_id);
+    assert.equal(value.native.combatants[0].id,tied?'linked':'enemy');
+    if(!tied)assert.equal(value.native.combatants[0].defeated,true);
+  }
+});
+
+test('rolling all does not select a turn or start an inactive or empty encounter',async()=>{
+  for(const empty of [false,true]) {
+    const value=fixture(empty?{entries:[]}:{});value.native.active=false;
+    value.native.round=0;value.native.encounterId=null;
+    await value.controller().rollInitiative('all');
+    assert.equal(value.native.active,false);assert.equal(value.native.round,0);
+    assert.equal(value.native.encounterId,null);assert.equal(value.count('combat','setTurn'),0);
+    assert.equal(value.count('combat','start'),0);assert.equal(value.public().operation,null);
+  }
+});
+
+test('an encounter stopped or emptied after the final initiative save skips turn selection',async()=>{
+  for(const emptied of [false,true]) {
+    const value=fixture();
+    value.hooks.afterNative=call=>{if(call.method==='setInitiative'&&value.count('combat','setInitiative')===2){
+      if(emptied)value.native.combatants=[];
+      else value.native.active=false;
+      value.native.version++;
+    }};
+    await value.controller().rollInitiative('all');
+    assert.equal(value.count('combat','setTurn'),0);assert.equal(value.public().operation,null);
+    assert.equal(value.count('combat','start'),0);
+  }
+});
+
+test('a skipped final selection stays skipped when its checkpoint is recovered after a later start',async()=>{
+  const value=fixture();value.native.active=false;value.native.round=0;let once=true;
+  value.hooks.storage=call=>{if(once&&call.when==='before'&&call.key.endsWith('.initiative-set-first')&&call.value?.done){
+    once=false;throw error('network');
+  }};
+  await assert.rejects(value.controller().rollInitiative('all'),{code:'network'});
+  value.native.active=true;value.native.round=1;value.native.turn=1;value.native.version++;
+  await value.controller().resumePending();
+  assert.equal(value.native.turn,1);assert.equal(value.count('combat','setTurn'),0);
+  assert.equal(value.count('dice','roll'),2);assert.equal(value.public().operation,null);
+});
+
+test('a partial initiative save failure cannot switch turn before all scores are saved',async()=>{
+  const value=fixture();let once=true;
+  value.hooks.diceResult=()=>value.count('dice','roll')===0?7:20;
+  value.hooks.beforeNative=call=>{if(once&&call.method==='setInitiative'&&call.payload.tokenId==='enemy'){
+    once=false;throw error('network');
+  }};
+  await assert.rejects(value.controller().rollInitiative('all'),{code:'network'});
+  assert.equal(value.native.combatants[value.native.turn].id,'linked');
+  assert.equal(value.count('combat','setTurn'),0);assert.equal(value.count('dice','roll'),2);
+  await value.controller().resumePending();
+  assert.equal(value.native.combatants[value.native.turn].id,'enemy');
+  assert.equal(value.count('combat','setTurn'),1);assert.equal(value.count('dice','roll'),2);
+  assert.equal(value.count('combat','setInitiative'),2);
+});
+
+test('lost initiative turn-selection responses and checkpoints recover the same UUID without rerolling',async()=>{
+  for(const failure of ['response','checkpoint-before','checkpoint-after']) {
+    const value=fixture();let once=true;
+    value.hooks.diceResult=()=>value.count('dice','roll')===0?7:20;
+    if(failure==='response')value.hooks.afterNative=call=>{if(once&&call.method==='setTurn'){
+      once=false;throw error('network');
+    }};
+    else value.hooks.storage=call=>{if(once&&call.key.endsWith('.initiative-set-first')&&call.value?.done&&
+      call.when===(failure==='checkpoint-before'?'before':'after')){
+      once=false;throw error('conflict');
+    }};
+    await assert.rejects(value.controller().rollInitiative('all'));
+    assert.equal(value.native.combatants[value.native.turn].id,'enemy');
+    await value.controller().resumePending();
+    assert.equal(value.count('dice','roll'),2);assert.equal(value.count('combat','setInitiative'),2);
+    assert.equal(value.count('combat','setTurn'),1);
+    const attempts=value.calls.filter(call=>call.method==='setTurn');
+    assert.equal(new Set(attempts.map(call=>call.requestId)).size,1);
+    assert.equal(value.public().operation,null);
+  }
+});
+
+test('a final selection conflict rebuilds both the first participant and revision from fresh state',async()=>{
+  const value=fixture();let once=true;
+  value.hooks.diceResult=()=>value.count('dice','roll')===0?7:20;
+  value.hooks.beforeNative=call=>{if(once&&call.method==='setTurn'){
+    once=false;
+    value.native.combatants.find(entry=>entry.id==='linked').initiative=25;
+    value.native.combatants.sort((left,right)=>right.initiative-left.initiative);
+    value.native.turn=0;value.native.version++;
+  }};
+  await value.controller().rollInitiative('all');
+  const attempts=value.calls.filter(call=>call.method==='setTurn');
+  assert.deepEqual(attempts.map(call=>call.payload.tokenId),['enemy','linked']);
+  assert.deepEqual(attempts.map(call=>call.payload.version),[3,4]);
+  assert.equal(new Set(attempts.map(call=>call.requestId)).size,2);
+  assert.equal(value.native.combatants[value.native.turn].id,'linked');
+  assert.equal(value.count('dice','roll'),2);assert.equal(value.count('combat','setTurn'),1);
+});
+
 test('public operation reservations block other GMs until the owner recovers',async()=>{
   const value=fixture(),one=value.controller(),two=value.controller({user:'other-gm'});let once=true;
   value.hooks.afterNative=call=>{if(call.method==='nextTurn'&&once){once=false;throw error('network');}};
