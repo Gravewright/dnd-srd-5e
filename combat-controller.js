@@ -49,18 +49,39 @@ export function combatPhases(state, method) {
 
 export function createCombatController({api, storage, sceneId, compatibility, t=key=>key}) {
   const key = `combat.scene.${part(sceneId)}`, intentKey = `${key}.intent`;
-  let state, actors, publicRecord, intent, operation, journal, owner;
+  let state, actors, publicRecord, intent, operation, journal, owner, recovery, recoveryKey;
   const acknowledged = new Set();
   const acknowledgedResources = new Set();
   const currentReceipt = pending => publicRecord?.value.completed?.find(value => value.id===pending.value.id && value.owner===pending.value.owner);
   const isPaused = value => state?.active && value?.paused===true && value.pausedEncounterId===state.encounterId;
-  const snapshot = () => ({state:copy(state), isGM:actors?.is_gm===true, paused:isPaused(publicRecord?.value),
+  function canResume() {
+    const stopping=publicRecord?.value.stopping, pending=stopping||publicRecord?.value.operation;
+    if(!actors?.is_gm||!pending||acknowledged.has(pending.id))return false;
+    const own=stopping?recovery:(!intent?.value.confirmed&&intent?.value.id===pending.id?intent.value:recovery);
+    return !!own && own.id===pending.id && own.owner===pending.owner && own.owner===owner;
+  }
+  const snapshot = () => ({state:copy(state), isGM:actors?.is_gm===true, paused:isPaused(publicRecord?.value),canResume:canResume(),
     tracker:copy(publicRecord?.value || {schemaVersion:1,paused:false,operation:null})});
+  async function refreshRecovery() {
+    const stopping=publicRecord?.value.stopping, pending=stopping||publicRecord?.value.operation;
+    if(!actors?.is_gm||!pending){recovery=null;recoveryKey=null;return;}
+    const marker=`${stopping?'stop':'operation'}:${pending.id}:${pending.owner}`;
+    if(recoveryKey===marker)return;
+    recovery=null;
+    owner??=(await storage.user.get('combat.owner'))?.value;
+    if(owner===pending.owner) {
+      const saved=await storage.user.get(stopping?`${key}.stop`:intentKey);
+      if(saved&&!saved.value.confirmed&&saved.value.id===pending.id&&saved.value.owner===owner)recovery=saved.value;
+    }
+    // Public polling does not repeatedly read another GM's private namespace.
+    recoveryKey=marker;
+  }
   async function refresh() {
     [state, actors, publicRecord] = await Promise.all([api.combat.state({sceneId}),api.actors.state(),storage.table.get(key)]);
+    await refreshRecovery();
     return snapshot();
   }
-  async function syncPublic() {publicRecord=await storage.table.get(key); return snapshot();}
+  async function syncPublic() {publicRecord=await storage.table.get(key);await refreshRecovery();return snapshot();}
   function running() {if(isPaused(publicRecord?.value)) throw fail('combat.pausedError');}
   async function writePublic(change,{claim=false,stopId=null}={}) {
     for(let attempt=0;attempt<4;attempt++) {
@@ -341,6 +362,12 @@ export function createCombatController({api, storage, sceneId, compatibility, t=
       const total=await rollStep(`initiative-roll-${index}`,target.expression,{visibility:target.visibility,label:t('combat.initiativeRoll')});
       await nativeStep(`initiative-save-${index}`,'setInitiative',{...identity(target.entry),value:total});
     }
+    if(scope==='all')await step('initiative-set-first','combat','setTurn',async()=>{
+      // Select from the final native order, with identity and revision from one
+      // snapshot. A retry replays this checkpoint instead of rolling again.
+      const combat=await api.combat.state({sceneId}),first=combat.combatants[0];
+      return combat.active&&first?{sceneId,version:combat.version,...identity(first)}:{skip:true};
+    },{perform:(payload,requestId)=>payload.skip?{skipped:true}:api.combat.setTurn(payload,{requestId})});
     return finish();
   }
   async function paused(value) {
@@ -361,6 +388,7 @@ export function createCombatController({api, storage, sceneId, compatibility, t=
         {expectedRevision:saved?.revision??null});
     }
     let pending=saved.value;
+    recovery=pending;
     async function confirmStop() {
       saved=await storage.user.set(stopKey,{...pending,confirmed:true},{expectedRevision:saved.revision});
       operation=null;journal=null;
