@@ -63,7 +63,7 @@ export function attunedItems(draft,path,id,value){
 }
 
 export function acceptsItemDrop(transfer,context){
-  return !!transfer&&(transfer.types.includes(ITEM)||(context.role==='gm'&&transfer.types.includes(COMPENDIUM)));
+  return !!transfer&&(transfer.types.includes(ITEM)||transfer.types.includes(COMPENDIUM));
 }
 
 // Sheet copies come from live authorized reads; a drop never creates a library item.
@@ -74,7 +74,7 @@ export async function droppedItem(transfer,{api,context,accepts,t}){
     if(ref.tableId!==context.tableId||typeof ref.id!=='string')fail();
     const item=await api.items.get(ref.id);if(!item.canOpen||!accepts(item))fail();return item;
   }
-  if(context.role!=='gm'||!transfer.types.includes(COMPENDIUM))fail();
+  if(!transfer.types.includes(COMPENDIUM))fail();
   const ref=JSON.parse(transfer.getData(COMPENDIUM));
   if(ref.campaign!==context.tableId||ref.kind!=='item'||typeof ref.id!=='string'||typeof ref.packId!=='string')fail();
   const raw=await api.compendiums.read({packId:ref.packId,id:ref.id});

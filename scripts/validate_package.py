@@ -25,7 +25,7 @@ def validate(root=ROOT):
                                  for p in (root / 'layouts').rglob('*.json')}
     provenance = read(root / 'compendiums/PROVENANCE.json')
     allowed_types = {item['id'] for item in browser['system']['itemTypes']}
-    assert browser['content']['compendiums'] == ['compendiums/2014.json', 'compendiums/2024.json']
+    assert browser['content']['compendiums'] == ['compendiums/2014.json', 'compendiums/2024.json', 'compendiums/monsters-2014.json', 'compendiums/monsters-2024.json']
     totals = {}
     for edition in ('2014', '2024'):
         collection = read(root / f'compendiums/{edition}.json')
@@ -50,6 +50,19 @@ def validate(root=ROOT):
                 assert source['sourcePath'].startswith('packs/_source/') and '..' not in Path(source['sourcePath']).parts
         assert dict(counts) == provenance['counts'][edition]
         totals[edition] = {'packs': len(collection['packs']), 'documents': len(ids)}
+    for edition, count in [('2014',317),('2024',330)]:
+        collection = read(root / f'compendiums/monsters-{edition}.json')
+        assert collection['license'] == 'CC-BY-4.0'
+        assert len(collection['packs']) == 1 and collection['packs'][0]['type'] == 'actor_pack'
+        entries = collection['packs'][0]['entries']
+        assert len(entries) == count and len({e['id'] for e in entries}) == count
+        for entry in entries:
+            assert entry['type'] == 'monster' and entry['systemId'] == browser['id']
+            assert entry['data']['rulesEdition'] == edition
+            assert entry['data']['provenance']['contentLicense'] == 'CC-BY-4.0'
+            assert entry['data']['provenance']['officialPdfSha256'] == provenance['official'][edition]['sha256']
+            assert entry['data']['hp']['max'] > 0 and entry['data']['ac'] > 0
+        totals[edition]['monsters'] = len(entries)
     reports = []
     for prefix, files in [('gravewright-5e-srd', browser_files(root))]:
         path = root / 'dist' / f'{prefix}-{browser["version"]}.zip'

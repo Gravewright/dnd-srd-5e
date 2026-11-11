@@ -8,6 +8,8 @@ A ficha Noturno combina fundo escuro, tipografia em marfim, molduras douradas e 
 
 Projeto independente, sem afiliação ou endosso da Wizards of the Coast ou do Foundry VTT. Não inclui artes oficiais, livros ou conteúdo premium.
 
+O código-fonte inclui também 317 monstros do SRD 5.1 e 330 do SRD 5.2.1 e permite aos jogadores copiar itens legíveis dos compêndios para fichas editáveis. Essas adições não estão no ZIP publicado da 0.1.6. As permissões de leitura do servidor continuam válidas; importações para a biblioteca e Efeitos continuam exclusivas do mestre.
+
 ## Instalar e escolher uma edição
 
 Funciona no [Gravewright VTT **0.2.3 já publicado**](https://github.com/Gravewright/gravewright/releases/tag/v0.2.3),
@@ -26,7 +28,10 @@ necessário alterar o core do VTT nem instalar um módulo separado de regras.
    Extensões → Personalizar**. Cada ficha mantém sua edição explícita: **2014 /
    SRD 5.1** ou **2024 / SRD 5.2.1**. Trocar a edição não converte itens existentes.
 4. Para usar português ou espanhol, instale e ative o Translator e escolha o
-   idioma na conta. O mestre concede leitura dos compêndios pelas permissões nativas.
+   idioma na conta. O mestre concede leitura de atores, diários, cenas e cartas pelas permissões
+   nativas. Nesta instalação modificada do Gravewright, os pacotes de itens e
+   magias já aparecem para jogadores. No Gravewright 0.3.4 sem essa alteração,
+   o mestre deve liberar a leitura em **⋯ Permissões**.
 
 Um único ZIP reúne fichas de personagens, monstros e itens, compêndios,
 traduções, configurações, iniciativa e automações de turno. O download inclui
@@ -101,7 +106,7 @@ não exige ativação de código de servidor.
 - Salvamento com revisão, erros sem descarte silencioso e espera ao fechar; tokens independentes mantêm sua própria ficha.
 - Interface em inglês, português brasileiro e espanhol pela API oficial do Translator, respeitando o idioma escolhido na conta. Não traduz conteúdo escrito pelos usuários nem os textos ingleses dos compêndios.
 - Compêndios separados por edição, disponíveis na interface nativa: 1.259 entradas de 2014 e 1.276 de 2024, incluindo 319 e 338 magias, respectivamente. São 2.535 entradas: 2.524 registros adaptados e 11 características originais derivadas dos textos licenciados de seus pais no SRD. Armas, armaduras, equipamentos, consumíveis, talentos, características, raças/espécies, antecedentes e classes têm dados próprios para a ficha.
-- Cópia direta do compêndio para a ficha pelo mestre, após leitura autorizada. A inclusão mantém a procedência sem criar um documento adicional na biblioteca; cancelar as escolhas não deixa itens órfãos. Jogadores veem apenas compêndios com leitura concedida.
+- Cópia direta do compêndio para fichas editáveis pelo mestre ou jogador, após leitura autorizada. A inclusão mantém a procedência sem criar um documento adicional na biblioteca; cancelar as escolhas não deixa itens órfãos. A leitura continua validada pelo servidor; soltar em Efeitos continua exclusivo do mestre.
 
 ## Tradução pelo módulo oficial
 
@@ -115,9 +120,9 @@ Para contribuir, altere os três catálogos com as mesmas chaves e marcadores, c
 
 ## Escopo de conteúdo e automação
 
-Os compêndios de `compendiums/` são uma seleção rastreável dos SRDs 5.1 e 5.2.1, adaptada dos dados públicos licenciados do sistema D&D5e do Foundry e conferida com os PDFs oficiais. São **parciais**, incluem variantes e não representam todo o SRD. As descrições das magias vêm dos PDFs; outras descrições foram convertidas para texto simples, sem macros nem notas de automação do Foundry. Conteúdo e nomes permanecem em inglês. Não inclui monstros, efeitos prontos, livros, PDFs, logotipos ou artes oficiais. Os modelos antigos de `content/` não são registrados como compêndios. Veja [cobertura, fontes, exclusões e reconstrução](compendiums/README.md).
+Os compêndios de `compendiums/` são uma seleção rastreável dos SRDs 5.1 e 5.2.1, adaptada dos dados públicos licenciados do sistema D&D5e do Foundry e conferida com os PDFs oficiais. São **parciais**, incluem variantes e não representam todo o SRD. As descrições das magias vêm dos PDFs; outras descrições foram convertidas para texto simples, sem macros nem notas de automação do Foundry. Conteúdo e nomes permanecem em inglês. Inclui dois compêndios de monstros: 317 blocos do SRD 5.1 e 330 do SRD 5.2.1, com descrições oficiais, atributos, PV, CA e ataques simples utilizáveis. Os pacotes de atores ficam privados até o mestre conceder leitura. Efeitos condicionais, conjuração e ataques múltiplos continuam manuais, com o bloco oficial completo para consulta. Não inclui efeitos prontos, livros, PDFs, logotipos ou artes oficiais. Os modelos antigos de `content/` não são registrados como compêndios. Veja [cobertura, fontes, exclusões e reconstrução](compendiums/README.md).
 
-As coleções só aparecem nas mesas que usam a versão instalada, aprovada e ativa deste sistema. O mestre define leitura para os jogadores pelas permissões nativas dos compêndios; a importação permanece reservada ao mestre. Trocar a edição da ficha não converte dados importados.
+As coleções só aparecem nas mesas que usam a versão instalada, aprovada e ativa deste sistema. Nesta instalação, itens e magias já ficam visíveis aos jogadores; atores, diários, cenas e cartas dependem das permissões nativas. No Gravewright 0.3.4 sem a alteração local, todos dependem de leitura liberada pelo mestre. A importação para a biblioteca permanece reservada ao mestre. Trocar a edição da ficha não converte dados importados.
 
 O perfil de edição não implementa automaticamente todas as regras das duas edições. Origens, talentos, características e classes aplicam somente avanços e passivos declarados; as escolhas obrigatórias são resolvidas antes de confirmar o plano. As fórmulas estruturadas dos compêndios preservam atributo de conjuração, cura, PV temporários e incrementos explícitos por nível do personagem ou do espaço usado. Não somam um atributo universal nem multiplicam o dano de um raio pelos demais projéteis. Magias antigas e fórmulas personalizadas mantêm seu modo manual. Maestrias, componentes consumidos, efeitos secundários, áreas/alvos, pré-requisitos não declarados e exceções contextuais continuam exigindo decisão da mesa. Veja [automações, compatibilidade de dados e limites](AUTOMATION.md).
 
@@ -206,3 +211,5 @@ Remova segredos e dados pessoais dos logs.
 ## Licenças
 
 Código original sob [MIT](LICENSE.md); conteúdo derivado dos SRDs sob **CC BY 4.0**, com as atribuições e modificações em [NOTICE.md](NOTICE.md). Os dados adaptados do Foundry preservam o [aviso MIT de sua representação](compendiums/FOUNDRY-DATA-LICENSE.txt). A licença MIT do código não concede direitos sobre marcas, artes ou conteúdo externo. Veja também [CONTENT_POLICY.md](CONTENT_POLICY.md).
+
+O conteúdo dos compêndios permanece em inglês nesta atualização local de monstros. A tradução integral aguarda suporte nativo e traduções revisadas; mudar o idioma da interface ainda não traduz essas entradas.

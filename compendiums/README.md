@@ -24,7 +24,7 @@ derivadas do texto licenciado de seus pais no SRD 5.1 — dez ancestralidades de
 Sopro de Dragão e Robustez Anã. Essas definições têm IDs estáveis e registram o
 pai, a verificação textual e a transformação em sua procedência.
 
-Não inclui monstros, efeitos prontos ou todo o conteúdo do SRD. O editor aceita
+Inclui também `monsters-2014.json` (317 monstros) e `monsters-2024.json` (330 monstros). Não inclui efeitos prontos ou todo o conteúdo do SRD. O editor aceita
 os 11 tipos do sistema; estas coleções usam dez deles. Origens, classes,
 talentos e características fornecem avanços declarativos para aplicar os
 benefícios reconhecidos, com escolhas obrigatórias e registro de procedência.
@@ -135,8 +135,22 @@ O download fixa o commit e verifica cada blob Git; os PDFs oficiais também têm
 SHA-256 fixado. Fontes, PDFs e dependências ficam em `data/`, fora do ZIP.
 O build final inclui os JSON e estes avisos; não inclui ferramentas ou testes.
 
-O manifesto declara apenas `compendiums/2014.json` e `compendiums/2024.json`.
+O manifesto declara os dois catálogos de itens e os dois catálogos de monstros.
 A base valida caminhos, limites, tipos registrados, integridade e versão ativa.
 Os compêndios começam privados do mestre. Jogadores precisam de concessão de
 leitura; importar documentos é reservado ao mestre. Veja o
 [contrato da base VTT 0.2.1](https://github.com/Gravewright/gravewright/blob/v0.2.1/docs/pt-BR/modules.md).
+
+## Monstros
+
+Execute `python scripts/build_monsters.py` após o download das fontes. O script
+confere os hashes e extrai os blocos oficiais em ordem de leitura. A CA vem do
+PDF, incluindo armadura e escudo, sem depender do runtime do Foundry. A iniciativa
+preserva o bônus explícito de 2024. Ataques simples recebem rolagens sem duplicar
+atributo ou proficiência; dano de múltiplos tipos e efeitos contextuais permanecem
+no texto de referência. Centopeia Gigante e Vespa Gigante de 2024 são transcritas
+diretamente do PDF porque os registros YAML não têm licença explícita.
+
+`MONSTER-PROVENANCE.json` registra a cobertura e as exclusões das fontes YAML.
+Variantes de invocação e objetos mágicos não são anunciados como novos monstros.
+Atores importados são cópias independentes; o pacote não altera atores existentes.

@@ -1,0 +1,372 @@
+{
+  "2014": {
+    "included": 317,
+    "excluded": [
+      {
+        "name": "Giant Fly",
+        "path": "packs/_source/monsters/beast/giant-fly.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Giant Rat (Diseased)",
+        "path": "packs/_source/monsters/beast/giant-rat-diseased.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Swarm of Beetles",
+        "path": "packs/_source/monsters/beast/swarm-of-beetles.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Swarm of Centipedes",
+        "path": "packs/_source/monsters/beast/swarm-of-centipedes.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Swarm of Spiders",
+        "path": "packs/_source/monsters/beast/swarm-of-spiders.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Swarm of Wasps",
+        "path": "packs/_source/monsters/beast/swarm-of-wasps.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Arcane Eye",
+        "path": "packs/_source/monsters/summons/arcane-eye.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Arcane Hand",
+        "path": "packs/_source/monsters/summons/arcane-hand.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Arcane Sword",
+        "path": "packs/_source/monsters/summons/arcane-sword.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Dancing Lights (medium)",
+        "path": "packs/_source/monsters/summons/dancing-lights-medium.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Dancing Lights (tiny)",
+        "path": "packs/_source/monsters/summons/dancing-lights-tiny.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Guardian of Faith",
+        "path": "packs/_source/monsters/summons/guardian-of-faith.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Huge Animated Object",
+        "path": "packs/_source/monsters/summons/huge-animated-object.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Large Animated Object",
+        "path": "packs/_source/monsters/summons/large-animated-object.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Mage Hand",
+        "path": "packs/_source/monsters/summons/mage-hand.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Medium Animated Object",
+        "path": "packs/_source/monsters/summons/medium-animated-object.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Small Animated Object",
+        "path": "packs/_source/monsters/summons/small-animated-object.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Tiny Animated Object",
+        "path": "packs/_source/monsters/summons/tiny-animated-object.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Unseen Servant",
+        "path": "packs/_source/monsters/summons/unseen-servant.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Avatar of Death",
+        "path": "packs/_source/monsters/undead/avatar-of-death.yml",
+        "reason": "missing-license-or-official-stat-block"
+      }
+    ]
+  },
+  "2024": {
+    "included": 330,
+    "excluded": [
+      {
+        "name": "Giant Centipede",
+        "path": "packs/_source/actors24/beast/giant-centipede.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Giant Wasp",
+        "path": "packs/_source/actors24/beast/giant-wasp.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Celestial Steed",
+        "path": "packs/_source/actors24/companions/otherworldly-steeds/celestial-steed.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Fey Steed",
+        "path": "packs/_source/actors24/companions/otherworldly-steeds/fey-steed.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Fiend Steed",
+        "path": "packs/_source/actors24/companions/otherworldly-steeds/fiend-steed.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Otherworldly Steed",
+        "path": "packs/_source/actors24/companions/otherworldly-steeds/otherworldly-steed.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Huge Animated Object",
+        "path": "packs/_source/actors24/conjurations/animated-objects/huge-animated-object.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Large Animated Object",
+        "path": "packs/_source/actors24/conjurations/animated-objects/large-animated-object.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Medium Animated Object",
+        "path": "packs/_source/actors24/conjurations/animated-objects/medium-animated-object.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Small Animated Object",
+        "path": "packs/_source/actors24/conjurations/animated-objects/small-animated-object.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Tiny Animated Object",
+        "path": "packs/_source/actors24/conjurations/animated-objects/tiny-animated-object.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Arcane Eye",
+        "path": "packs/_source/actors24/conjurations/arcane-eye.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Arcane Hand",
+        "path": "packs/_source/actors24/conjurations/arcane-hand.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Arcane Sword",
+        "path": "packs/_source/actors24/conjurations/arcane-sword.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Conjured Animals",
+        "path": "packs/_source/actors24/conjurations/conjured-animals.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Conjured Air Elemental",
+        "path": "packs/_source/actors24/conjurations/conjured-elementals/conjured-air-elemental.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Conjured Earth Elemental",
+        "path": "packs/_source/actors24/conjurations/conjured-elementals/conjured-earth-elemental.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Conjured Fire Elemental",
+        "path": "packs/_source/actors24/conjurations/conjured-elementals/conjured-fire-elemental.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Conjured Water Elemental",
+        "path": "packs/_source/actors24/conjurations/conjured-elementals/conjured-water-elemental.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Conjured Fey",
+        "path": "packs/_source/actors24/conjurations/conjured-fey.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Dancing Light (Medium)",
+        "path": "packs/_source/actors24/conjurations/dancing-light-medium.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Dancing Light (Tiny)",
+        "path": "packs/_source/actors24/conjurations/dancing-light-tiny.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Duplicate",
+        "path": "packs/_source/actors24/conjurations/duplicate.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Faithful Hound",
+        "path": "packs/_source/actors24/conjurations/faithful-hound.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Flaming Sphere",
+        "path": "packs/_source/actors24/conjurations/flaming-sphere.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Floating Disk",
+        "path": "packs/_source/actors24/conjurations/floating-disk.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Guardian of Faith",
+        "path": "packs/_source/actors24/conjurations/guardian-of-faith.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Illusory Creature",
+        "path": "packs/_source/actors24/conjurations/illusory-creature.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Illusory Object",
+        "path": "packs/_source/actors24/conjurations/illusory-object.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Illusory Phenomenon",
+        "path": "packs/_source/actors24/conjurations/illusory-phenomenon.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Invisible Sensor",
+        "path": "packs/_source/actors24/conjurations/invisible-sensor.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Light",
+        "path": "packs/_source/actors24/conjurations/light.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Mage Hand",
+        "path": "packs/_source/actors24/conjurations/mage-hand.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Phantom Steed",
+        "path": "packs/_source/actors24/conjurations/phantom-steed.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Secret Chest",
+        "path": "packs/_source/actors24/conjurations/secret-chest.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Spiritual Weapon",
+        "path": "packs/_source/actors24/conjurations/spiritual-weapon.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Unseen Servant",
+        "path": "packs/_source/actors24/conjurations/unseen-servant.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Avatar of Death",
+        "path": "packs/_source/actors24/magic-items/avatar-of-death.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Carpet of Flying (3 by 5 ft.)",
+        "path": "packs/_source/actors24/magic-items/carpet-of-flying-3-by-5-ft.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Carpet of Flying (4 by 6 ft.)",
+        "path": "packs/_source/actors24/magic-items/carpet-of-flying-4-by-6-ft.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Carpet of Flying (5 by 7 ft.)",
+        "path": "packs/_source/actors24/magic-items/carpet-of-flying-5-by-7-ft.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Carpet of Flying (6 by 9 ft.)",
+        "path": "packs/_source/actors24/magic-items/carpet-of-flying-6-by-9-ft.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Dancing Sword",
+        "path": "packs/_source/actors24/magic-items/dancing-sword.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Floating Whip",
+        "path": "packs/_source/actors24/magic-items/floating-whip.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Giant Fly",
+        "path": "packs/_source/actors24/magic-items/giant-fly.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Goat of Traveling",
+        "path": "packs/_source/actors24/magic-items/goat-of-traveling.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Illusory Creature",
+        "path": "packs/_source/actors24/magic-items/illusory-creature.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Draconic Spirit",
+        "path": "packs/_source/actors24/summons/draconic-spirit.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Giant Centipede",
+        "path": "packs/_source/actors24/summons/giant-insects/giant-centipede.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Giant Spider",
+        "path": "packs/_source/actors24/summons/giant-insects/giant-spider.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Giant Wasp",
+        "path": "packs/_source/actors24/summons/giant-insects/giant-wasp.yml",
+        "reason": "missing-license-or-official-stat-block"
+      },
+      {
+        "name": "Giant Insect",
+        "path": "packs/_source/actors24/summons/summon-templates/giant-insect.yml",
+        "reason": "missing-license-or-official-stat-block"
+      }
+    ]
+  }
+}
