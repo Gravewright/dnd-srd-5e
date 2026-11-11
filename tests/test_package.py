@@ -45,8 +45,8 @@ class BrowserPackageTests(unittest.TestCase):
             self.assertEqual(len(first), 1)
             result = validate(root)
             self.assertEqual(result['compendiums'], {
-                '2014': {'packs': 10, 'documents': 1259},
-                '2024': {'packs': 10, 'documents': 1276},
+                '2014': {'packs': 10, 'documents': 1259, 'monsters': 317},
+                '2024': {'packs': 10, 'documents': 1276, 'monsters': 330},
             })
             with zipfile.ZipFile(root / 'dist' / first[0]['archive']) as archive:
                 names = archive.namelist()
