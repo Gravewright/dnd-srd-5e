@@ -8,6 +8,8 @@ The Noturno sheet brings a dark background, ivory typography, gold frames and an
 
 This is an independent project, not affiliated with or endorsed by Wizards of the Coast or Foundry VTT. It does not include official artwork, rulebooks or premium content. The software adapts the user-supplied Gravewright 5e SRD legacy framework; its current public name is **DnD 5e SRD**.
 
+The source checkout additionally includes 317 SRD 5.1 and 330 SRD 5.2.1 monsters and lets players copy readable compendium items into editable sheets. These additions are not included in the published 0.1.6 ZIP. Server read permissions still apply; library imports and Effects remain GM-only.
+
 ## Requirements
 
 | Component | Required version | Purpose |
@@ -31,8 +33,10 @@ the published VTT 0.2.3 without a core patch or a separately installed rules mod
 3. The GM chooses the default edition for new sheets in **Settings → Extensions
    → Customize**. Each sheet retains **2014 / SRD 5.1** or **2024 / SRD 5.2.1**.
 4. For Portuguese or Spanish, install and activate the official Translator and
-   choose your account language. Grant compendium read access through native
-   permissions when players need it.
+   choose your account language. Grant native compendium read access for actors, journals, scenes and cards
+   when players need it. In the locally modified Gravewright installation, item
+   and spell packs are already visible to players. On unmodified Gravewright
+   0.3.4, the GM must grant read access through **⋯ Permissions**.
 
 One system ZIP contains character, monster and item sheets, compendiums,
 translations, settings, initiative and supported turn automation. Its SHA-256
@@ -104,7 +108,7 @@ All current rules run from this package, including `rules.js`, `combat-rules.js`
 
 The native compendiums include **2,535 entries**: **1,259** for 2014 and **1,276** for 2024, across twenty packs. They cover weapons, armor, equipment, consumables, spells, feats, features/subclasses, races/species, backgrounds and classes, with **319** and **338** spells respectively. These are **partial collections**, including variants, rather than a complete SRD.
 
-Content remains in English. There are no monster compendiums or ready-made effect packs. The monster sheet is available for your own documents. No official artwork, logos, books, PDFs, premium packs, Foundry runtime or Foundry translations are redistributed. Legacy files under `content/` are not registered as compendiums.
+Content remains in English. Two monster compendiums add 317 SRD 5.1 stat blocks and 330 SRD 5.2.1 stat blocks, with official descriptions, ability scores, HP, AC and supported attack rolls. Actor packs remain private until the GM grants read access. There are no ready-made effect packs. Conditional effects, spellcasting and multiattack remain manual; the full official stat block is included for reference. No official artwork, logos, books, PDFs, premium packs, Foundry runtime or Foundry translations are redistributed. Legacy files under `content/` are not registered as compendiums.
 
 Entries derive from licensed public structured data, checked against the official SRD PDFs. Spell descriptions come from the PDFs; other descriptions are converted to plain text. Source editions, paths and digests are retained. See [compendium coverage and provenance](compendiums/README.md), [NOTICE.md](NOTICE.md) and [CONTENT_POLICY.md](CONTENT_POLICY.md).
 
@@ -139,7 +143,7 @@ Automation does not run in the background after all table clients close.
 
 | Symptom | Check |
 | --- | --- |
-| Compendiums are missing | The table uses an installed active system version and the GM has granted player read access |
+| Compendiums are missing | The table uses an installed active system version and the host grants read access (on unmodified 0.3.4, the GM grants it) |
 | Previous server module detected | The host owner can open Previous installation in Customize and review migration |
 | Interface stays English | Activate Translator, choose your account language and reload; SRD content stays English |
 | Interrupted combat operation | Restore connectivity and use the tracker's retry action before issuing another advance |
@@ -190,3 +194,5 @@ documented review seed and local URL; never point them at a production table.
 ## Licenses
 
 Original software is [MIT-licensed](LICENSE.md). SRD-derived content is **CC BY 4.0**, with required attribution and modification notices in [NOTICE.md](NOTICE.md). Adapted Foundry structured data retains the [upstream MIT representation notice](compendiums/FOUNDRY-DATA-LICENSE.txt). These software licenses do not grant rights to third-party brands or artwork. The decorative banner was created originally for Gravewright with AI assistance; no Wizards or Foundry artwork is included.
+
+The compendium content remains English in this local monster update. Full content localization is pending native-host support and reviewed translations; changing the interface language does not yet translate these entries.

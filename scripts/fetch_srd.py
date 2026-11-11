@@ -16,11 +16,12 @@ COMMIT = "87e94dbd9f930135e0694cd7e7d49f210603cd2c"
 PACKS = {
     "spells", "spells24", "items", "equipment24", "classes", "subclasses",
     "classfeatures", "backgrounds", "races", "classes24", "origins24", "feats24",
+    "monsters", "actors24",
 }
 CACHE = Path(sys.argv[1]).expanduser().resolve() if len(sys.argv) > 1 else srd_cache()
 CACHE.mkdir(parents=True, exist_ok=True)
 
-def download(url, limit=2 * 1024 * 1024):
+def download(url, limit=8 * 1024 * 1024):
     request = Request(url, headers={"User-Agent": "Gravewright-SRD-content-adapter"})
     with urlopen(request, timeout=45) as response:
         raw = response.read(limit + 1)
