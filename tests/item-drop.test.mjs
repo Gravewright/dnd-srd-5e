@@ -79,7 +79,7 @@ test('GM compendium drops resolve one authorized read without importing or rerea
  assert.deepEqual(calls.read,[{packId:packRef.packId,id:packRef.id}]);assert.deepEqual(calls.import,[]);
  assert.deepEqual(calls.get,[]);assert.equal(result.canOpen,true);assert.equal(result.canEdit,false);
  assert.equal(result.id,'library-item');assert.deepEqual(result.data,item().data);
- const player={...context,role:'player'};assert.equal(acceptsItemDrop(transfer(COMPENDIUM,packRef),player),false);
+ const player={...context,role:'player'};assert.equal(acceptsItemDrop(transfer(COMPENDIUM,packRef),player),true);
  assert.equal(acceptsItemDrop(transfer(ITEM,sourceRef),player),true);
 });
 
@@ -90,7 +90,7 @@ test('incompatible type, edition, permissions and malformed references cause zer
   const {api,calls}=mockedApi();await assert.rejects(drop(transfer(COMPENDIUM,ref),api));assert.equal(calls.read.length,0);assert.equal(calls.import.length,0);
  }
  for(const data of [transfer(COMPENDIUM,'{'),transfer(ITEM,'{')]){const {api,calls}=mockedApi();await assert.rejects(drop(data,api));assert.equal(calls.import.length,0);}
- const player=mockedApi();await assert.rejects(drop(transfer(COMPENDIUM,packRef),player.api,{context:{...context,role:'player'}}));assert.equal(player.calls.read.length,0);assert.equal(player.calls.import.length,0);
+
  const readonly=mockedApi();await assert.rejects(drop(transfer(COMPENDIUM,packRef),readonly.api,{accepts:value=>!!itemDestination(layouts.character,value,{...options,canEdit:false})}));assert.equal(readonly.calls.import.length,0);
  const effectPlayer=mockedApi(item('effect'));await assert.rejects(drop(transfer(COMPENDIUM,packRef),effectPlayer.api,{accepts:value=>!!itemDestination(layouts.character,value,{...options,role:'player'})}));assert.equal(effectPlayer.calls.import.length,0);
 });
@@ -257,3 +257,14 @@ test('autoequip sees both legacy equipment collections and ignores unequipped ar
  assert.equal(ownedItem(armor('chain','heavy'),draft).equipped,true);assert.equal(ownedItem(armor('shield','shield'),draft).equipped,false);
  assert.equal(ownedItem(armor('chain','heavy'),{inventory:null,equipment:null}).equipped,true);
 });
+
+ test('players copy authorized compendium items only into editable sheets',async()=>{
+  for(const canEdit of [true,false]){
+   const {api,calls}=mockedApi();
+   const pending=drop(transfer(COMPENDIUM,packRef),api,{context:{...context,role:'player'},accepts:value=>!!itemDestination(layouts.character,value,{...options,role:'player',canEdit})});
+   if(canEdit)assert.equal((await pending).id,'library-item');else await assert.rejects(pending);
+   assert.equal(calls.read.length,1);assert.deepEqual(calls.import,[]);assert.deepEqual(calls.get,[]);
+  }
+  const {api}=mockedApi();api.compendiums.read=async()=>{throw Object.assign(Error('permission_denied'),{code:'permission_denied'});};
+  await assert.rejects(drop(transfer(COMPENDIUM,packRef),api,{context:{...context,role:'player'}}),{code:'permission_denied'});
+ });
