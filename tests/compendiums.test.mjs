@@ -9,7 +9,7 @@ const entries=edition=>collections[edition].packs.flatMap(pack=>pack.entries);
 const find=(edition,name,type)=>entries(edition).find(entry=>entry.name===name&&(!type||entry.type===type));
 
 test('installed collections preserve edition, registered types and unique stable IDs',()=>{
- assert.deepEqual(manifest.content.compendiums,['compendiums/2014.json','compendiums/2024.json']);
+ assert.deepEqual(manifest.content.compendiums,['compendiums/2014.json','compendiums/2024.json','compendiums/monsters-2014.json','compendiums/monsters-2024.json']);
  const types=new Set(manifest.system.itemTypes.map(type=>type.id)),ids=new Set();
  for(const edition of ['2014','2024']){
   assert.equal(collections[edition].language,'en');assert.equal(collections[edition].license,'CC-BY-4.0');

@@ -13,7 +13,9 @@
   "content": {
     "compendiums": [
       "compendiums/2014.json",
-      "compendiums/2024.json"
+      "compendiums/2024.json",
+      "compendiums/monsters-2014.json",
+      "compendiums/monsters-2024.json"
     ]
   },
   "system": {
