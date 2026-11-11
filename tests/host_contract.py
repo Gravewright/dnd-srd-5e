@@ -101,8 +101,13 @@ class ReleasedHostContractTests(TestCase):
         actor = Actor.objects.create(campaign=self.campaign, name='Existing character', type='character', data=authored)
         directory = invoke(self.campaign.pk, self.gm.pk, 'compendiums', 'state', {})
         packs = [pack for pack in directory['packs'] if pack.get('systemId') == self.manifest['id']]
-        self.assertEqual(len(packs), 20)
-        self.assertEqual(sum(len(pack['entries']) for pack in packs), 2535)
+        item_packs = [pack for pack in packs if pack['entries'][0]['kind'] == 'item']
+        monster_packs = [pack for pack in packs if pack['entries'][0]['kind'] == 'actor']
+        self.assertEqual(len(packs), 22)
+        self.assertEqual(len(item_packs), 20)
+        self.assertEqual(sum(len(pack['entries']) for pack in item_packs), 2535)
+        self.assertEqual(len(monster_packs), 2)
+        self.assertEqual(sorted(len(pack['entries']) for pack in monster_packs), [317, 330])
         self.assertEqual(invoke(self.campaign.pk, self.player.pk, 'compendiums', 'state', {})['packs'], [])
         first = packs[0]
         payload = {'packId': first['id'], 'id': first['entries'][0]['id']}
