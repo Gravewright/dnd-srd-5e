@@ -6,6 +6,9 @@ env:
   PYTHONUTF8: '1'
 jobs:
   validate:
+    strategy:
+      matrix:
+        host: [db15638f65e8f9e02e28b6b7616274006a92c436, b91010c02023dbc3936b3eafd596d154a497172d]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
@@ -14,7 +17,7 @@ jobs:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
         with:
           repository: Gravewright/gravewright
-          ref: db15638f65e8f9e02e28b6b7616274006a92c436
+          ref: ${{ matrix.host }}
           path: host-vtt
           persist-credentials: false
       - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
@@ -36,7 +39,7 @@ jobs:
           python scripts/build.py
           python scripts/validate_package.py
           git diff --exit-code -- system.json
-      - name: Test the single system archive and original VTT 0.2.3 contracts
+      - name: Test the single system archive and released VTT contracts
         run: |
           python -m unittest discover -s tests -p test_package.py -v
           host-vtt/.venv/bin/python tests/run_host_tests.py

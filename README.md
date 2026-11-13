@@ -1,21 +1,21 @@
 # DnD 5e SRD
 
-A fifth-edition game system for Gravewright VTT, with selectable **2014 / SRD 5.1** and **2024 / SRD 5.2.1** rules. **0.1.6 Alpha**.
+A fifth-edition game system for Gravewright VTT, with selectable **2014 / SRD 5.1** and **2024 / SRD 5.2.1** rules. **0.2.0 Alpha**.
 
-[Português brasileiro](README.pt-BR.md) · [Download 0.1.6](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.6) · [Release notes](docs/releases/0.1.6.md) · [Report an issue](https://github.com/Gravewright/dnd-srd-5e/issues)
+[Português brasileiro](README.pt-BR.md) · [Download 0.2.0](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.2.0) · [Release notes](docs/releases/0.2.0.md) · [Report an issue](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 The Noturno sheet brings a dark background, ivory typography, gold frames and an illustrated character header. Character, monster and item sheets use native Gravewright windows, automatic saving and chat rolls. The system includes licensed, edition-separated SRD compendiums and declarative automation for supported rules.
 
 This is an independent project, not affiliated with or endorsed by Wizards of the Coast or Foundry VTT. It does not include official artwork, rulebooks or premium content. The software adapts the user-supplied Gravewright 5e SRD legacy framework; its current public name is **DnD 5e SRD**.
 
-The source checkout additionally includes 317 SRD 5.1 and 330 SRD 5.2.1 monsters and lets players copy readable compendium items into editable sheets. These additions are not included in the published 0.1.6 ZIP. Server read permissions still apply; library imports and Effects remain GM-only.
+This release includes 317 SRD 5.1 and 330 SRD 5.2.1 monsters and lets players copy readable compendium items into editable sheets. Server read permissions still apply; library imports and Effects remain GM-only.
 
 ## Requirements
 
 | Component | Required version | Purpose |
 | --- | --- | --- |
 | [Gravewright VTT](https://github.com/Gravewright/gravewright/releases/tag/v0.2.3) | **Released 0.2.3**, SDK 1.x | Native documents, compendiums, dice, combat and modals |
-| **DnD 5e SRD** | **0.1.6 Alpha** | One browser system with sheets, licensed content and automation |
+| **DnD 5e SRD** | **0.2.0 Alpha** | One browser system with sheets, licensed content and automation |
 | [Official Translator](https://github.com/Gravewright/translator) | **0.1.2 or newer** for localized use | English, Brazilian Portuguese and Spanish through the official API |
 
 English is the default without an active language package. The system runs on
@@ -24,7 +24,7 @@ the published VTT 0.2.3 without a core patch or a separately installed rules mod
 ## Install and choose an edition
 
 1. As host owner, download
-   [`gravewright-5e-srd-0.1.6.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.1.6/gravewright-5e-srd-0.1.6.zip)
+   [`gravewright-5e-srd-0.2.0.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.2.0/gravewright-5e-srd-0.2.0.zip)
    from the GitHub release and install it through the running host's native
    local system installer. The Marketplace version may differ until its catalog
    is updated.
@@ -34,7 +34,7 @@ the published VTT 0.2.3 without a core patch or a separately installed rules mod
    → Customize**. Each sheet retains **2014 / SRD 5.1** or **2024 / SRD 5.2.1**.
 4. For Portuguese or Spanish, install and activate the official Translator and
    choose your account language. Grant native compendium read access for actors, journals, scenes and cards
-   when players need it. In the locally modified Gravewright installation, item
+   when players need it. In Gravewright 0.3.5, item
    and spell packs are already visible to players. On unmodified Gravewright
    0.3.4, the GM must grant read access through **⋯ Permissions**.
 
@@ -44,8 +44,8 @@ sidecar accompanies the download. Install through the VTT; do not extract the ZI
 into the VTT source tree. The stable system ID `gravewright.5e-srd` preserves
 existing character data, table settings and embedded copies.
 
-Version 0.1.6 installs alongside earlier releases, including local builds
-0.1.3–0.1.5. Select 0.1.6 in the table's extensions and reload open table pages
+Version 0.2.0 installs alongside earlier releases, including local builds
+0.1.3–0.1.5. Select 0.2.0 in the table's extensions and reload open table pages
 to load the correction; restarting the host alone does not change that
 selection. Keep the previous version installed for rollback by selecting it
 again. Installed ID/version pairs are immutable and cannot be overwritten with
@@ -196,3 +196,5 @@ documented review seed and local URL; never point them at a production table.
 Original software is [MIT-licensed](LICENSE.md). SRD-derived content is **CC BY 4.0**, with required attribution and modification notices in [NOTICE.md](NOTICE.md). Adapted Foundry structured data retains the [upstream MIT representation notice](compendiums/FOUNDRY-DATA-LICENSE.txt). These software licenses do not grant rights to third-party brands or artwork. The decorative banner was created originally for Gravewright with AI assistance; no Wizards or Foundry artwork is included.
 
 The compendium content remains English in this local monster update. Full content localization is pending native-host support and reviewed translations; changing the interface language does not yet translate these entries.
+
+Validated against released VTT 0.3.5; the 0.2.3 baseline remains supported.

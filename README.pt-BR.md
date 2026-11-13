@@ -1,14 +1,14 @@
 # DnD 5e SRD
 
-Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. **0.1.6 Alpha**.
+Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. **0.2.0 Alpha**.
 
-[English](README.md) · [Baixar 0.1.6](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.1.6) · [Notas da release](docs/releases/0.1.6.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
+[English](README.md) · [Baixar 0.2.0](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.2.0) · [Notas da release](docs/releases/0.2.0.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 A ficha Noturno combina fundo escuro, tipografia em marfim, molduras douradas e um cabeçalho ilustrado. Inclui fichas próprias de personagem, monstro e 11 tipos de itens, salvamento automático e compêndios licenciados separados por edição. Este projeto adapta o framework legado Gravewright 5e SRD 0.3.1; o nome público atual é **DnD 5e SRD**.
 
 Projeto independente, sem afiliação ou endosso da Wizards of the Coast ou do Foundry VTT. Não inclui artes oficiais, livros ou conteúdo premium.
 
-O código-fonte inclui também 317 monstros do SRD 5.1 e 330 do SRD 5.2.1 e permite aos jogadores copiar itens legíveis dos compêndios para fichas editáveis. Essas adições não estão no ZIP publicado da 0.1.6. As permissões de leitura do servidor continuam válidas; importações para a biblioteca e Efeitos continuam exclusivas do mestre.
+Esta versão inclui 317 monstros do SRD 5.1 e 330 do SRD 5.2.1 e permite aos jogadores copiar itens legíveis dos compêndios para fichas editáveis. As permissões de leitura do servidor continuam válidas; importações para a biblioteca e Efeitos continuam exclusivas do mestre.
 
 ## Instalar e escolher uma edição
 
@@ -18,7 +18,7 @@ recente](https://github.com/Gravewright/translator). Inglês é o padrão. Não 
 necessário alterar o core do VTT nem instalar um módulo separado de regras.
 
 1. Como proprietário do host, baixe
-   [`gravewright-5e-srd-0.1.6.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.1.6/gravewright-5e-srd-0.1.6.zip)
+   [`gravewright-5e-srd-0.2.0.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.2.0/gravewright-5e-srd-0.2.0.zip)
    da release no GitHub e instale pelo instalador local nativo de sistemas do
    host em execução. A versão do Marketplace pode ser diferente até a atualização
    de seu catálogo.
@@ -29,7 +29,7 @@ necessário alterar o core do VTT nem instalar um módulo separado de regras.
    SRD 5.1** ou **2024 / SRD 5.2.1**. Trocar a edição não converte itens existentes.
 4. Para usar português ou espanhol, instale e ative o Translator e escolha o
    idioma na conta. O mestre concede leitura de atores, diários, cenas e cartas pelas permissões
-   nativas. Nesta instalação modificada do Gravewright, os pacotes de itens e
+   nativas. No Gravewright 0.3.5, os pacotes de itens e
    magias já aparecem para jogadores. No Gravewright 0.3.4 sem essa alteração,
    o mestre deve liberar a leitura em **⋯ Permissões**.
 
@@ -39,8 +39,8 @@ checksum SHA-256. Use o instalador do VTT, sem extrair o pacote no código-fonte
 O ID `gravewright.5e-srd`, os dados das fichas, as configurações e as cópias
 incorporadas permanecem no namespace original.
 
-A versão 0.1.6 instala ao lado das anteriores, incluindo os builds locais
-0.1.3–0.1.5. Selecione 0.1.6 nas extensões da mesa e recarregue as páginas abertas
+A versão 0.2.0 instala ao lado das anteriores, incluindo os builds locais
+0.1.3–0.1.5. Selecione 0.2.0 nas extensões da mesa e recarregue as páginas abertas
 para carregar a correção; reiniciar o servidor sozinho não altera essa seleção.
 Mantenha a versão anterior instalada para poder selecioná-la em uma reversão.
 O mesmo ID/versão é imutável e não pode ser sobrescrito com bytes diferentes.
@@ -122,7 +122,7 @@ Para contribuir, altere os três catálogos com as mesmas chaves e marcadores, c
 
 Os compêndios de `compendiums/` são uma seleção rastreável dos SRDs 5.1 e 5.2.1, adaptada dos dados públicos licenciados do sistema D&D5e do Foundry e conferida com os PDFs oficiais. São **parciais**, incluem variantes e não representam todo o SRD. As descrições das magias vêm dos PDFs; outras descrições foram convertidas para texto simples, sem macros nem notas de automação do Foundry. Conteúdo e nomes permanecem em inglês. Inclui dois compêndios de monstros: 317 blocos do SRD 5.1 e 330 do SRD 5.2.1, com descrições oficiais, atributos, PV, CA e ataques simples utilizáveis. Os pacotes de atores ficam privados até o mestre conceder leitura. Efeitos condicionais, conjuração e ataques múltiplos continuam manuais, com o bloco oficial completo para consulta. Não inclui efeitos prontos, livros, PDFs, logotipos ou artes oficiais. Os modelos antigos de `content/` não são registrados como compêndios. Veja [cobertura, fontes, exclusões e reconstrução](compendiums/README.md).
 
-As coleções só aparecem nas mesas que usam a versão instalada, aprovada e ativa deste sistema. Nesta instalação, itens e magias já ficam visíveis aos jogadores; atores, diários, cenas e cartas dependem das permissões nativas. No Gravewright 0.3.4 sem a alteração local, todos dependem de leitura liberada pelo mestre. A importação para a biblioteca permanece reservada ao mestre. Trocar a edição da ficha não converte dados importados.
+As coleções só aparecem nas mesas que usam a versão instalada, aprovada e ativa deste sistema. No Gravewright 0.3.5, itens e magias já ficam visíveis aos jogadores; atores, diários, cenas e cartas dependem das permissões nativas. No Gravewright 0.3.4 e anteriores, todos dependem de leitura liberada pelo mestre. A importação para a biblioteca permanece reservada ao mestre. Trocar a edição da ficha não converte dados importados.
 
 O perfil de edição não implementa automaticamente todas as regras das duas edições. Origens, talentos, características e classes aplicam somente avanços e passivos declarados; as escolhas obrigatórias são resolvidas antes de confirmar o plano. As fórmulas estruturadas dos compêndios preservam atributo de conjuração, cura, PV temporários e incrementos explícitos por nível do personagem ou do espaço usado. Não somam um atributo universal nem multiplicam o dano de um raio pelos demais projéteis. Magias antigas e fórmulas personalizadas mantêm seu modo manual. Maestrias, componentes consumidos, efeitos secundários, áreas/alvos, pré-requisitos não declarados e exceções contextuais continuam exigindo decisão da mesa. Veja [automações, compatibilidade de dados e limites](AUTOMATION.md).
 
@@ -213,3 +213,5 @@ Remova segredos e dados pessoais dos logs.
 Código original sob [MIT](LICENSE.md); conteúdo derivado dos SRDs sob **CC BY 4.0**, com as atribuições e modificações em [NOTICE.md](NOTICE.md). Os dados adaptados do Foundry preservam o [aviso MIT de sua representação](compendiums/FOUNDRY-DATA-LICENSE.txt). A licença MIT do código não concede direitos sobre marcas, artes ou conteúdo externo. Veja também [CONTENT_POLICY.md](CONTENT_POLICY.md).
 
 O conteúdo dos compêndios permanece em inglês nesta atualização local de monstros. A tradução integral aguarda suporte nativo e traduções revisadas; mudar o idioma da interface ainda não traduz essas entradas.
+
+Validado com o VTT 0.3.5 publicado; a compatibilidade com a base 0.2.3 é mantida.

@@ -13,8 +13,8 @@ def main():
     if not (host / 'manage.py').is_file():
         raise RuntimeError('Set GRAVEWRIGHT_TEST_HOST_ROOT to the released Gravewright 0.2.3 checkout.')
     host_version = tomllib.loads((host / 'pyproject.toml').read_text(encoding='utf-8'))['project']['version']
-    if host_version != '0.2.3':
-        raise RuntimeError(f'This compatibility suite requires the released VTT 0.2.3; received {host_version}.')
+    if host_version not in {'0.2.3', '0.3.5'}:
+        raise RuntimeError(f'This compatibility suite requires released VTT 0.2.3 or 0.3.5; received {host_version}.')
     version = json.loads((source / 'manifest.json').read_text(encoding='utf-8'))['version']
     archive = source / 'dist' / f'gravewright-5e-srd-{version}.zip'
     if not archive.is_file():
@@ -33,7 +33,7 @@ def main():
             'GRAVEWRIGHT_SERVER_APPS': '', 'GRAVEWRIGHT_SERVER_APP_PATHS': '',
             'GRAVEWRIGHT_MARKETPLACE_URL': '', 'GRAVEWRIGHT_MARKETPLACE_KEYS_FILE': '',
             'GRAVEWRIGHT_REDIS_URL': '', 'GRAVEWRIGHT_RELEASES_REPOSITORY': '', 'TRUSTED_PROXIES': '',
-            'DND_TEST_ARCHIVE': str(archive),
+            'DND_TEST_ARCHIVE': str(archive), 'DND_TEST_HOST_VERSION': host_version,
         })
         import django
         django.setup()
@@ -44,7 +44,7 @@ def main():
         assert settings.DATABASES['default']['TEST']['NAME'] == ':memory:'
         assert Path(settings.MEDIA_ROOT).is_relative_to(isolated)
         assert Path(settings.GRAVEWRIGHT_MODULES_ROOT).is_relative_to(isolated)
-        print('Original VTT 0.2.3; browser-only system ZIP; memory databases; isolated media/modules; .env disabled')
+        print(f'Released VTT {host_version}; browser-only system ZIP; memory databases; isolated media/modules; .env disabled')
         return DiscoverRunner(verbosity=2).run_tests(['host_contract'])
 
 
