@@ -1,4 +1,4 @@
-"""DnD initiative, effect clocks and recovery on the original VTT 0.2.3.
+"""DnD initiative, effect clocks and recovery on legacy and current VTT hosts.
 
 Build the single system ZIP first. This starts its own isolated native host;
 existing .env files, campaigns, installed packages and databases are preserved.
@@ -11,9 +11,11 @@ import json
 import os
 from pathlib import Path
 import secrets
+import sqlite3
 import subprocess
 import sys
 import time
+import tomllib
 from urllib.request import ProxyHandler, build_opener
 
 from playwright.sync_api import expect, sync_playwright
@@ -33,7 +35,7 @@ def start_fixture(root,output,archive,port):
     workspace=next(parent for parent in MODULE.parents if (parent/'manage.py').is_file())
     fixture=workspace/'data'/f'dc-{secrets.token_hex(4)}'
     process=subprocess.Popen([sys.executable,'-B','-X','utf8',str(Path(__file__).with_name('review_server.py')),
-        '--host-root',str(root),'--archive',str(archive),'--fixture',str(fixture),
+        '--host-root',str(root),'--allow-current-host','--archive',str(archive),'--fixture',str(fixture),
         '--seed',str(seed_file),'--port',str(port)],cwd=output,stdout=log,stderr=log,
         env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1','PYTHON_DOTENV_DISABLED':'1'})
     localhost=build_opener(ProxyHandler({}))
@@ -55,6 +57,14 @@ def start_fixture(root,output,archive,port):
 
 def native(page,seed):
     return page.evaluate('async sceneId=>await gravewright.combat.state({sceneId})',seed['scene'])
+
+
+def initiative_facts(seed):
+    """Read only the disposable fixture's persisted roll facts and receipt count."""
+    database=Path(seed['fixture'])/'review.sqlite3'
+    with sqlite3.connect(database.as_uri()+'?mode=ro',uri=True) as connection:
+        return {'messages':connection.execute('SELECT id, request_id, visibility, roll FROM gravewright_chat_message ORDER BY id').fetchall(),
+            'receipts':connection.execute('SELECT COUNT(*) FROM gravewright_combat_initiativebatchreceipt').fetchone()[0]}
 
 
 def actor(page,id,token=None):
@@ -88,11 +98,11 @@ def settled(tracker):
     expect(tracker.locator('.gw-combat-panel__state')).not_to_have_attribute('aria-busy','true',timeout=20000)
 
 
-def benchmark(seed,output):
+def benchmark(seed,output,executable=None):
     """Measure usable controls with native HTTP, excluding cold table startup."""
     samples,requests=[],[]
     with sync_playwright() as playwright:
-        browser=playwright.chromium.launch(env={**os.environ,'CHROME_LOG_FILE':str(output/'chromium.log')})
+        browser=playwright.chromium.launch(**({'executable_path':str(executable)} if executable else {}),env={**os.environ,'CHROME_LOG_FILE':str(output/'chromium.log')})
         context=browser.new_context(viewport={'width':1440,'height':1050})
         context.add_cookies([{**seed['sessions']['gm'],'url':seed['base']}]);page=context.new_page()
         def record(request):
@@ -124,10 +134,11 @@ def benchmark(seed,output):
     return {'result':'PASS','samples':samples,'fixture':seed['fixture']}
 
 
-def smoke(seed,output):
+def smoke(seed,output,executable=None):
     errors,dialogs,calls,timings,requests=[],[],[],[],[]
+    batch_replies=[]
     with sync_playwright() as playwright:
-        browser=playwright.chromium.launch(env={**os.environ,'CHROME_LOG_FILE':str(output/'chromium.log')})
+        browser=playwright.chromium.launch(**({'executable_path':str(executable)} if executable else {}),env={**os.environ,'CHROME_LOG_FILE':str(output/'chromium.log')})
         pages={}
         for role in ('gm','player','reader'):
             context=browser.new_context(viewport={'width':1440,'height':1050},locale='en')
@@ -139,11 +150,14 @@ def smoke(seed,output):
             page.wait_for_function('!!window.gravewright')
             pages[role]=page
         gm,player,reader=(pages[role] for role in ('gm','player','reader'))
+        use_batch=gm.evaluate("typeof gravewright.combat.rollInitiativeBatch==='function'")
         def record(response):
             if '/modules/gravewright.5e-srd/api' in response.url:
                 request=response.request.post_data_json or {}
                 calls.append({'domain':request.get('domain'),'method':request.get('method'),'status':response.status,
                     'requestId':request.get('requestId'),'payload':request.get('payload',{})})
+                if request.get('method')=='rollInitiativeBatch' and response.ok:
+                    batch_replies.append(response.json()['value'])
         gm.on('response',record)
         def record_request(request):
             if request.method=='POST' and '/api/tables/' in request.url and request.url.endswith(('/api','/storage')):
@@ -153,7 +167,7 @@ def smoke(seed,output):
         gm.on('request',record_request)
         installed=gm.request.get(seed['base']+'/api/module-packages').json()
         assert [row['id'] for row in installed]==['gravewright.5e-srd'],installed
-        assert installed[0]['version']=='0.1.1' and 'django' not in installed[0]
+        assert installed[0]['version']==seed['package']['version'] and 'django' not in installed[0]
         assert installed[0]['system']['combat']['requiresProvider'] is False
         library=gm.context.new_page();library.goto(seed['base']+'/inside?section=addons')
         expect(library.locator('[data-module-catalog="installed"] .module-catalog__card')).to_have_count(0)
@@ -204,10 +218,63 @@ def smoke(seed,output):
 
         # All initiative facts are native receipt-backed rolls. Both editions
         # retain their condition/exhaustion preparation before dice execution.
+        lost_batch=[];batch_attempts=[]
+        if use_batch:
+            gm.evaluate('''async({sceneId,tokenId})=>{
+                const current=await gravewright.combat.state({sceneId});
+                await gravewright.combat.toggle({sceneId,tokenId,version:current.version,hidden:true});
+            }''',{'sceneId':seed['scene'],'tokenId':seed['monsterToken']})
+            tokens=gm.evaluate('sceneId=>gravewright.tokens.state({mapId:sceneId})',seed['scene'])['tokens']
+            token_by_id={token['id']:token for token in tokens}
+            expected_sources={}
+            for token_key,actor_key in [('linkedToken','actor'),('snapshotToken','actor'),('monsterToken','monster')]:
+                document=actor(gm,seed[actor_key],seed[token_key])
+                expected_sources[seed[token_key]]={'actorVersion':document['version'],'sheetVersion':document['sheetVersion'],
+                    'tokenVersion':token_by_id[seed[token_key]]['version']}
+            def lose_batch(route):
+                request=route.request.post_data_json or {}
+                if request.get('domain')=='combat' and request.get('method')=='rollInitiativeBatch':
+                    batch_attempts.append(request)
+                    if not lost_batch:
+                        response=route.fetch();assert response.ok,response.text()
+                        lost_batch.append(response.json()['value'])
+                        route.fulfill(status=503,json={'error':'unavailable'});return
+                route.continue_()
+            gm.route(SCOPED_API,lose_batch)
         action(tracker,'roll-all').click();settled(tracker)
-        dice=[call for call in calls if call['domain']=='dice' and call['method']=='roll' and call['status']==200]
-        assert len(dice)==3,dice
-        expressions=[call['payload']['expression'] for call in dice]
+        if use_batch:
+            assert len(lost_batch)==1,batch_attempts
+            accepted=native(gm,seed);facts=initiative_facts(seed)
+            assert facts['receipts']==1 and len(facts['messages'])==2,facts
+            expect(action(tracker,'retry')).to_be_enabled()
+            gm.reload();tracker=show_tracker(gm);action(tracker,'retry').click();settled(tracker)
+            gm.unroute(SCOPED_API,lose_batch)
+            assert len(batch_attempts)==2,batch_attempts
+            for key in ('domain','method','payload','requestId'):
+                assert batch_attempts[0][key]==batch_attempts[1][key],batch_attempts
+            assert len(batch_replies)==1 and batch_replies[0]['batch']['replayed'] is True,batch_replies
+            assert batch_replies[0]['batch']['results']==lost_batch[0]['batch']['results']
+            assert native(gm,seed)['version']==accepted['version']
+            assert initiative_facts(seed)==facts,'A replay must retain the original persisted dice facts and message count.'
+            entries=batch_attempts[0]['payload']['entries']
+            assert {entry['tokenId']:entry['source'] for entry in entries}==expected_sources
+            assert not [call for call in calls if call['domain']=='dice' and call['method']=='roll']
+            expressions=[entry['expression'] for entry in entries]
+            secret=next(item['messageId'] for item in lost_batch[0]['batch']['results'] if item.get('tokenId')==seed['monsterToken'])
+            public=next(item['messageId'] for item in lost_batch[0]['batch']['results'] if item.get('tokenId')==seed['linkedToken'])
+            for page in (gm,player,reader):
+                if not page.locator('#chat-panel').is_visible():page.locator('[data-panel=chat]').click()
+                expect(page.locator(f'#chat-log [data-message-id="{public}"]')).to_be_visible(timeout=15000)
+                expect(page.locator(f'#chat-log [data-message-id="{secret}"]')).to_have_count(1 if page==gm else 0)
+                page.locator('[data-panel=chat]').click()
+            gm.evaluate('''async({sceneId,tokenId})=>{
+                const current=await gravewright.combat.state({sceneId});
+                await gravewright.combat.toggle({sceneId,tokenId,version:current.version,hidden:false});
+            }''',{'sceneId':seed['scene'],'tokenId':seed['monsterToken']})
+        else:
+            dice=[call for call in calls if call['domain']=='dice' and call['method']=='roll' and call['status']==200]
+            assert len(dice)==3,dice
+            expressions=[call['payload']['expression'] for call in dice]
         assert any('2d20kl1' in expression for expression in expressions),expressions
         assert any('2d20kh1' in expression and '- 4' in expression for expression in expressions),expressions
         # Explicit scores make following turn checks independent of random facts.
@@ -307,11 +374,11 @@ def smoke(seed,output):
         assert actor(gm,seed['actor'])['data']['bars']['bar_1']['value']==15
         for bar in reader_tracker.locator('.gw-combat-bar').all():expect(bar).to_be_disabled()
         row=tracker.locator(f'[data-gw5-token-id="{seed["linkedToken"]}"]')
-        row.locator('.gw-combat-menu__trigger').click();action(row,'open-sheet').click()
+        row.locator('.gw-combat-menu__trigger').click();action(gm.locator('body > .gw5-combat-menu'),'open-sheet').click()
         sheet=gm.locator('.gw5-combat-sheet');expect(sheet.locator('.gw5-sheet')).to_be_visible(timeout=15000)
         sheet.locator('.gw5-close').click();expect(sheet).to_have_count(0)
         enemy=tracker.locator(f'[data-gw5-token-id="{seed["monsterToken"]}"]')
-        enemy.locator('.gw-combat-menu__trigger').click();action(enemy,'open-sheet').click()
+        enemy.locator('.gw-combat-menu__trigger').click();action(gm.locator('body > .gw5-combat-menu'),'open-sheet').click()
         monster_sheet=gm.locator('.gw5-combat-sheet');expect(monster_sheet.locator('.gw5-monster')).to_be_visible(timeout=15000)
         name=monster_sheet.locator('[data-gw5-path="core.name"]');name.fill('Monster edit flushed on close')
         # Close immediately, before the autosave debounce; the existing native
@@ -328,7 +395,9 @@ def smoke(seed,output):
         action(tracker,'stop').click();settled(tracker);assert native(gm,seed)['active'] is False
         assert gm.locator('dialog').count()==0 and not dialogs and not errors,(errors,dialogs)
         browser.close()
-    return {'result':'PASS','hostVersion':'0.2.3','systemVersion':'0.1.1','oneSystem':True,
+    return {'result':'PASS','hostVersion':tomllib.loads((Path(seed['host'])/'pyproject.toml').read_text())['project']['version'],
+        'systemVersion':seed['package']['version'],'oneSystem':True,'initiativeTransport':'batch' if use_batch else 'legacy',
+        'batchReplay':{'sameRequest':True,'sameDiceFacts':True,'hiddenAudience':True,'sourceRevisions':True} if use_batch else None,
         'initiativeEditions':['2014','2024'],'nativeReceipts':True,'reloadRecovery':True,
         'linkedAndIndependent':True,'gmControls':True,'ownerResources':True,'dialogs':dialogs,'errors':errors,
         'fixture':seed['fixture'],'timings':timings,'calls':calls,'requests':requests}
@@ -339,8 +408,9 @@ def main():
     parser.add_argument('--host-root');parser.add_argument('--archive',type=Path,default=default_archive())
     parser.add_argument('--seed',type=Path);parser.add_argument('--output',type=Path)
     parser.add_argument('--benchmark',action='store_true')
+    parser.add_argument('--browser-executable',type=Path)
     parser.add_argument('--port',type=int,default=30041);args=parser.parse_args()
-    root=host_root(args.host_root)
+    root=host_root(args.host_root,allow_current=True)
     output=(args.output or MODULE/'test-results'/'combat'/secrets.token_hex(8)).resolve();output.mkdir(parents=True,exist_ok=True)
     local_temp=output/'runtime'/'temp';local_cache=output/'runtime'/'cache'
     local_temp.mkdir(parents=True,exist_ok=True);local_cache.mkdir(parents=True,exist_ok=True)
@@ -355,7 +425,7 @@ def main():
         installed_archive_sha=fingerprint(installed_archives[0])
         if not args.seed and installed_archive_sha!=source_archive_sha:
             raise AssertionError('The fixture installed different bytes from the archive fingerprint captured before startup.')
-        result=(benchmark if args.benchmark else smoke)(seed,output)
+        result=(benchmark if args.benchmark else smoke)(seed,output,args.browser_executable.resolve() if args.browser_executable else None)
         result['archiveSha256']=installed_archive_sha
         result['sourceArchiveSha256']=source_archive_sha
         (output/'result.json').write_text(json.dumps(result,indent=2),encoding='utf-8')

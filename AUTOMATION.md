@@ -1,4 +1,4 @@
-# Automações, avanços e limites — 0.1.1
+# Automações, avanços e limites — 0.2.1
 
 As regras atuais são implementadas exclusivamente no pacote de sistema para o
 navegador: `rules.js`, `combat-rules.js`, `combat-controller.js` e `tracker.js`.
@@ -20,6 +20,17 @@ rodada nem os relógios de efeitos, e rolar em um combate inativo não o inicia.
 O tracker mostra progresso durante a execução normal; o aviso de operação
 incompleta fica reservado a falhas. Retomar uma operação usa os mesmos recibos e
 resultados de rolagens já concluídas.
+
+No VTT 0.3.8, o pacote utiliza a capacidade pública `combat.rollInitiativeBatch`
+para novas iniciativas: prepara as regras DnD e revisões das fontes, persiste
+um checkpoint do lote e envia uma operação atômica ao host. Os resultados de
+chat são agrupados por visibilidade. Respostas perdidas reutilizam o mesmo
+UUID e plano; uma revisão rejeitada exige novas leituras antes de outro plano.
+Hosts 0.2.3/0.3.7 e registros antigos continuam pelo fluxo sequencial. Um lote
+nativo pendente não é convertido em rolagens novas após downgrade do host.
+Pausa, permissão de mestre e encerramento continuam sendo conferidos. Essa
+transação de iniciativa não transforma efeitos e gravações de fichas de um
+avanço de turno em uma transação compartilhada.
 
 O sistema conserva a edição de cada item em `data.rulesEdition`. A edição da
 ficha controla regras gerais, como exaustão e descanso; não converte o texto nem

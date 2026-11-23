@@ -20,14 +20,15 @@ const paths={play:'m8 4 12 8-12 8Z',stop:'M5 5h14v14H5Z',pause:'M8 5v14M16 5v14'
 /** The package owns controls and automation; the native tracker supplies its layout. */
 export async function mountTracker(block,system) {
   const {root,api,storage,context,signal}=block,doc=root.ownerDocument,t=(key,args)=>api.i18n.t(key,args);
-  const controller=createCombatController({api,storage,sceneId:context.sceneId,compatibility:system.compatibility,t});
+  const controller=createCombatController({api,storage,sceneId:context.sceneId,compatibility:system.compatibility,signal,t});
   const shell=doc.createElement('section');shell.className='gw-combat-panel gw5-combat';shell.setAttribute('translate','no');
   // Replacing the native surface hides its DOM, but the host's delegated
   // handlers remain on the containing panel. Package controls own these events.
   shell.addEventListener('click',event=>event.stopPropagation(),{signal});
   shell.addEventListener('change',event=>event.stopPropagation(),{signal});
   const target=doc.createElement('div');target.className='gw-combat-panel__state';shell.append(target);root.append(shell);
-  let current,busy=false,disposed=false,errorKey='',lastTask,reloading,dirty=false,lastPublic='',poll,progress='combat.progressUpdate';
+  let current,busy=false,disposed=false,errorKey='',lastTask,reloading,dirty=false,lastPublic='',lastRender='',poll,polling,progress='combat.progressUpdate';
+  let projections={},actorsProjection;
   const publicState=value=>JSON.stringify([value.tracker,value.canResume]);
   const pendingProgress=()=>current?.tracker.stopping?'combat.progressStop':progressKey(current?.tracker.operation?.kind||'');
   const subscriptions=[],modals=new Set();
@@ -106,20 +107,46 @@ export async function mountTracker(block,system) {
   }
   async function refresh() {
     if(disposed)return;
+    if(busy){dirty=true;return;}
     if(reloading){dirty=true;return reloading;}
     reloading=(async()=>{
-      do {dirty=false;current=await controller.refresh();lastPublic=publicState(current);if(!disposed)render();}while(dirty&&!disposed);
+      await polling;
+      do {
+        dirty=false;const incoming=projections;projections={};
+        current=await controller.refresh({...actorsProjection?{actors:actorsProjection}:{},...incoming});
+        lastPublic=publicState(current);if(!disposed)render();
+      }while(dirty&&!disposed&&!busy);
     })().catch(error=>{if(!disposed){errorKey=errorMessage(error);render();}}).finally(()=>{reloading=null;});
     return reloading;
+  }
+  function changed(event,payload) {
+    if(disposed||context.tableId&&payload?.tableId&&payload.tableId!==context.tableId)return;
+    const scene=payload?.sceneId??payload?.state?.sceneId??payload?.mapId;
+    if(event!=='actors.changed'&&scene&&scene!==context.sceneId)return;
+    if(event==='combat.changed'&&payload?.state)projections.state=payload.state;
+    else if(event==='actors.changed'&&Array.isArray(payload?.actors)){actorsProjection=payload;delete projections.state;}
+    else delete projections.state;
+    dirty=true;
+    if(!busy)void refresh();
   }
   async function run(task,status='combat.progressUpdate') {
     if(busy||disposed)return;
     busy=true;progress=status;errorKey='';lastTask=task;render();
     // Controller commands already finish with an authenticated refresh. Avoid a
     // second network wait after opening a modal: its submit must be usable now.
-    try {await task();if(!disposed){errorKey='';current=controller.snapshot();lastPublic=publicState(current);}lastTask=null;}
+    try {
+      // Finish any prior display read before a command owns controller state.
+      await reloading;await polling;if(disposed)return;
+      dirty=false;projections={};actorsProjection=undefined;
+      await task();if(!disposed){errorKey='';current=controller.snapshot();lastPublic=publicState(current);}lastTask=null;
+    }
     catch(error){if(!disposed){errorKey=errorMessage(error);current=controller.snapshot();}}
-    finally {busy=false;if(!disposed)render();}
+    finally {
+      // A command revalidates membership. Earlier event projections must not
+      // restore controls removed by that newer authorization result.
+      actorsProjection=undefined;busy=false;
+      if(!disposed){render();if(dirty)void refresh();}
+    }
   }
   function modal(title) {
     const window=openModal(api,doc,t(title),signal,t('close'));window.classList.add('gw5-combat-modal');modals.add(window);
@@ -173,7 +200,7 @@ export async function mountTracker(block,system) {
     window.addEventListener('close',()=>{child.abort();signal.removeEventListener('abort',abort);},{once:true});
     const childApi={...api,events:{...api.events,on:(...args)=>{const release=api.events.on(...args);cleanups.push(release);return release;}}};
     try {await mountSheet({...block,api:childApi,root:body,signal:child.signal,onDispose:cleanup=>cleanups.push(cleanup),context:{...context,actorId:entry.actor_id,
-      actorType:view.actorType||view.type||'character',canEdit:view.canEdit,...entry.token_id?{tokenId:entry.token_id}:{}}},system);}
+      actorType:view.actorType||view.type||'character',canEdit:view.canEdit,...entry.token_id?{tokenId:entry.token_id}:{}}},system,false,view);}
     catch(error){window.close(true);throw error;}
   }
   function actions(entry,locked) {
@@ -232,8 +259,12 @@ export async function mountTracker(block,system) {
     } else row.append(el('span','gw-combat-combatant__score',entry.initiative??'—'));
     row.append(actions(entry,locked));return row;
   }
-  function render() {
+  function render(force=false) {
     if(disposed)return;
+    const key=JSON.stringify([current?.state,current?.isGM,current?.paused,current?.canResume,current?.tracker?.operation,current?.tracker?.stopping,
+      busy,errorKey,progress,system.compatibility?.current?.state]);
+    if(!force&&key===lastRender)return;
+    lastRender=key;
     const menuReturn=actionMenu?.trigger.dataset.gw5CombatMenu;
     dismissActions();
     const focused=doc.activeElement,focusKey=focused?.closest?.('.gw5-combat')===shell?focused.dataset.gw5CombatAction:null;
@@ -277,17 +308,20 @@ export async function mountTracker(block,system) {
     if(menuReturn&&!busy)target.querySelector(`[data-gw5-combat-menu="${menuReturn}"]`)?.focus({preventScroll:true});
     if(focusKey)target.querySelector(`[data-gw5-combat-action="${focusKey}"]:not(:disabled)`)?.focus();
   }
-  for(const event of ['combat.changed','actors.changed','tokens.changed'])subscriptions.push(api.events.on(event,()=>{void refresh();}));
-  subscriptions.push(api.i18n.onChange(()=>render()));
+  for(const event of ['combat.changed','actors.changed','tokens.changed']){
+    const handler=payload=>changed(event,payload);
+    subscriptions.push(event==='actors.changed'&&system.actorUpdates?system.actorUpdates.subscribe(handler):api.events.on(event,handler));
+  }
+  subscriptions.push(api.i18n.onChange(()=>render(true)));
   if(system.compatibility)subscriptions.push(system.compatibility.subscribe(()=>render()));
   function dispose(){if(disposed)return;disposed=true;dismissActions();clearInterval(poll);for(const unsubscribe of subscriptions)unsubscribe?.();for(const window of modals)window.close(true);shell.remove();}
   signal.addEventListener('abort',dispose,{once:true});
   await refresh();
   if(disposed)return dispose;
   poll=setInterval(()=>{
-    if(disposed||busy||!root.isConnected||!root.getClientRects().length)return;
-    void controller.syncPublic().then(snapshot=>{if(disposed)return;const value=publicState(snapshot);if(value!==lastPublic){lastPublic=value;current=snapshot;render();}})
-      .catch(error=>{if(!disposed){errorKey=errorMessage(error);render();}});
+    if(disposed||busy||reloading||polling||!root.isConnected||!root.getClientRects().length)return;
+    polling=controller.syncPublic().then(snapshot=>{if(disposed)return;const value=publicState(snapshot);if(value!==lastPublic){lastPublic=value;current=snapshot;render();}})
+      .catch(error=>{if(!disposed){errorKey=errorMessage(error);render();}}).finally(()=>{polling=undefined;});
   },2000);
   return dispose;
 }

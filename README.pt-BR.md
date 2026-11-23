@@ -1,14 +1,14 @@
 # DnD 5e SRD
 
-Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. **0.2.0 Alpha**.
+Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. **0.2.1 Alpha**.
 
-[English](README.md) · [Baixar 0.2.0](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.2.0) · [Notas da release](docs/releases/0.2.0.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
+[English](README.md) · [Baixar 0.2.1](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.2.1) · [Notas da release](docs/releases/0.2.1.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 A ficha Noturno combina fundo escuro, tipografia em marfim, molduras douradas e um cabeçalho ilustrado. Inclui fichas próprias de personagem, monstro e 11 tipos de itens, salvamento automático e compêndios licenciados separados por edição. Este projeto adapta o framework legado Gravewright 5e SRD 0.3.1; o nome público atual é **DnD 5e SRD**.
 
 Projeto independente, sem afiliação ou endosso da Wizards of the Coast. Não inclui artes oficiais, livros ou conteúdo premium.
 
-Esta versão inclui 317 monstros do SRD 5.1 e 330 do SRD 5.2.1 e permite aos jogadores copiar itens legíveis dos compêndios para fichas editáveis. As permissões de leitura do servidor continuam válidas; importações para a biblioteca e Efeitos continuam exclusivas do mestre.
+A versão 0.2.1 acelera a iniciativa com lotes nativos no VTT 0.3.8 e reduz trabalho repetido do tracker e das fichas em hosts anteriores. O pacote mantém 317 monstros do SRD 5.1 e 330 do SRD 5.2.1 e permite aos jogadores copiar itens legíveis dos compêndios para fichas editáveis. As permissões de leitura do servidor continuam válidas; importações para a biblioteca e Efeitos continuam exclusivas do mestre.
 
 ## Instalar e escolher uma edição
 
@@ -16,9 +16,11 @@ Funciona no [Gravewright VTT **0.2.3 já publicado**](https://github.com/Gravewr
 com SDK 1.x. Para português/espanhol, use o [Translator oficial 0.1.2 ou mais
 recente](https://github.com/Gravewright/translator). Inglês é o padrão. Não é
 necessário alterar o core do VTT nem instalar um módulo separado de regras.
+O caminho opcional de iniciativa em lote exige o VTT **0.3.8** e é selecionado
+automaticamente quando a capacidade pública está disponível.
 
 1. Como proprietário do host, baixe
-   [`gravewright-5e-srd-0.2.0.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.2.0/gravewright-5e-srd-0.2.0.zip)
+   [`gravewright-5e-srd-0.2.1.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.2.1/gravewright-5e-srd-0.2.1.zip)
    da release no GitHub e instale pelo instalador local nativo de sistemas do
    host em execução. A versão do Marketplace pode ser diferente até a atualização
    de seu catálogo.
@@ -39,8 +41,8 @@ checksum SHA-256. Use o instalador do VTT, sem extrair o pacote no código-fonte
 O ID `gravewright.5e-srd`, os dados das fichas, as configurações e as cópias
 incorporadas permanecem no namespace original.
 
-A versão 0.2.0 instala ao lado das anteriores, incluindo os builds locais
-0.1.3–0.1.5. Selecione 0.2.0 nas extensões da mesa e recarregue as páginas abertas
+A versão 0.2.1 instala ao lado das anteriores, incluindo os builds locais
+0.1.3–0.1.5. Selecione 0.2.1 nas extensões da mesa e recarregue as páginas abertas
 para carregar a correção; reiniciar o servidor sozinho não altera essa seleção.
 Mantenha a versão anterior instalada para poder selecioná-la em uma reversão.
 O mesmo ID/versão é imutável e não pode ser sobrescrito com bytes diferentes.
@@ -198,6 +200,16 @@ turno já concluídas. Gravações em fichas diferentes são etapas recuperávei
 não uma transação única. Voltar no combate não desfaz os resultados resolvidos.
 A automação não executa em segundo plano após todos fecharem a mesa.
 
+No VTT 0.3.8, novas operações de iniciativa usam `combat.rollInitiativeBatch`
+quando disponível. O pacote congela fórmulas DnD e revisões de origem em um
+checkpoint durável do lote. O host confirma dados, ordem de iniciativa e
+resultados agrupados no chat juntos, preservando a visibilidade pública ou
+exclusiva do mestre. Repetir uma resposta perdida usa o mesmo UUID e plano.
+Hosts 0.2.3 e 0.3.7, e operações já iniciadas com o registro antigo, mantêm a
+recuperação sequencial. Um lote nativo pendente exige um host com essa capacidade
+para retomar; voltar a um host anterior não cria rolagens novas. Veja
+[medições e limites](docs/performance.pt-BR.md).
+
 - **Compêndios ausentes:** confira o sistema ativo da mesa e as permissões de leitura.
 - **Módulo de servidor anterior detectado:** o proprietário pode revisar a migração em Personalizar → Instalação anterior.
 - **Interface permanece em inglês:** ative o Translator e selecione o idioma na conta; os textos dos compêndios continuam em inglês.
@@ -208,10 +220,14 @@ Ao [reportar um problema](https://github.com/Gravewright/dnd-srd-5e/issues), inf
 as versões do VTT, sistema e Translator, a edição escolhida e passos para reproduzir.
 Remova segredos e dados pessoais dos logs.
 
+[Desempenho do combate](docs/performance.pt-BR.md) documenta as otimizações de
+iniciativa, painel e fichas, as medições por etapa e o benchmark de navegador.
+
 ## Licenças
 
 Código original sob [MIT](LICENSE.md); conteúdo derivado dos SRDs sob **CC BY 4.0**, com as atribuições e modificações em [NOTICE.md](NOTICE.md). Os dados estruturados adaptados de terceiros preservam o [aviso MIT de sua representação](compendiums/THIRD-PARTY-DATA-LICENSE.txt). A licença MIT do código não concede direitos sobre marcas, artes ou conteúdo externo. Veja também [CONTENT_POLICY.md](CONTENT_POLICY.md).
 
 O conteúdo dos compêndios permanece em inglês nesta atualização local de monstros. A tradução integral aguarda suporte nativo e traduções revisadas; mudar o idioma da interface ainda não traduz essas entradas.
 
-Validado com o VTT 0.3.5 publicado; a compatibilidade com a base 0.2.3 é mantida.
+O lote nativo é validado com o VTT 0.3.8; os contratos também são conferidos nos
+hosts publicados e inalterados 0.2.3 e 0.3.7.

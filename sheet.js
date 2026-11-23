@@ -8,6 +8,7 @@ import {acceptsItemDrop,droppedItem,itemDestination,ownedItem} from './item-drop
 import {renderMonster} from './monster.js';
 import {chooseAdvancement} from './advancement-ui.js';
 import {removeAdvancement,syncAdvancementLevel} from './advancement.js';
+import {createSheetRefresh} from './sheet-updates.js';
 
 const SIZE_KEYS={tiny:'sizeTiny',small:'sizeSmall',medium:'sizeMedium',large:'sizeLarge',huge:'sizeHuge',gargantuan:'sizeGargantuan'};
 const ABILITY_LABELS={str:'dnd5e.ui.forca',dex:'dnd5e.ui.destreza',con:'dnd5e.ui.constituicao',int:'dnd5e.ui.inteligencia',wis:'dnd5e.ui.sabedoria',cha:'dnd5e.ui.carisma'};
@@ -34,20 +35,21 @@ export function openModal(api,doc,title,signal,closeLabel='Close',opener=doc.act
   return api.ui.openModal(d,{nested:true});
 }
 
-export async function mountSheet(block, system, isItem=false) {
+export async function mountSheet(block, system, isItem=false, initialView) {
   const {root,context,api,signal,storage}=block, doc=root.ownerDocument, t=(key,params)=>api.i18n.t(key,params);
   root.setAttribute('translate','no');
   const sizeLabel=value=>SIZE_KEYS[value]?t(SIZE_KEYS[value]):String(value||'');
-  let view=isItem ? await api.items.get(context.itemId) : await api.actors.sheet(context.actorId,context.tokenId?{tokenId:context.tokenId}:{});
+  let view=initialView??(isItem ? await api.items.get(context.itemId) : await api.actors.sheet(context.actorId,context.tokenId?{tokenId:context.tokenId}:{}));
   if(signal.aborted)return;
   const type=view.type || context.actorType, schema=system.schemas[isItem?'item':type];
   const layout=system.layouts[isItem?`items/${type}`:type];
   if(!layout || !schema)throw Error(t('unsupported'));
   let setting=await storage.table.get('rules'), edition=view.data.rulesEdition || setting?.value?.edition || '2014';
+  if(signal.aborted)return;
   let draft=isItem ? defaults(schema,view.data) : derive(view.data,type,schema,edition);
   if(isItem&&view.data.trained===undefined)delete draft.trained;
   if(isItem&&type==='effect'&&!draft.duration)draft.duration={type:'permanent',value:0};
-  let name=view.name, changes=0,saved=0,pending,timer,uploadPromise,uploading=false,editing=0,saveState='saved',tab=layout.body.tabs?.[0]?.id;
+  let name=view.name, changes=0,saved=0,pending,timer,uploadPromise,uploading=false,editing=0,updates,saveState='saved',tab=layout.body.tabs?.[0]?.id;
   const shell=element(doc,'form','gw5-sheet'), notice=element(doc,'p','gw5-notice');notice.role='status';notice.hidden=true;
   const itemState={tab:'description'};
   let dropQueue=Promise.resolve(),actionSource;
@@ -98,7 +100,7 @@ export async function mountSheet(block, system, isItem=false) {
     notice.hidden=true;
     status('saved');
   }
-  function flush(){clearTimeout(timer);if(!pending)pending=drain().finally(()=>{pending=undefined;});return pending;}
+  function flush(){clearTimeout(timer);if(!pending)pending=drain().finally(()=>{pending=undefined;void updates?.resume();});return pending;}
   async function flushAll(){
     for(const window of advancementWindows)void window.close();
     while(!signal.aborted){
@@ -118,7 +120,7 @@ export async function mountSheet(block, system, isItem=false) {
     const modal=openModal(api,doc,title,signal,t('close'),opener);editing++;
     modal.addEventListener('gravewright:sheet-flush',event=>event.detail.waitUntil((async()=>{await Promise.all([...work]);await flush();})().catch(e=>{error(e);throw e;})));
     modal.addEventListener('close',()=>{
-      editing--;for(const indicator of indicators)if(!indicator.isConnected)indicators.delete(indicator);
+      editing--;void updates?.resume();for(const indicator of indicators)if(!indicator.isConnected)indicators.delete(indicator);
       // Editors redraw their source after close; restore its replacement button.
       queueMicrotask(()=>{
         if(signal.aborted||opener?.isConnected)return;
@@ -492,7 +494,7 @@ export async function mountSheet(block, system, isItem=false) {
           view=await api.actors.sheet(context.actorId,context.tokenId?{tokenId:context.tokenId}:{});
           if(!signal.aborted){draft=derive(view.data,type,schema,edition);name=view.name;}
         }catch(e){error(e);throw e;}finally{uploading=false;for(const [control,disabled] of controls)if(control.isConnected)control.disabled=disabled||!view.canEdit;render();if(details.isConnected&&(view.portraitUrl||view.tokenUrl)){details.querySelector('.gw5-portrait-framing')?.remove();details.append(portraitFraming());}}
-        })().finally(()=>{uploadPromise=undefined;});
+        })().finally(()=>{uploadPromise=undefined;void updates?.resume();});
         uploadPromise.catch(()=>{});
       };
     }
@@ -619,8 +621,11 @@ export async function mountSheet(block, system, isItem=false) {
   render();
   const unsubscribe=api.i18n.onChange(()=>render());signal.addEventListener('abort',unsubscribe,{once:true});
   const changedEdition=()=>void refreshEdition().catch(error);system.listeners.add(changedEdition);signal.addEventListener('abort',()=>system.listeners.delete(changedEdition),{once:true});
-  if(!isItem)api.events.on('actors.changed',async()=>{
-    if(pending||uploading||editing||changes!==saved)return;
-    try {const current=await api.actors.sheet(context.actorId,context.tokenId?{tokenId:context.tokenId}:{});if(signal.aborted||pending||uploading||editing||changes!==saved)return;if(current.sheetVersion!==view.sheetVersion||current.version!==view.version){view=current;draft=derive(view.data,type,schema,edition);name=view.name;render();}}catch(e){error(e);}
-  });
+  if(!isItem){
+    updates=createSheetRefresh({context,signal,current:()=>view,busy:()=>pending||uploading||editing||changes!==saved,
+      read:()=>api.actors.sheet(context.actorId,context.tokenId?{tokenId:context.tokenId}:{}),error,
+      apply:current=>{if(current.sheetVersion!==view.sheetVersion||current.version!==view.version||current.canEdit!==view.canEdit){view=current;draft=derive(view.data,type,schema,edition);name=view.name;render();}}});
+    const release=system.actorUpdates?system.actorUpdates.subscribe(updates.invalidate):api.events.on('actors.changed',updates.invalidate);
+    signal.addEventListener('abort',release,{once:true});
+  }
 }

@@ -1,4 +1,4 @@
-"""Check the browser package against an unchanged released Gravewright 0.2.3."""
+"""Check the browser package against an unchanged supported Gravewright release."""
 import json
 import os
 from pathlib import Path
@@ -13,8 +13,8 @@ def main():
     if not (host / 'manage.py').is_file():
         raise RuntimeError('Set GRAVEWRIGHT_TEST_HOST_ROOT to the released Gravewright 0.2.3 checkout.')
     host_version = tomllib.loads((host / 'pyproject.toml').read_text(encoding='utf-8'))['project']['version']
-    if host_version not in {'0.2.3', '0.3.5'}:
-        raise RuntimeError(f'This compatibility suite requires released VTT 0.2.3 or 0.3.5; received {host_version}.')
+    if host_version not in {'0.2.3', '0.3.5', '0.3.7'}:
+        raise RuntimeError(f'This compatibility suite requires released VTT 0.2.3, 0.3.5 or 0.3.7; received {host_version}.')
     version = json.loads((source / 'manifest.json').read_text(encoding='utf-8'))['version']
     archive = source / 'dist' / f'gravewright-5e-srd-{version}.zip'
     if not archive.is_file():

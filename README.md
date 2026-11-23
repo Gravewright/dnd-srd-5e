@@ -1,21 +1,22 @@
 # DnD 5e SRD
 
-A fifth-edition game system for Gravewright VTT, with selectable **2014 / SRD 5.1** and **2024 / SRD 5.2.1** rules. **0.2.0 Alpha**.
+A fifth-edition game system for Gravewright VTT, with selectable **2014 / SRD 5.1** and **2024 / SRD 5.2.1** rules. **0.2.1 Alpha**.
 
-[Português brasileiro](README.pt-BR.md) · [Download 0.2.0](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.2.0) · [Release notes](docs/releases/0.2.0.md) · [Report an issue](https://github.com/Gravewright/dnd-srd-5e/issues)
+[Português brasileiro](README.pt-BR.md) · [Download 0.2.1](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.2.1) · [Release notes](docs/releases/0.2.1.md) · [Report an issue](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 The Noturno sheet brings a dark background, ivory typography, gold frames and an illustrated character header. Character, monster and item sheets use native Gravewright windows, automatic saving and chat rolls. The system includes licensed, edition-separated SRD compendiums and declarative automation for supported rules.
 
 This is an independent project, not affiliated with or endorsed by Wizards of the Coast. It does not include official artwork, rulebooks or premium content. The software adapts the user-supplied Gravewright 5e SRD legacy framework; its current public name is **DnD 5e SRD**.
 
-This release includes 317 SRD 5.1 and 330 SRD 5.2.1 monsters and lets players copy readable compendium items into editable sheets. Server read permissions still apply; library imports and Effects remain GM-only.
+Version 0.2.1 accelerates initiative through native batches on VTT 0.3.8 and reduces repeated tracker and sheet work on older hosts. The package retains 317 SRD 5.1 and 330 SRD 5.2.1 monsters and lets players copy readable compendium items into editable sheets. Server read permissions still apply; library imports and Effects remain GM-only.
 
 ## Requirements
 
 | Component | Required version | Purpose |
 | --- | --- | --- |
 | [Gravewright VTT](https://github.com/Gravewright/gravewright/releases/tag/v0.2.3) | **Released 0.2.3**, SDK 1.x | Native documents, compendiums, dice, combat and modals |
-| **DnD 5e SRD** | **0.2.0 Alpha** | One browser system with sheets, licensed content and automation |
+| **DnD 5e SRD** | **0.2.1 Alpha** | One browser system with sheets, licensed content and automation |
+| Gravewright VTT | **0.3.8** for native initiative batches | Optional faster path, selected when the public capability is available |
 | [Official Translator](https://github.com/Gravewright/translator) | **0.1.2 or newer** for localized use | English, Brazilian Portuguese and Spanish through the official API |
 
 English is the default without an active language package. The system runs on
@@ -24,7 +25,7 @@ the published VTT 0.2.3 without a core patch or a separately installed rules mod
 ## Install and choose an edition
 
 1. As host owner, download
-   [`gravewright-5e-srd-0.2.0.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.2.0/gravewright-5e-srd-0.2.0.zip)
+   [`gravewright-5e-srd-0.2.1.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.2.1/gravewright-5e-srd-0.2.1.zip)
    from the GitHub release and install it through the running host's native
    local system installer. The Marketplace version may differ until its catalog
    is updated.
@@ -44,8 +45,8 @@ sidecar accompanies the download. Install through the VTT; do not extract the ZI
 into the VTT source tree. The stable system ID `gravewright.5e-srd` preserves
 existing character data, table settings and embedded copies.
 
-Version 0.2.0 installs alongside earlier releases, including local builds
-0.1.3–0.1.5. Select 0.2.0 in the table's extensions and reload open table pages
+Version 0.2.1 installs alongside earlier releases, including local builds
+0.1.3–0.1.5. Select 0.2.1 in the table's extensions and reload open table pages
 to load the correction; restarting the host alone does not change that
 selection. Keep the previous version installed for rollback by selecting it
 again. Installed ID/version pairs are immutable and cannot be overwritten with
@@ -141,6 +142,15 @@ Different sheets are recoverable writes, not one shared database transaction.
 Moving backward does not undo resolved outcomes.
 Automation does not run in the background after all table clients close.
 
+On VTT 0.3.8, new initiative operations use `combat.rollInitiativeBatch` when
+available. The package freezes DnD formulas and source revisions in one durable
+batch checkpoint. The host commits rolls, initiative order and grouped chat
+results together, preserving public/GM visibility. Retrying a lost response
+reuses the same UUID and prepared payload. Hosts 0.2.3 and 0.3.7, and operations
+already started with the older journal, retain sequential recovery. A pending
+native batch requires a host with that capability to resume; downgrading does
+not turn it into fresh rolls. See [measurements and limits](docs/performance.md).
+
 | Symptom | Check |
 | --- | --- |
 | Compendiums are missing | The table uses an installed active system version and the host grants read access (on unmodified 0.3.4, the GM grants it) |
@@ -191,10 +201,14 @@ current system runtime.
 databases, media, modules and synthetic accounts. Older E2E scripts expect their
 documented review seed and local URL; never point them at a production table.
 
+[Combat performance](docs/performance.md) documents the initiative, tracker and
+sheet optimizations, staged measurements, and reproducible browser benchmark.
+
 ## Licenses
 
 Original software is [MIT-licensed](LICENSE.md). SRD-derived content is **CC BY 4.0**, with required attribution and modification notices in [NOTICE.md](NOTICE.md). Adapted third-party structured data retains the [upstream MIT representation notice](compendiums/THIRD-PARTY-DATA-LICENSE.txt). These software licenses do not grant rights to third-party brands or artwork. The decorative banner was created originally for Gravewright with AI assistance; no Wizards artwork is included.
 
 The compendium content remains English in this local monster update. Full content localization is pending native-host support and reviewed translations; changing the interface language does not yet translate these entries.
 
-Validated against released VTT 0.3.5; the 0.2.3 baseline remains supported.
+Native batch behavior is validated with VTT 0.3.8; compatibility checks also cover
+the unchanged released VTT 0.2.3 and 0.3.7 hosts.

@@ -4,6 +4,7 @@
  */
 import {prepareInitiative, advanceCombatEffects, hasCombatEffects} from './combat-rules.js';
 import {rollResult} from './automation.js';
+import {createCombatRollPacing} from './combat-roll-pacing.js';
 
 const copy = value => structuredClone(value);
 const fail = code => Object.assign(new Error(code), {code});
@@ -47,9 +48,11 @@ export function combatPhases(state, method) {
     phase('start',entries[index],boundary,method==='nextTurn')];
 }
 
-export function createCombatController({api, storage, sceneId, compatibility, t=key=>key}) {
+export function createCombatController({api, storage, sceneId, compatibility, signal, rollPacing, t=key=>key}) {
   const key = `combat.scene.${part(sceneId)}`, intentKey = `${key}.intent`;
-  let state, actors, publicRecord, intent, operation, journal, owner, recovery, recoveryKey;
+  let state, actors, publicRecord, intent, operation, journal, owner, recovery, recoveryKey, nativeVersion, nativeSnapshot, freshJournal=false;
+  const visitedSteps=new Set();
+  const pacing=rollPacing||createCombatRollPacing({api,signal});
   const acknowledged = new Set();
   const acknowledgedResources = new Set();
   const currentReceipt = pending => publicRecord?.value.completed?.find(value => value.id===pending.value.id && value.owner===pending.value.owner);
@@ -76,16 +79,27 @@ export function createCombatController({api, storage, sceneId, compatibility, t=
     // Public polling does not repeatedly read another GM's private namespace.
     recoveryKey=marker;
   }
-  async function refresh() {
-    [state, actors, publicRecord] = await Promise.all([api.combat.state({sceneId}),api.actors.state(),storage.table.get(key)]);
+  async function refresh(projected={}) {
+    // SDK events already contain authenticated projections for this client.
+    // Accept only the expected domain/scene shape; other invalidations re-read.
+    const combat=projected.state, actorState=projected.actors;
+    const supplied= combat?.sceneId===sceneId && Array.isArray(combat.combatants) && Number.isInteger(combat.version);
+    const [nextState,nextActors,nextPublic] = await Promise.all([
+      supplied ? copy(combat) : api.combat.state({sceneId}),
+      typeof actorState?.is_gm==='boolean' && Array.isArray(actorState.actors) ? copy(actorState) : api.actors.state(),
+      storage.table.get(key)]);
+    // Encounter identity changes on Start/Stop; the scene revision still grows.
+    if(!supplied || !state || state.version<=nextState.version)state=nextState;
+    actors=nextActors;publicRecord=nextPublic;
     await refreshRecovery();
     return snapshot();
   }
   async function syncPublic() {publicRecord=await storage.table.get(key);await refreshRecovery();return snapshot();}
   function running() {if(isPaused(publicRecord?.value)) throw fail('combat.pausedError');}
-  async function writePublic(change,{claim=false,stopId=null}={}) {
+  async function writePublic(change,{claim=false,stopId=null,known}={}) {
     for(let attempt=0;attempt<4;attempt++) {
-      const previous=await storage.table.get(key), value=copy(previous?.value || {schemaVersion:1,paused:false,operation:null,completed:[]});
+      const previous=attempt===0&&known!==undefined?known:await storage.table.get(key);
+      const value=copy(previous?.value || {schemaVersion:1,paused:false,operation:null,completed:[]});
       if(stopId ? value.stopping?.id!==stopId : value.stopping || operation &&
         (value.operation?.id!==operation.id && !(claim&&!value.operation))) throw fail('combat.operationBusy');
       change(value);
@@ -106,27 +120,36 @@ export function createCombatController({api, storage, sceneId, compatibility, t=
     value.completed=[...(value.completed||[]).filter(receipt=>receipt.id!==pending.id),
       {id:pending.id,owner:pending.owner,kind:pending.kind,...(cancelled?{cancelled:true}:{})}].slice(-32);
   }
-  async function acknowledge(pending) {
+  async function acknowledge(pending,{compact=false}={}) {
     // A freshly read/written public completion is already authoritative. Avoid
     // re-reading actors, encounter and storage a second time on every command.
     if(!currentReceipt(pending))await refresh();
     if(!currentReceipt(pending))throw fail('combat.operationBusy');
     acknowledged.add(pending.value.id);
     try {
-      let record=await storage.user.get(intentKey);
+      // The batch owns this exact intent revision. CAS still prevents an older
+      // completion from confirming or deleting a later operation's intent.
+      let record=compact?pending:await storage.user.get(intentKey);
       if(record?.value.id===pending.value.id) {
         record=await storage.user.set(intentKey,{...record.value,confirmed:true},{expectedRevision:record.revision});
-        try {await storage.user.delete(intentKey,{expectedRevision:record.revision});}catch{/* Confirmed receipts remain safe to clean later. */}
+        // Keep one small confirmed batch intent per scene; the next operation
+        // replaces it with CAS. Cleanup must not race that next replacement.
+        if(!compact)try {await storage.user.delete(intentKey,{expectedRevision:record.revision});}catch{/* Confirmed receipts remain safe to clean later. */}
       }
     } catch {/* Public completion remains the authoritative confirmation. */}
     return snapshot();
   }
-  async function begin(kind, details={}) {
+  async function begin(kind, details={}, validate, journalDefaults={}) {
     await refresh();
     if(!actors.is_gm)throw fail('permission_denied');
+    validate?.();
+    nativeVersion=state.version;
+    nativeSnapshot=state;
     running();await compatibility?.assertReady();
     const publicKind=details.method?`native-${details.method}`:details.scope?`initiative-${details.scope}`:'operation';
-    const owned=await ownerId(), previous=await storage.user.get(intentKey);
+    const compact=journalDefaults.initiativeTransport==='native-batch-v1';
+    const [owned,previous]=compact?await Promise.all([ownerId(),storage.user.get(intentKey)]):[await ownerId(),await storage.user.get(intentKey)];
+    let createdIntent=false;
     if(previous && !previous.value.confirmed && !acknowledged.has(previous.value.id)) {
       if(previous.value.kind!==kind || previous.value.owner!==owned)throw fail('combat.operationBusy');
       if(currentReceipt(previous))return {completed:true,intent:previous};
@@ -136,6 +159,7 @@ export function createCombatController({api, storage, sceneId, compatibility, t=
       if(publicRecord?.value.operation)throw fail('combat.operationBusy');
       intent=await storage.user.set(intentKey,{id:uuid(),owner:owned,kind,details:copy(details),
         encounterId:state.encounterId,stage:'prepared',confirmed:false},{expectedRevision:previous?.revision??null});
+      createdIntent=true;
     }
     const pending=publicRecord?.value.operation;
     if(pending && (pending.id!==intent.value.id || pending.owner!==owned || pending.kind!==publicKind))throw fail('combat.operationBusy');
@@ -146,27 +170,41 @@ export function createCombatController({api, storage, sceneId, compatibility, t=
       if(value.operation)throw fail('combat.operationBusy');
       if(isPaused(value))throw fail('combat.pausedError');
       value.operation=operation;
-    },{claim:true});
+    },{claim:true,known:compact?publicRecord:undefined});
     if(intent.value.stage!=='running')intent=await storage.user.set(intentKey,{...intent.value,stage:'running'},{expectedRevision:intent.revision});
     const journalKey=`${key}.operation.${operation.id}`;
-    journal=await storage.user.get(journalKey);
-    if(!journal)journal=await storage.user.set(journalKey,{steps:[],plans:{}},{expectedRevision:null});
+    journal=compact&&createdIntent?null:await storage.user.get(journalKey);
+    freshJournal=!journal;visitedSteps.clear();
+    if(!journal)journal=await storage.user.set(journalKey,{
+      steps:journalDefaults.initiativeTransport==='native-batch-v1'?[checkpointKey('initiative-batch')]:[],
+      plans:{},...journalDefaults},{expectedRevision:null});
+    pacing.start();
     return {completed:false,intent};
   }
   async function saveJournal(value) {
     journal=await storage.user.set(`${key}.operation.${operation.id}`,value,{expectedRevision:journal.revision});
   }
   async function invoke(domain,method,payload,requestId) {
-    if(domain==='dice')return api.dice.roll(payload.expression,{label:payload.label,visibility:payload.visibility},{requestId});
-    return api[domain][method](payload,{requestId});
+    if(domain==='dice')return api.dice.roll(payload.expression,{label:payload.label,visibility:payload.visibility},{requestId,signal});
+    return api[domain][method](payload,{requestId,signal});
   }
-  async function assertOperation() {
-    const record=await storage.table.get(key);
+  async function assertOperation(revalidate=false) {
+    if(signal?.aborted)throw fail('cancelled');
+    const [record,authorization]=await Promise.all([storage.table.get(key),revalidate?api.actors.state():null]);
+    if(signal?.aborted)throw fail('cancelled');
+    if(revalidate) {
+      actors=authorization;
+      if(!actors.is_gm)throw fail('permission_denied');
+    }
     if(record?.value.operation?.id!==operation?.id || record?.value.stopping)throw fail('combat.operationBusy');
   }
+  const checkpointKey=name=>`${key}.step.${operation.id}.${part(name)}`;
   async function step(name,domain,method,build,{reconcile,perform}={}) {
-    const stepKey=`${key}.step.${operation.id}.${part(name)}`;
-    let saved=await storage.user.get(stepKey);
+    const stepKey=checkpointKey(name);
+    // A journal created by this invocation has no earlier checkpoints. Any
+    // resumed journal still reads each checkpoint, including lost SET replies.
+    let saved=freshJournal&&!visitedSteps.has(stepKey)?null:await storage.user.get(stepKey);
+    visitedSteps.add(stepKey);
     for(let attempt=0;attempt<4;attempt++) {
       if(!saved) {
         const requestId=uuid(),payload=await build(requestId);
@@ -184,10 +222,12 @@ export function createCombatController({api, storage, sceneId, compatibility, t=
         return confirmed;
       }
       let result;
-      await assertOperation();
+      if(domain!=='dice')await assertOperation();
       try {
-        result=perform ? await perform(saved.value.payload,saved.value.requestId)
-          : await invoke(domain,method,saved.value.payload,saved.value.requestId);
+        const send=()=>perform ? perform(saved.value.payload,saved.value.requestId)
+          : invoke(domain,method,saved.value.payload,saved.value.requestId);
+        if(domain==='dice')result=await pacing.run(saved.value.requestId,send,assertOperation);
+        else result=await send();
       } catch(error) {
         if(error.code!=='conflict'||attempt===3) {
           if(domain==='combat'&&['invalid','invalid_input','invalid_data','forbidden','not_found','permission_denied'].includes(error.code))error.combatRejectedStep=stepKey;
@@ -197,6 +237,9 @@ export function createCombatController({api, storage, sceneId, compatibility, t=
         if(confirmed) {
           saved=await storage.user.set(stepKey,{...saved.value,done:true,result:confirmed},{expectedRevision:saved.revision});return confirmed;
         }
+        // Only an explicit native rejection permits a new UUID and revision.
+        // Subsequent builds must read current combat state after a CAS conflict.
+        if(domain==='combat')nativeVersion=undefined;
         await storage.user.delete(stepKey,{expectedRevision:saved.revision});saved=null;continue;
       }
       // A failed checkpoint is a storage failure, not a rejected native CAS.
@@ -229,18 +272,32 @@ export function createCombatController({api, storage, sceneId, compatibility, t=
       return api.actors.saveSheet({...payload,name:view.name,data},{requestId});
     }});
   }
-  const nativeStep=(name,method,payload={})=>step(name,'combat',method,async()=>({...payload,sceneId,version:(await api.combat.state({sceneId})).version}));
-  async function rollStep(name,expression,{visibility='gm',label=t('combat.periodicRoll')}={}) {
+  async function nativeStep(name,method,payload={}) {
+    const result=await step(name,'combat',method,async()=>({...payload,sceneId,
+      version:nativeVersion??(nativeVersion=(await api.combat.state({sceneId})).version)}));
+    // Native commands return the accepted projection. Recovery may replay an
+    // older receipt, so it must never replace a fresher authenticated revision.
+    nativeVersion=Number.isInteger(result?.version)?Math.max(nativeVersion??0,result.version):undefined;
+    return result;
+  }
+  async function rollName(name,expression) {
     const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(`${name}\0${expression}`));
     const suffix=[...new Uint8Array(digest)].map(value=>value.toString(16).padStart(2,'0')).join('');
-    const message=await step(`roll-${suffix}`,'dice','roll',()=>({expression,visibility,label:String(label).slice(0,48)}));
+    return `roll-${suffix}`;
+  }
+  async function rollStep(name,expression,{visibility='gm',label=t('combat.periodicRoll')}={}) {
+    const message=await step(await rollName(name,expression),'dice','roll',()=>({expression,visibility,label:String(label).slice(0,48)}));
     return rollResult(message).total;
+  }
+  async function loadSheets(entries) {
+    const loaded=[];
+    for(let index=0;index<entries.length;index+=4)loaded.push(...await Promise.all(entries.slice(index,index+4)
+      .map(entry=>api.actors.sheet(entry.actor_id,sheetContext(entry)))));
+    return loaded;
   }
   async function planEffects(before,phases) {
     const documents=new Map(), sources=new Map(),views=new Map();
-    const entries=before.combatants.slice(0,64),loaded=[];
-    for(let index=0;index<entries.length;index+=4)loaded.push(...await Promise.all(entries.slice(index,index+4)
-      .map(entry=>api.actors.sheet(entry.actor_id,sheetContext(entry)))));
+    const entries=before.combatants.slice(0,64),loaded=await loadSheets(entries);
     for(const [index,entry]of entries.entries()) {
       const view=loaded[index],independent=!!view.tokenId;
       const documentKey=independent?['token',view.tokenId]:['actor',entry.actor_id];
@@ -281,19 +338,24 @@ export function createCombatController({api, storage, sceneId, compatibility, t=
   async function clockedStep(name,method,payload={}) {
     if(!['nextTurn','nextRound'].includes(method))return nativeStep(name,method,payload);
     const result=await step(name,'combat',method,async()=>{
-      const before=await api.combat.state({sceneId}),next=copy(journal.value);
+      const before=nativeSnapshot?.version===nativeVersion?nativeSnapshot:await api.combat.state({sceneId}),next=copy(journal.value);
+      const stepKey=checkpointKey(name);
+      if(!next.steps.includes(stepKey))next.steps.push(stepKey);
       next.plans[name]=await planEffects(before,combatPhases(before,method));await saveJournal(next);
       return {...payload,sceneId,version:before.version};
     });
     const plan=journal.value.plans?.[name];if(!plan)throw fail('combat.missingPlan');
     await applyEffects(name,plan);return result;
   }
-  async function finish({cancelled=false}={}) {
+  async function finish({cancelled=false,projection,compact=false}={}) {
     const old=operation,metadata=journal;
-    await writePublic(value=>{complete(value,old,cancelled);value.operation=null;});
+    await writePublic(value=>{complete(value,old,cancelled);value.operation=null;},{known:compact?publicRecord:undefined});
     // One fresh encounter includes resource bars after every sheet write.
-    state=await api.combat.state({sceneId});operation=null;journal=null;
-    const result=await acknowledge(intent);
+    if(projection?.sceneId===sceneId&&Number.isInteger(projection.version)&&Array.isArray(projection.combatants)) {
+      if(!state||state.version<projection.version)state=copy(projection);
+    } else state=await api.combat.state({sceneId});
+    operation=null;journal=null;
+    const result=await acknowledge(intent,{compact});
     // Completion has committed and the intent is acknowledged. Private cleanup
     // is optional, bounded to four requests and never holds the combat controls.
     void (async()=>{
@@ -332,31 +394,99 @@ export function createCombatController({api, storage, sceneId, compatibility, t=
       return `(${value})`;
     });
   }
+  async function batchInitiativePlan(scope,selected) {
+    // A rejected CAS must prepare again from current sources, never just change
+    // the expected encounter revision under a previously prepared expression.
+    if(nativeVersion===undefined) {
+      const [combat,authorization]=await Promise.all([api.combat.state({sceneId}),api.actors.state()]);
+      if(!authorization.is_gm)throw fail('permission_denied');
+      nativeSnapshot=combat;nativeVersion=combat.version;actors=authorization;
+    }
+    const before=nativeSnapshot,tokens=await api.tokens.state({mapId:sceneId});
+    const tokenById=new Map((tokens.tokens||[]).map(token=>[token.id,token]));
+    const actorById=new Map(actors.actors.map(actor=>[actor.id,actor]));
+    const players=actors.players?.map(player=>player.id)||[];
+    const entries=before.combatants.slice(0,64).filter(entry=>{
+      if(scope==='one'&&entry.id!==selected?.id||scope==='missing'&&entry.initiative!==null&&entry.initiative!==undefined)return false;
+      const actor=actorById.get(entry.actor_id);
+      return scope!=='npcs'||!players.some(id=>(actor?.permissions?.[id]??actor?.permissions?.default)==='owner');
+    });
+    if(scope==='one'&&!entries.length)throw fail('not_found');
+    // Share only fresh reads within this preparation. Independent token sheets
+    // have their own revisions, even when they point to the same actor.
+    const documents=new Map(),documentFor=new Map();
+    for(const entry of entries) {
+      const token=entry.token_id?tokenById.get(entry.token_id):null;
+      if(entry.token_id&&(!token||token.actorId!==entry.actor_id))throw fail('not_found');
+      const independent=entry.token_id&&token.linkMode!=='linked';
+      const documentKey=independent?`token:${entry.token_id}`:`actor:${entry.actor_id}`;
+      documentFor.set(entry,documentKey);
+      if(!documents.has(documentKey))documents.set(documentKey,{...entry,token_id:independent?entry.token_id:null});
+    }
+    const keys=[...documents.keys()],loaded=await loadSheets([...documents.values()]);
+    const views=new Map(keys.map((key,index)=>[key,loaded[index]]));
+    const targets=entries.map(entry=>{
+      const view=views.get(documentFor.get(entry)),token=tokenById.get(entry.token_id);
+      if(!view.canEdit)throw fail('permission_denied');
+      const prepared=prepareInitiative(before.config?.formula||'',view.data,{conditions:conditionIds(token?.conditions)});
+      if(!prepared.formula)throw fail('combat.manualInitiative');
+      const expression=initiativeExpression(prepared.formula,prepared.data);
+      if(expression.length>512)throw fail('combat.invalidFormula');
+      return {...identity(entry),expression,visibility:entry.hidden||token?.hidden?'gm':'public',
+        source:{actorVersion:view.version,sheetVersion:view.sheetVersion,...(token?{tokenVersion:token.version}:{})}};
+    });
+    return targets.length?{sceneId,version:before.version,entries:targets,selectFirst:scope==='all',
+      label:String(t('combat.initiativeRoll')).slice(0,48)}:{skip:true};
+  }
+  async function rollInitiativeBatch(scope,selected) {
+    // A pending batch cannot fall back after a timeout or host downgrade: its
+    // UUID may already have committed every roll and initiative on the server.
+    if(typeof api.combat.rollInitiativeBatch!=='function')throw fail('unavailable');
+    const result=await step('initiative-batch','combat','rollInitiativeBatch',()=>batchInitiativePlan(scope,selected),{
+      perform:(payload,requestId)=>payload.skip?{skipped:true}:api.combat.rollInitiativeBatch(payload,{requestId,signal})});
+    if(Number.isInteger(result?.version))nativeVersion=Math.max(nativeVersion??0,result.version);
+    return finish({projection:result,compact:true});
+  }
   async function rollInitiative(scope='all',selected) {
     if(!['all','npcs','missing','one'].includes(scope))throw fail('combat.invalidCommand');
-    await refresh();
-    if(!actors.is_gm)throw fail('permission_denied');
-    if(!state.config?.formula)throw fail('combat.manualInitiative');
-    const begun=await begin(`initiative-${scope}-${selected?.id||''}`,{scope,selected:selected?.id||''});
+    const begun=await begin(`initiative-${scope}-${selected?.id||''}`,{scope,selected:selected?.id||''},()=>{
+      if(!state.config?.formula)throw fail('combat.manualInitiative');
+    },{initiativeTransport:typeof api.combat.rollInitiativeBatch==='function'?'native-batch-v1':'legacy-v1'});
     if(begun.completed)return acknowledge(begun.intent);
+    // Journals created by older hosts have no transport marker and must finish
+    // their original sequence, including already accepted individual rolls.
+    if(journal.value.initiativeTransport==='native-batch-v1')return rollInitiativeBatch(scope,selected);
     if(!journal.value.initiative) {
       const tokens=await api.tokens.state({mapId:sceneId}),targets=[];
       const players=actors.players?.map(player=>player.id)||[];
-      for(const entry of state.combatants.slice(0,64)) {
-        if(scope==='one'&&entry.id!==selected?.id||scope==='missing'&&entry.initiative!==null&&entry.initiative!==undefined)continue;
-        const actor=actors.actors.find(actor=>actor.id===entry.actor_id);
-        if(scope==='npcs'&&players.some(id=>(actor?.permissions?.[id]??actor?.permissions?.default)==='owner'))continue;
-        const view=await api.actors.sheet(entry.actor_id,sheetContext(entry));
+      const tokenById=new Map((tokens.tokens||[]).map(token=>[token.id,token]));
+      const actorById=new Map(actors.actors.map(actor=>[actor.id,actor]));
+      const entries=state.combatants.slice(0,64).filter(entry=>{
+        if(scope==='one'&&entry.id!==selected?.id||scope==='missing'&&entry.initiative!==null&&entry.initiative!==undefined)return false;
+        const actor=actorById.get(entry.actor_id);
+        return scope!=='npcs'||!players.some(id=>(actor?.permissions?.[id]??actor?.permissions?.default)==='owner');
+      });
+      const loaded=await loadSheets(entries);
+      for(const [index,entry]of entries.entries()) {
+        const view=loaded[index],token=tokenById.get(entry.token_id);
         const prepared=prepareInitiative(state.config?.formula||'',view.data,
-          {conditions:conditionIds(tokens.tokens?.find(token=>token.id===entry.token_id)?.conditions)});
+          {conditions:conditionIds(token?.conditions)});
         if(!prepared.formula)throw fail('combat.manualInitiative');
         const expression=initiativeExpression(prepared.formula,prepared.data);
         if(expression.length>512)throw fail('combat.invalidFormula');
-        const hidden=entry.hidden||tokens.tokens?.find(token=>token.id===entry.token_id)?.hidden;
+        const hidden=entry.hidden||token?.hidden;
         targets.push({entry:copy(entry),expression,visibility:hidden?'gm':'public'});
       }
       if(scope==='one'&&!targets.length)throw fail('not_found');
-      const next=copy(journal.value);next.initiative=targets;await saveJournal(next);
+      const next=copy(journal.value);next.initiative=targets;
+      // Register the known steps together with their frozen input plan. Each
+      // command still owns its durable UUID/result and checks the reservation.
+      // Older journals without this manifest retain the per-step fallback.
+      const names=(await Promise.all(targets.map(async(target,index)=>[
+        await rollName(`initiative-roll-${index}`,target.expression),`initiative-save-${index}`]))).flat();
+      if(scope==='all')names.push('initiative-set-first');
+      next.steps=[...new Set([...next.steps,...names.map(checkpointKey)])];
+      await saveJournal(next);
     }
     for(const [index,target]of journal.value.initiative.entries()) {
       const total=await rollStep(`initiative-roll-${index}`,target.expression,{visibility:target.visibility,label:t('combat.initiativeRoll')});

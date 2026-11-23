@@ -21,6 +21,7 @@ from uuid import uuid4
 from playwright.sync_api import expect, sync_playwright
 
 from review_server import MODULE, available_port, configure_environment, create_fixture, default_archive
+from combat import initiative_facts
 
 
 SCOPED_API = '**/api/tables/*/modules/gravewright.5e-srd/api'
@@ -190,7 +191,8 @@ def small_panel_menu(page, tracker, seed, output):
     expect(panel).to_be_visible()
     assert trigger.evaluate('node=>node===document.activeElement'), 'Escape must return focus to its trigger.'
     trigger.click()
-    page.locator('#combat-panel > header').click()
+    # The popup can cover the header's center in a short viewport.
+    page.locator('#combat-panel > header').click(position={'x': 20, 'y': 12})
     expect(popup).to_have_count(0)
     trigger.click()
     action(popup, 'turn/set').click()
@@ -211,7 +213,7 @@ def small_panel_menu(page, tracker, seed, output):
 
 
 def smoke(seed, output, executable):
-    requests, errors, held = [], [], []
+    requests, errors, held, batch_replies = [], [], [], []
     with sync_playwright() as playwright:
         options = {'executable_path': str(executable)} if executable else {}
         browser = playwright.chromium.launch(**options, env={**os.environ, 'CHROME_LOG_FILE': str(output / 'chromium.log')})
@@ -220,6 +222,11 @@ def smoke(seed, output, executable):
         def record(request):
             if '/modules/gravewright.5e-srd/api' in request.url:
                 requests.append(request.post_data_json or {})
+        def record_reply(response):
+            if '/modules/gravewright.5e-srd/api' in response.url and response.ok:
+                request = response.request.post_data_json or {}
+                if request.get('method') == 'rollInitiativeBatch':
+                    batch_replies.append(response.json()['value'])
         for role in ('gm', 'other-gm'):
             context = browser.new_context(viewport={'width': 1366, 'height': 900})
             context.add_cookies([{**seed['sessions'][role], 'url': seed['base']}])
@@ -227,17 +234,32 @@ def smoke(seed, output, executable):
             page.on('pageerror', lambda error: errors.append(str(error)))
             if role == 'gm':
                 page.on('request', record)
+                page.on('response', record_reply)
             page.goto(seed['base'] + '/game/' + seed['campaign'])
             contexts[role], pages[role] = context, page
         gm, other = pages['gm'], pages['other-gm']
         tracker, observer = show_tracker(gm), show_tracker(other)
+        use_batch = gm.evaluate("typeof gravewright.combat.rollInitiativeBatch==='function'")
         fixture_state = state(gm, seed)
         assert fixture_state['round'] == 3 and fixture_state['combatants'][fixture_state['turn']]['id'] == seed['linkedToken']
         # Reproduce the actual reported sequence, rather than relying only on
         # an encounter created active by the fixture: Start, then Roll all.
         action(tracker, 'end').click()
         settled(tracker)
-        assert state(gm, seed)['active'] is False
+        ended = state(gm, seed)
+        assert ended['active'] is False
+        # Current hosts clear the tracker on Stop; the 0.2.3 baseline retains
+        # participants. Recreate the next encounter through the public API.
+        if not ended['combatants']:
+            expect(action(tracker, 'start')).to_be_disabled()
+            gm.evaluate('''async({sceneId,participants})=>{
+              let current=await gravewright.combat.state({sceneId});
+              for(const participant of participants) {
+                current=await gravewright.combat.add({sceneId,version:current.version,
+                  ...participant.token_id?{tokenId:participant.token_id}:{actorId:participant.actor_id}});
+              }
+            }''', {'sceneId': seed['scene'], 'participants': fixture_state['combatants']})
+            expect(tracker.locator('[data-gw5-token-id]')).to_have_count(len(fixture_state['combatants']))
         action(tracker, 'start').click()
         settled(tracker)
         initial = state(gm, seed)
@@ -245,7 +267,8 @@ def smoke(seed, output, executable):
         assert initial['combatants'][initial['turn']]['id'] == seed['linkedToken']
         def hold_dice(route):
             body = route.request.post_data_json or {}
-            if not held and body.get('domain') == 'dice' and body.get('method') == 'roll':
+            selected = (body.get('domain'), body.get('method')) == (('combat', 'rollInitiativeBatch') if use_batch else ('dice', 'roll'))
+            if not held and selected:
                 held.append(route)
             else:
                 route.continue_()
@@ -277,9 +300,10 @@ def smoke(seed, output, executable):
         first_calls = requests[start:]
         def calls(rows, domain, method):
             return [row for row in rows if row.get('domain') == domain and row.get('method') == method]
-        assert len(calls(first_calls, 'dice', 'roll')) == 5
-        assert len(calls(first_calls, 'combat', 'setInitiative')) == 5
-        assert len(calls(first_calls, 'combat', 'setTurn')) == 1
+        assert len(calls(first_calls, 'dice', 'roll')) == (0 if use_batch else 5)
+        assert len(calls(first_calls, 'combat', 'setInitiative')) == (0 if use_batch else 5)
+        assert len(calls(first_calls, 'combat', 'setTurn')) == (0 if use_batch else 1)
+        assert len(calls(first_calls, 'combat', 'rollInitiativeBatch')) == (1 if use_batch else 0)
         expect(tracker.get_by_text(PROGRESS, exact=True)).to_have_count(0)
         expect(tracker.get_by_text(INCOMPLETE, exact=False)).to_have_count(0)
         screenshot(gm, tracker, output, 'ordered-desktop')
@@ -301,13 +325,16 @@ def smoke(seed, output, executable):
           await gravewright.combat.setTurn({sceneId,tokenId,version:current.version});
         }''', {'sceneId': seed['scene'], 'tokenId': seed['linkedToken']})
         expect(tracker.locator('.gw-combat-combatant.is-current')).to_have_count(1)
-        lost = []
+        lost, accepted_batch = [], []
+        recovery_method = 'rollInitiativeBatch' if use_batch else 'setTurn'
         def lose_set_turn(route):
             body = route.request.post_data_json or {}
-            if not lost and body.get('domain') == 'combat' and body.get('method') == 'setTurn':
+            if not lost and body.get('domain') == 'combat' and body.get('method') == recovery_method:
                 response = route.fetch()
                 assert response.ok, response.text()
                 lost.append(body)
+                if use_batch:
+                    accepted_batch.append(response.json()['value'])
                 route.fulfill(status=503, json={'error': 'unavailable'})
             else:
                 route.continue_()
@@ -320,6 +347,7 @@ def smoke(seed, output, executable):
         assert len(lost) == 1
         accepted = state(gm, seed)
         assert accepted['turn'] == 0
+        accepted_facts = initiative_facts(seed) if use_batch else None
         screenshot(gm, tracker, output, 'recoverable-failure')
         expect(observer.get_by_text(PROGRESS, exact=True)).to_be_visible(timeout=10000)
         expect(observer.get_by_text(INCOMPLETE, exact=False)).to_have_count(0)
@@ -329,6 +357,7 @@ def smoke(seed, output, executable):
         gm.close()
         gm = contexts['gm'].new_page()
         gm.on('request', record)
+        gm.on('response', record_reply)
         gm.on('pageerror', lambda error: errors.append(str(error)))
         gm.goto(seed['base'] + '/game/' + seed['campaign'])
         tracker = show_tracker(gm)
@@ -342,14 +371,21 @@ def smoke(seed, output, executable):
         action(tracker, 'retry').click()
         settled(tracker)
         recovered = state(gm, seed)
-        assert recovered['version'] == accepted['version'], 'Retry must replay setTurn without accepting a second mutation.'
+        assert recovered['version'] == accepted['version'], 'Retry must replay the accepted operation without a second mutation.'
         assert recovered['round'] == accepted['round'] and recovered['turn'] == 0
         expect(tracker.locator('.gw-combat-combatant.is-current [data-gw5-combat-initiative]')).to_have_value('20')
         recovery_calls = requests[recovery_start:]
-        assert len(calls(recovery_calls, 'dice', 'roll')) == 5
-        assert len(calls(recovery_calls, 'combat', 'setInitiative')) == 5
-        turn_calls = calls(recovery_calls, 'combat', 'setTurn')
-        assert len(turn_calls) == 2 and turn_calls[0]['requestId'] == turn_calls[1]['requestId'], turn_calls
+        assert len(calls(recovery_calls, 'dice', 'roll')) == (0 if use_batch else 5)
+        assert len(calls(recovery_calls, 'combat', 'setInitiative')) == (0 if use_batch else 5)
+        recovery_writes = calls(recovery_calls, 'combat', recovery_method)
+        assert len(recovery_writes) == 2, recovery_writes
+        for key in ('domain', 'method', 'payload', 'requestId'):
+            assert recovery_writes[0][key] == recovery_writes[1][key], recovery_writes
+        if use_batch:
+            assert len(calls(recovery_calls, 'combat', 'setTurn')) == 0
+            assert batch_replies[-1]['batch']['replayed'] is True
+            assert batch_replies[-1]['batch']['results'] == accepted_batch[0]['batch']['results']
+            assert initiative_facts(seed) == accepted_facts, 'Retry cannot create new roll facts or chat messages.'
         expect(tracker.get_by_text(PROGRESS, exact=True)).to_have_count(0)
         expect(action(tracker, 'retry')).to_have_count(0)
         gm.set_viewport_size({'width': 390, 'height': 844})
@@ -358,8 +394,10 @@ def smoke(seed, output, executable):
         browser.close()
     return {'result': 'PASS', 'fixture': seed['fixture'], 'host': seed['host'], 'package': seed['package'],
         'initialScores': [20, 16, 14, 7, 2], 'nextTurns': sequence, 'initialRound': initial['round'],
-        'roundAfterWrap': current['round'], 'firstBatch': {'rolls': 5, 'initiativeWrites': 5, 'turnSelection': 1},
-        'recoveryRequestId': turn_calls[0]['requestId'], 'recoveryReusedRolls': True,
+        'roundAfterWrap': current['round'], 'initiativeTransport': 'batch' if use_batch else 'legacy',
+        'firstBatch': {'nativeBatch': 1, 'rolls': 0, 'initiativeWrites': 0, 'turnSelection': 0} if use_batch
+            else {'nativeBatch': 0, 'rolls': 5, 'initiativeWrites': 5, 'turnSelection': 1},
+        'recoveryRequestId': recovery_writes[0]['requestId'], 'recoveryReusedRolls': True,
         'recoveryPreservedVersion': True, 'otherGMProgress': True, 'startThenRollAll': True,
         'smallPanelMenu': menu_checks, 'pageErrors': errors}
 

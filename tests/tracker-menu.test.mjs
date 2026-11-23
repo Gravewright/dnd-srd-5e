@@ -131,7 +131,8 @@ test('combat popups close on outside interaction, external scrolling, resizing, 
     panel.root.scrollTop=10;panel.doc.dispatchEvent(event('scroll',panel.root));assert.equal(panel.popup(),undefined);
     panel.open();panel.doc.dispatchEvent(event('pointerdown',panel.root));assert.equal(panel.popup(),undefined);
     panel.open();panel.view.dispatchEvent(event('resize',panel.view));assert.equal(panel.popup(),undefined);
-    panel.open();panel.emit('combat.changed');await until(()=>panel.popup()===undefined);
+    panel.open();panel.value.native.round++;panel.value.native.version++;
+    panel.emit('combat.changed');await until(()=>panel.popup()===undefined);
     assert.equal(panel.doc.activeElement,panel.trigger('enemy'));
     panel.open();popup=panel.popup();panel.dispose();
     assert.equal(popup.isConnected,false);assert.equal(panel.doc.count(),0);assert.equal(panel.view.count(),0);

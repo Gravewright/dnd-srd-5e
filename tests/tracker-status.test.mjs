@@ -38,18 +38,22 @@ async function until(predicate) {
 }
 async function mount(value,options={}) {
   const client=value.client(options),doc=document(),root=doc.createElement('root'),abort=new AbortController(),events=new Map();
-  const api={...client.api,i18n:{t:key=>key,onChange:()=>()=>{}},events:{on:(name,listener)=>{
+  const reads={combat:0,actors:0};
+  const api={...client.api,
+    combat:{...client.api.combat,state:async(...args)=>{reads.combat++;return client.api.combat.state(...args);}},
+    actors:{...client.api.actors,state:async(...args)=>{reads.actors++;const result=await client.api.actors.state(...args);return {...result,is_gm:options.currentGM?.()??result.is_gm};}},
+    i18n:{t:key=>key,onChange:()=>()=>{}},events:{on:(name,listener)=>{
     if(!events.has(name))events.set(name,new Set());events.get(name).add(listener);return ()=>events.get(name).delete(listener);
   }}};
   const dispose=await mountTracker({root,api,storage:client.storage,context:{sceneId:'scene'},signal:abort.signal},
     {compatibility:{...client.compatibility,current:{state:'absent'},subscribe:()=>()=>{}}});
   const find=action=>nodes(root).find(node=>node.dataset.gw5CombatAction===action);
-  return {root,find,dispose:()=>{abort.abort();dispose();},
+  return {root,find,reads,dispose:()=>{abort.abort();dispose();},
     text:()=>root.textContent,alerts:()=>nodes(root).filter(node=>node.role==='alert'),
     busy:()=>nodes(root).some(node=>node.getAttribute('aria-busy')==='true'),
     click:action=>{const button=find(action);assert.ok(button,action);assert.equal(!!button.disabled,false,action);
       button.onclick({stopPropagation(){}});},
-    emit:name=>{for(const listener of events.get(name)||[])listener();},
+    emit:(name,payload)=>{for(const listener of events.get(name)||[])listener(payload);},
     subscriptions:()=>[...events.values()].reduce((count,listeners)=>count+listeners.size,0)};
 }
 
@@ -78,6 +82,60 @@ test('local commands show contextual progress before and during shared updates w
       assert.equal(panel.text().includes(key),false);assert.equal(panel.alerts().length,0);
     } finally {gate.resolve();panel.dispose();}
   }
+});
+
+test('authorized events reuse projected state and identical renders preserve controls',async()=>{
+  const value=fixture(),panel=await mount(value);
+  try {
+    const first=panel.find('initiative/roll-all'),before={...panel.reads};
+    const actors=await value.client().api.actors.state();
+    panel.emit('actors.changed',actors);
+    panel.emit('combat.changed',{sceneId:'scene',state:structuredClone(value.native)});
+    for(let index=0;index<10;index++)await new Promise(setImmediate);
+    assert.deepEqual(panel.reads,before,'Both authorized domain payloads replace duplicate HTTP reads.');
+    assert.equal(panel.find('initiative/roll-all'),first,'An unchanged projection does not replace focused controls.');
+    panel.emit('combat.changed',{sceneId:'another-scene',state:{...structuredClone(value.native),sceneId:'another-scene'}});
+    for(let index=0;index<5;index++)await new Promise(setImmediate);
+    assert.deepEqual(panel.reads,before,'A different scene cannot refresh this tracker.');
+  } finally {panel.dispose();}
+});
+
+test('a command coalesces event bursts without competing display reads and observes the final change',async()=>{
+  const quietValue=fixture(),quiet=await mount(quietValue),quietBefore={...quiet.reads};
+  quiet.click('initiative/roll-all');await until(()=>!quiet.busy());
+  const quietReads={combat:quiet.reads.combat-quietBefore.combat,actors:quiet.reads.actors-quietBefore.actors};quiet.dispose();
+  const value=fixture(),gate=deferred(),entered=deferred();let once=true;
+  value.hooks.beforeNative=async call=>{if(once&&call.domain==='dice'){once=false;entered.resolve();await gate.promise;}};
+  const panel=await mount(value);
+  try {
+    const initial={...panel.reads};
+    panel.click('initiative/roll-all');await entered.promise;const before={...panel.reads};
+    for(let index=0;index<20;index++)panel.emit('combat.changed',{sceneId:'scene',state:structuredClone(value.native)});
+    panel.emit('actors.changed',await value.client().api.actors.state());
+    for(let index=0;index<10;index++)await new Promise(setImmediate);
+    assert.deepEqual(panel.reads,before,'Local journal work owns controller reads while busy.');
+    gate.resolve();await until(()=>!panel.busy());
+    for(let index=0;index<10;index++)await new Promise(setImmediate);
+    assert.equal(value.count('dice','roll'),2);assert.equal(value.public().operation,null);
+    assert.equal(panel.reads.combat-initial.combat,quietReads.combat+1,'The entire burst adds only one display refresh to normal command reads.');
+    assert.equal(panel.reads.actors-initial.actors,quietReads.actors+1,'The final display refresh revalidates permissions after the command.');
+  } finally {gate.resolve();panel.dispose();}
+});
+
+test('an older actor event cache cannot restore GM controls after a command revalidates revoked access',async()=>{
+  const value=fixture();let gm=true;const panel=await mount(value,{currentGM:()=>gm});
+  try {
+    panel.emit('actors.changed',await value.client().api.actors.state());
+    panel.emit('combat.changed',{sceneId:'scene',state:structuredClone(value.native)});
+    for(let index=0;index<10;index++)await new Promise(setImmediate);
+    assert.ok(panel.find('initiative/roll-all'));
+    gm=false;panel.click('turn/next');await until(()=>!panel.busy());
+    assert.equal(panel.find('initiative/roll-all'),undefined);
+    panel.emit('combat.changed',{sceneId:'scene',state:structuredClone(value.native)});
+    for(let index=0;index<10;index++)await new Promise(setImmediate);
+    assert.equal(panel.find('initiative/roll-all'),undefined);
+    assert.equal(value.count('combat','nextTurn'),0);
+  } finally {panel.dispose();}
 });
 
 test('a real failed initiative keeps an enabled owner retry and hides it during recovery',async()=>{

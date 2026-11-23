@@ -19,14 +19,14 @@ def default_archive():
     return MODULE/'dist'/f'gravewright-5e-srd-{version}.zip'
 
 
-def host_root(value=None):
+def host_root(value=None, *, allow_current=False):
     configured=value or os.environ.get('GRAVEWRIGHT_TEST_HOST_ROOT')
     candidates=([Path(configured)] if configured else [])+[Path.cwd(),*MODULE.parents]
     for candidate in candidates:
         root=candidate.resolve()
         if (root/'manage.py').is_file() and (root/'gravewright/modules').is_dir():
             version=tomllib.loads((root/'pyproject.toml').read_text(encoding='utf-8'))['project']['version']
-            if version!='0.2.3':
+            if version!='0.2.3' and not allow_current:
                 raise RuntimeError('Use the released Gravewright VTT 0.2.3 checkout for this compatibility fixture.')
             return root
     raise RuntimeError('Pass --host-root or set GRAVEWRIGHT_TEST_HOST_ROOT to the released VTT 0.2.3.')
@@ -122,13 +122,14 @@ def create_fixture(root,fixture,archive,translator_archive=None):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--host-root')
+    parser.add_argument('--allow-current-host',action='store_true',help='Opt in to testing the explicitly selected current host.')
     parser.add_argument('--archive',type=Path,default=default_archive())
     parser.add_argument('--translator-archive',type=Path,help='Optional official Translator ZIP for native locale preferences.')
     parser.add_argument('--fixture',type=Path)
     parser.add_argument('--seed',type=Path)
     parser.add_argument('--port',type=int,default=30029)
     args=parser.parse_args()
-    root=host_root(args.host_root)
+    root=host_root(args.host_root,allow_current=args.allow_current_host)
     fixture=(args.fixture or root/'data/dnd-review'/secrets.token_hex(8)).resolve()
     if fixture.exists() and any(fixture.iterdir()):raise RuntimeError('Use a new empty isolated fixture directory.')
     fixture.mkdir(parents=True,exist_ok=True)

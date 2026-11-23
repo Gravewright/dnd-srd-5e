@@ -9,12 +9,13 @@ export const duration=(value=3,extra={})=>({data:{duration:{type:'turns',value,e
 export const periodic=(value='1d6')=>({data:{modifiers:[{operation:'damage_over_time',target:'damage.self',value}]}});
 
 /** Strict native-CAS/receipt simulator: it never applies system effects itself. */
-export function fixture({entries,data={}}={}) {
+export function fixture({entries,data={},batch=false}={}) {
   const maps={table:new Map(),users:new Map()},receipts=new Map(),calls=[],accepted=[],sheetReads=[];
   const docs=new Map(['hero','monster'].map(id=>[id,{id,tokenId:null,name:id,actorType:id==='monster'?'monster':'character',
     version:1,sheetVersion:1,canEdit:true,data:sheet(data[id])}]));
-  const tokens=[{id:'linked',actorId:'hero',conditions:[]},{id:'snapshot',actorId:'hero',conditions:[],independent:true},
-    {id:'enemy',actorId:'monster',conditions:[]}];
+  const tokens=[{id:'linked',actorId:'hero',conditions:[],version:1,linkMode:'linked'},
+    {id:'snapshot',actorId:'hero',conditions:[],independent:true,version:1,linkMode:'snapshot'},
+    {id:'enemy',actorId:'monster',conditions:[],version:1,linkMode:'linked'}];
   docs.set('snapshot',{...clone(docs.get('hero')),tokenId:'snapshot',name:'Independent Hero'});
   const native={sceneId:'scene',encounterId:'encounter-1',active:true,round:1,turn:0,version:1,history:[],
     config:{formula:'1d20 + @init',input:'roll',can_roll:true},combatants:entries||[
@@ -46,6 +47,7 @@ export function fixture({entries,data={}}={}) {
       // saveSheet retries may re-read data/name, but receipt identity/revisions
       // remain immutable and the native receipt precedes revision validation.
       if(domain!=='actors')assert.deepEqual(receipt.payload,payload);
+      if(method==='rollInitiativeBatch')return {...clone(native),batch:{...clone(receipt.result.batch),replayed:true}};
       return clone(receipt.result);
     }
     await hooks.beforeNative?.(call);
@@ -62,7 +64,31 @@ export function fixture({entries,data={}}={}) {
       result={version:doc.version,sheetVersion:doc.sheetVersion};
     } else {
       if(payload.version!==native.version)throw error('conflict');
-      if(method==='nextTurn') {
+      let batchResult;
+      if(method==='rollInitiativeBatch') {
+        if(payload.sceneId!==native.sceneId)throw error('not_found');
+        if(!hooks.canEdit)throw error('permission_denied');
+        const targets=payload.entries.map(target=>{
+          const entry=native.combatants.find(entry=>target.tokenId?entry.token_id===target.tokenId:entry.actor_id===target.actorId&&!entry.token_id);
+          if(!entry)throw error('not_found');
+          const token=entry.token_id?tokens.find(token=>token.id===entry.token_id):null;
+          const doc=resolve(entry.actor_id,entry.token_id),actor=docs.get(entry.actor_id);
+          if(target.source.actorVersion!==actor.version||target.source.sheetVersion!==doc.sheetVersion||
+            token&&target.source.tokenVersion!==token.version)throw error('conflict');
+          return {target,entry,token};
+        });
+        const current=native.combatants[native.turn]?.id,results=[];
+        for(const {target,entry,token}of targets) {
+          const initiative=hooks.diceResult?await hooks.diceResult({...call,payload:target}):12;
+          results.push({...target.tokenId?{tokenId:target.tokenId}:{actorId:target.actorId},initiative,
+            messageId:`${requestId}-${results.length}`,visibility:entry.hidden||token?.hidden?'gm':target.visibility});
+        }
+        for(const [index,{entry}]of targets.entries())entry.initiative=results[index].initiative;
+        const score=entry=>Number.isFinite(entry.initiative)?entry.initiative:-Infinity;
+        native.combatants.sort((left,right)=>score(right)-score(left));
+        native.turn=payload.selectFirst||!native.active?0:Math.max(0,native.combatants.findIndex(entry=>entry.id===current));
+        batchResult={requestId,version:native.version+1,replayed:false,results,messageIds:results.map(result=>result.messageId)};
+      } else if(method==='nextTurn') {
         if(!native.active)throw error('not_started');
         for(let n=0;n<native.combatants.length;n++) {
           if(++native.turn===native.combatants.length){native.turn=0;native.round++;}
@@ -85,13 +111,13 @@ export function fixture({entries,data={}}={}) {
         const index=native.combatants.findIndex(entry=>payload.tokenId?entry.token_id===payload.tokenId:entry.actor_id===payload.actorId&&!entry.token_id);
         if(index<0)throw error('not_found');native.turn=index;
       } else if(method==='configure')native.config.formula=payload.formula;
-      native.version++;result={nativeAction:method,...clone(native)};
+      native.version++;result={nativeAction:method,...clone(native),...(batchResult?{batch:batchResult}:{})};
     }
     receipts.set(requestId,{...call,result:clone(result)});accepted.push(call);
     await hooks.afterNative?.(call);return clone(result);
   }
   const managers=[];
-  function client({user='gm',gm=true,compatibility={assertReady:async()=>{}}}={}) {
+  function client({user='gm',gm=true,compatibility={assertReady:async()=>{}},batch:useBatch=batch}={}) {
     const api={combat:{state:async()=>clone(native)},
       actors:{state:async()=>({is_gm:gm,players:[{id:'player'}],actors:[
         {id:'hero',permissions:{player:'owner'}},{id:'monster',permissions:{}}]}),
@@ -101,6 +127,10 @@ export function fixture({entries,data={}}={}) {
       dice:{roll:(expression,options,receipt)=>command('dice','roll',{expression,...options},receipt)}};
     for(const method of ['nextTurn','nextRound','previousTurn','previousRound','start','stop','setInitiative','configure','toggle','remove','add','moveUp','moveDown','setTurn'])
       api.combat[method]=(payload,options)=>command('combat',method,payload,options);
+    if(useBatch)api.combat.rollInitiativeBatch=(payload,options)=>{
+      if(!gm)return Promise.reject(error('permission_denied'));
+      return command('combat','rollInitiativeBatch',payload,options);
+    };
     return {api,storage:{user:storage('user',user),table:storage('table',user)},compatibility};
   }
   function controller(options={}) {

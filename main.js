@@ -4,6 +4,7 @@ import {createCatalog} from './catalog.js';
 import {mountTracker} from './tracker.js';
 import {createLegacyCompatibility} from './legacy.js';
 import {openLegacyMigration} from './legacy-ui.js';
+import {createActorUpdates} from './sheet-updates.js';
 
 let host, system, settingsModal,releaseCatalog;
 export default {
@@ -15,6 +16,7 @@ export default {
     if(context.signal.aborted)throw Object.assign(new Error('cancelled'),{code:'cancelled'});
     context.i18n.register(locales);context.styles.use('styles.css');context.styles.use('monster.css');context.styles.use('tracker.css');
     system={schemas,layouts,actions,listeners:new Set(),chatRolls:createChatRolls(),t:(key,args)=>context.i18n.t(key,args)};
+    system.actorUpdates=createActorUpdates(context.api,context.signal);
     system.compatibility=createLegacyCompatibility(context);
     await system.compatibility.refresh().catch(error=>{if(context.signal.aborted||error.code==='cancelled')throw error;});
     if(context.signal.aborted)throw Object.assign(new Error('cancelled'),{code:'cancelled'});
@@ -57,5 +59,5 @@ export default {
       finally{submit.disabled=!state.is_gm;}
     };
   },
-  stop() {settingsModal?.close(true);settingsModal=null;releaseCatalog?.();releaseCatalog=null;system?.compatibility.dispose();system?.chatRolls.stop();system?.listeners.clear();system=null;host=null;},
+  stop() {settingsModal?.close(true);settingsModal=null;releaseCatalog?.();releaseCatalog=null;system?.actorUpdates.dispose();system?.compatibility.dispose();system?.chatRolls.stop();system?.listeners.clear();system=null;host=null;},
 };

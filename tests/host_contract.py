@@ -108,7 +108,7 @@ class ReleasedHostContractTests(TestCase):
         self.assertEqual(sum(len(pack['entries']) for pack in item_packs), 2535)
         self.assertEqual(len(monster_packs), 2)
         self.assertEqual(sorted(len(pack['entries']) for pack in monster_packs), [317, 330])
-        visible_ids = {pack['id'] for pack in item_packs} if os.environ['DND_TEST_HOST_VERSION'] == '0.3.5' else set()
+        visible_ids = {pack['id'] for pack in item_packs} if os.environ['DND_TEST_HOST_VERSION'] in {'0.3.5', '0.3.7'} else set()
         self.assertEqual({pack['id'] for pack in invoke(self.campaign.pk, self.player.pk, 'compendiums', 'state', {})['packs']}, visible_ids)
         first = packs[0]
         payload = {'packId': first['id'], 'id': first['entries'][0]['id']}
