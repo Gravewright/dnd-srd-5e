@@ -47,8 +47,10 @@ function templateChanges(d){
   return activeTraitItems(d,true).flatMap(item=>(Array.isArray(item.data?.effectTemplates)?item.data.effectTemplates:[]).filter(template=>{
     if(!template||template.enabled===false)return false;
     const requirements=template.requirements||{},keys=Object.keys(requirements);
-    if(keys.some(key=>!['unarmored','noShield'].includes(key)||typeof requirements[key]!=='boolean'))return false;
-    if(requirements.unarmored&&armor.some(item=>item.data?.armor_type!=='shield')||requirements.noShield&&armor.some(item=>item.data?.armor_type==='shield'))return false;
+    if(keys.some(key=>!['unarmored','noShield','armored'].includes(key)||typeof requirements[key]!=='boolean'))return false;
+    const suit=armor.some(item=>item.data?.armor_type!=='shield');
+    // `armored` covers effects such as the Defense fighting style: light, medium or heavy armor, not a shield alone.
+    if(requirements.unarmored&&suit||requirements.armored&&!suit||requirements.noShield&&armor.some(item=>item.data?.armor_type==='shield'))return false;
     // A declared equipment-only guard can safely activate a conditional passive.
     return template.passive===true||keys.length>0&&template.manual!==true;
   }).flatMap(template=>(Array.isArray(template.changes)?template.changes:[]).map(change=>({...change,template}))));
@@ -73,15 +75,20 @@ function sensesState(d){
   const values={...(d.senses&&typeof d.senses==='object'?d.senses:{})};
   for(const change of templateChanges(d)){const match=/^senses\.(darkvision|blindsight|truesight|tremorsense)$/.exec(change.target||'');if(match)values[match[1]]=Math.max(0,applyValue(numeric(values[match[1]]),change,d));}return values;
 }
+// Unarmored Defense is the class feature that 2014 multiclassing grants once.
+// Other "while not wearing armor" base AC formulas stay separate in baseArmor.
+const UNARMORED_DEFENSES=['barbarian','monk'],BASE_ARMOR=['draconic','draconic2024'];
 export function mechanicalTraits(d){
-  const defenses=value=>(Array.isArray(value)?value:[value]).filter(option=>['barbarian','monk'].includes(option));
-  const result={...d.mechanicalTraits,saveAdvantages:[...(Array.isArray(d.mechanicalTraits?.saveAdvantages)?d.mechanicalTraits.saveAdvantages:[])],unarmoredDefense:defenses(d.mechanicalTraits?.unarmoredDefense)};
+  const options=(value,allowed)=>(Array.isArray(value)?value:[value]).filter(option=>allowed.includes(option));
+  const result={...d.mechanicalTraits,saveAdvantages:[...(Array.isArray(d.mechanicalTraits?.saveAdvantages)?d.mechanicalTraits.saveAdvantages:[])],
+    unarmoredDefense:options(d.mechanicalTraits?.unarmoredDefense,UNARMORED_DEFENSES),baseArmor:options(d.mechanicalTraits?.baseArmor,BASE_ARMOR)};
   for(const item of activeTraitItems(d)){
     const traits=item.data?.mechanicalTraits||{};
     for(const key of ['hpPerLevel','hpFlat'])if(typeof traits[key]==='number')result[key]=numeric(result[key])+numeric(traits[key]);
     for(const key of ['ignoreHeavyArmorSpeedPenalty','initiativeAdvantage','magicalSleepImmunity'])if(traits[key]===true)result[key]=true;
     for(const context of Array.isArray(traits.saveAdvantages)?traits.saveAdvantages:[])if(!result.saveAdvantages.includes(context))result.saveAdvantages.push(context);
-    for(const option of defenses(traits.unarmoredDefense))if(!result.unarmoredDefense.includes(option))result.unarmoredDefense.push(option);
+    for(const option of options(traits.unarmoredDefense,UNARMORED_DEFENSES))if(!result.unarmoredDefense.includes(option))result.unarmoredDefense.push(option);
+    for(const option of options(traits.baseArmor,BASE_ARMOR))if(!result.baseArmor.includes(option))result.baseArmor.push(option);
   }
   // Numeric HP changes are already normalized into hpFlat. Only declarative
   // formulas left in templates need evaluation here.
@@ -131,11 +138,19 @@ export function conditionSet(d) {
   if(['paralyzed','petrified','stunned','unconscious'].some(id=>ids.has(id)))ids.add('incapacitated');return ids;
 }
 export function incapacitated(d){return !!d.death?.dead||conditionSet(d).has('incapacitated');}
-function flatModifiers(changes,base) {
+/** A modifier's number, including bounded declarative values such as "Wisdom modifier, minimum +1". */
+export function modifierValue(change,d){
+  return change?.valueProfile&&d?evaluateNumericProfile(change.valueProfile,d)??0:numeric(change?.value);
+}
+function flatModifiers(changes,base,d) {
   let value=base;
-  for(const change of changes){if(change.operation==='set')value=numeric(change.value);if(change.operation==='add')value+=numeric(change.value);if(change.operation==='subtract')value-=numeric(change.value);}
+  for(const change of changes){const amount=modifierValue(change,d);if(change.operation==='set')value=amount;if(change.operation==='add')value+=amount;if(change.operation==='subtract')value-=amount;}
   return value;
 }
+/** The flat bonus a d20 roll appends for these targets; derived displays show the same total as the roll. */
+function flatBonus(d,targets){return flatModifiers(modifiers(d,targets).filter(change=>['add','subtract'].includes(change.operation)),0,d);}
+// Compendium passives use `ac`; effects authored in the sheet use `stat.ac`.
+const AC_TARGETS=['ac','stat.ac','stat.armor_class'];
 export function armorState(d,edition=d.rulesEdition||'2014') {
   const dex=mod(effectiveAbilityScore(d,'dex')),traits=mechanicalTraits(d);
   const items=[...(d.inventory||[]),...(d.equipment||[])].filter(item=>item?.equipped&&item.type==='armor');
@@ -144,8 +159,11 @@ export function armorState(d,edition=d.rulesEdition||'2014') {
   const armorAC=item=>numeric(item?.data?.base_ac,item?.data?.armor_type==='shield'?2:10)-(itemAttunementActive(item)?0:numeric(item?.data?.magicBonus));
   let ac=armor?armorAC(armor):10+numeric(dex);
   if(!armor){
+    // Alternative base AC formulas never stack; the best one available applies.
     if(traits.unarmoredDefense.includes('barbarian'))ac=Math.max(ac,10+dex+mod(effectiveAbilityScore(d,'con')));
     if(!shield&&traits.unarmoredDefense.includes('monk'))ac=Math.max(ac,10+dex+mod(effectiveAbilityScore(d,'wis')));
+    if(traits.baseArmor.includes('draconic'))ac=Math.max(ac,13+dex);
+    if(traits.baseArmor.includes('draconic2024'))ac=Math.max(ac,10+dex+mod(effectiveAbilityScore(d,'cha')));
   }
   if(armor&&data.add_dex!==false)ac+=data.armor_type==='medium'?Math.min(numeric(dex),numeric(data.max_dex,2)):numeric(dex);
   if(shield&&(edition==='2014'||trained(shield)))ac+=armorAC(shield);
@@ -161,15 +179,27 @@ function maximumHP(d,edition) {
   const maximum=Math.max(0,Math.floor((positive(d.hpBaseMax)+bonus-positive(d.hpMaxReduction))*factor));
   d.bars.bar_1.max=maximum;d.hpDerivedMax=maximum;d.hpTraitBonus=bonus;d.bars.bar_1.value=Math.min(d.bars.bar_1.value,maximum);
 }
-function refreshClassHP(d,source=d) {
-  // Class advancement explicitly opts into Constitution-derived HP. Preserve
-  // the per-level minimum rather than applying an unconditional CON * level.
-  if(!Number.isFinite(source.hpConModifier)||positive(source.classHitPointLevels)<1)return;
-  const con=mod(effectiveAbilityScore(d,'con')),before=source.hpConModifier,levels=positive(source.classHitPointLevels);
-  const classes=Object.values(source.advancementLedger?.parents||{}).filter(parent=>parent?.type==='class'&&!parent.item?.data?.isSubclass&&parent.hpRolls);
-  const rolls=classes.flatMap(parent=>Object.entries(parent.hpRolls).filter(([level])=>positive(level)<=positive(parent.classLevel)).map(([,value])=>numeric(value)));
-  const delta=rolls.length===levels?rolls.reduce((sum,roll)=>sum+Math.max(1,roll+con)-Math.max(1,roll+before),0):(con-before)*levels;
-  d.hpBaseMax=Math.max(levels,numeric(d.hpBaseMax,d.bars.bar_1.max)+delta);d.hpConModifier=con;
+function refreshClassHP(d,source=d,{initialize=false}={}) {
+  // A Constitution modifier change adjusts the maximum by 1 per level, also for
+  // levels already gained (SRD 5.1 "Hit Points"; SRD 5.2.1 "Gaining a Level").
+  const con=mod(effectiveAbilityScore(d,'con'));
+  if(!Number.isFinite(source.hpConModifier)){
+    // A typed maximum already includes the modifier current when it was entered.
+    if(initialize)d.hpConModifier=con;
+    return;
+  }
+  const before=source.hpConModifier;
+  if(positive(source.classHitPointLevels)>=1){
+    // Class advancement knows each level's die and keeps the per-level minimum of 1.
+    const levels=positive(source.classHitPointLevels);
+    const classes=Object.values(source.advancementLedger?.parents||{}).filter(parent=>parent?.type==='class'&&!parent.item?.data?.isSubclass&&parent.hpRolls);
+    const rolls=classes.flatMap(parent=>Object.entries(parent.hpRolls).filter(([level])=>positive(level)<=positive(parent.classLevel)).map(([,value])=>numeric(value)));
+    const delta=rolls.length===levels?rolls.reduce((sum,roll)=>sum+Math.max(1,roll+con)-Math.max(1,roll+before),0):(con-before)*levels;
+    d.hpBaseMax=Math.max(levels,numeric(d.hpBaseMax,d.bars.bar_1.max)+delta);d.hpConModifier=con;return;
+  }
+  const levels=Math.max(1,positive(d.level));
+  if(con!==before)d.hpBaseMax=Math.max(levels,numeric(d.hpBaseMax,d.bars.bar_1.max)+(con-before)*levels);
+  d.hpConModifier=con;
 }
 export function heal(d,amount) {
   ensureBars(d);const death=deathState(d);amount=positive(amount);
@@ -318,9 +348,10 @@ export function derive(raw, type, schema, edition) {
   d.rulesEdition = edition;
   d.acMode=['manual','equipment'].includes(raw.acMode)?raw.acMode:type==='character'?'equipment':'manual';
   // Earlier sheets persisted the schema's manual default without recording a
-  // choice. Equipped armor opts those character drafts into the corrected
-  // default; a recorded manual choice and the stored manual AC remain intact.
-  if(type==='character'&&d.acMode==='manual'&&raw.acModeExplicit!==true&&[...(d.inventory||[]),...(d.equipment||[])].some(item=>item?.equipped===true&&item.type==='armor'))d.acMode='equipment';
+  // choice. Equipped armor, or the untouched default AC of 10, opts those
+  // character drafts into the corrected default so Dexterity applies; a
+  // recorded manual choice and a typed manual AC remain intact.
+  if(type==='character'&&d.acMode==='manual'&&raw.acModeExplicit!==true&&(numeric(raw.ac,10)===10||[...(d.inventory||[]),...(d.equipment||[])].some(item=>item?.equipped===true&&item.type==='armor')))d.acMode='equipment';
   d.armorTraining={light:true,medium:true,heavy:true,shield:true,...structuredClone(raw.armorTraining||{})};
   d.mechanicalTraits=structuredClone(raw.mechanicalTraits||{});
   d.abilityScoreBases=structuredClone(raw.abilityScoreBases||{});
@@ -343,21 +374,29 @@ export function derive(raw, type, schema, edition) {
     if(get(d,`skills.${skill}.expert`,false))set(d,`skills.${skill}.prof`,true);
     set(d,`skills.${skill}.mod`,skillModifier(d,skill));
   }
-  // Only class advancement opts into retroactive Constitution changes. Manual
-  // HP sheets and monster stat blocks keep their recorded maximum.
-  refreshClassHP(d,raw);
+  // Characters adjust their maximum when Constitution changes. Monster stat
+  // blocks keep their recorded maximum.
+  refreshClassHP(d,raw,{initialize:type==='character'});
   refreshUses(d);
   for (const skill of ['perception','investigation','insight']) {
     const context=rollContext(d,{id:`roll.skill.${skill}`},{edition});
-    d[`passive_${skill}`]=10+flatModifiers(modifiers(d,['roll.check',`roll.skill.${skill}`]),get(d,`skills.${skill}.mod`,0))+(context.advantage!==context.disadvantage?(context.advantage?5:-5):0);
+    d[`passive_${skill}`]=10+flatModifiers(modifiers(d,['roll.check',`roll.skill.${skill}`]),get(d,`skills.${skill}.mod`,0),d)+(context.advantage!==context.disadvantage?(context.advantage?5:-5):0);
   }
   const dex = get(d,'abilities.dex.mod',0);
   d.init = dex + numeric(d.init_misc) - (edition === '2024' ? d.exhaustion*2 : 0);
+  // `mod` values feed roll formulas, which append active modifiers themselves.
+  // `bonus` values add those same flat modifiers for display, e.g. a Ring of Protection.
+  for (const ability of ABILITIES) {
+    set(d,`abilities.${ability}.checkBonus`,get(d,`abilities.${ability}.mod`,0)+flatBonus(d,['roll.check',`roll.check.${ability}`]));
+    set(d,`saves.${ability}.bonus`,get(d,`saves.${ability}.mod`,0)+flatBonus(d,['roll.save',`roll.save.${ability}`]));
+  }
+  for (const skill of Object.keys(SKILLS)) set(d,`skills.${skill}.bonus`,get(d,`skills.${skill}.mod`,0)+flatBonus(d,['roll.check',`roll.skill.${skill}`]));
+  d.initBonus = d.init + flatBonus(d,['roll.check','roll.initiative']);
   d.spell ??= {};
   d.spell.mod = get(d,`abilities.${d.spell.ability || 'int'}.mod`,0);
-  d.spell.attack = flatModifiers(modifiers(d,'spell.attack'),numeric(d.prof) + d.spell.mod);
+  d.spell.attack = flatModifiers(modifiers(d,'spell.attack'),numeric(d.prof) + d.spell.mod,d);
   d.spell.dc = spellSaveDC(d);
-  d.effective_ac=flatModifiers(modifiers(d,['stat.ac','stat.armor_class']),d.acMode==='equipment'?armorState(d,edition).ac:numeric(d.ac,10));
+  d.effective_ac=flatModifiers(modifiers(d,AC_TARGETS),d.acMode==='equipment'?armorState(d,edition).ac:numeric(d.ac,10),d);
   // Conditional AC templates have not also been copied into modifiers.
   for(const change of templateChanges(d))if(change.target==='ac'&&change.template.requirements&&Object.keys(change.template.requirements).length)d.effective_ac=applyValue(d.effective_ac,change,d);
   d.effectiveMovement=Object.fromEntries(Object.entries(movementState(d)).map(([kind,speed])=>[kind,adjustSpeed(d,numeric(speed),edition)]));
@@ -440,7 +479,7 @@ export function weaponBonuses(d,item,{offhand=false,addOffhandAbility=false}={})
   const proficient=automaticProficiency?(d.weaponProficiencies||[]).some(id=>id===data.weaponGroup||id===data.baseWeapon):data.proficient!==false, proficiencyBonus=proficient?numeric(d.prof):0;
   const inactiveMagic=itemAttunementActive(item)?0:numeric(data.magicBonus);
   return {ability,abilityModifier,proficient,proficiencyBonus,
-    attackBonus:flatModifiers(data.attack_type==='ranged'?modifiers(d,'weapon.attack.ranged'):[],abilityModifier+proficiencyBonus+numeric(data.attack_bonus)-inactiveMagic),
+    attackBonus:flatModifiers(data.attack_type==='ranged'?modifiers(d,'weapon.attack.ranged'):[],abilityModifier+proficiencyBonus+numeric(data.attack_bonus)-inactiveMagic,d),
     damageBonus:(offhand&&!addOffhandAbility?Math.min(0,abilityModifier):abilityModifier)+numeric(data.damage_bonus)-inactiveMagic};
 }
 function actionCategory(action) {
@@ -496,7 +535,7 @@ export function spellRollKind(item) {
 }
 export function spellSaveDC(d,item){
   const ability=item?.data?.spell_ability,abilityModifier=ABILITIES.includes(ability)?get(d,`abilities.${ability}.mod`,mod(get(d,`abilities.${ability}.score`,10))):numeric(d.spell?.mod);
-  return flatModifiers(modifiers(d,'spell.dc'),8+numeric(d.prof)+abilityModifier);
+  return flatModifiers(modifiers(d,'spell.dc'),8+numeric(d.prof)+abilityModifier,d);
 }
 function spellProfile(data) {
   const profile=data?.formulaProfile;
@@ -578,8 +617,8 @@ export function rollFormula(action,d,options={}) {
   const extra = numeric(extraModifier)-exhaustion;
   if (extra) formula += ` + (${extra})`;
   for(const change of active) {
-    if(change.operation==='add')formula+=` + (${numeric(change.value)})`;
-    if(change.operation==='subtract')formula+=` - (${numeric(change.value)})`;
+    if(change.operation==='add')formula+=` + (${modifierValue(change,d)})`;
+    if(change.operation==='subtract')formula+=` - (${modifierValue(change,d)})`;
     if(change.operation==='add_dice') {
       const dice=String(change.value).trim();
       if(!/^\d{1,2}d\d{1,3}$/i.test(dice))throw Error('Invalid modifier dice');

@@ -9,6 +9,9 @@ import zipfile
 from build import ROOT, browser_files, read
 from validate_locales import load_locales
 
+# VTT 0.3.8+ shows each edition's items, spells and monsters in one package folder.
+FOLDERS = {'2014': ['DnD 5e SRD', 'SRD 5.1 · 2014'], '2024': ['DnD 5e SRD', 'SRD 5.2.1 · 2024']}
+
 
 def validate(root=ROOT):
     root = Path(root).resolve()
@@ -24,21 +27,16 @@ def validate(root=ROOT):
     assert system['layouts'] == {p.relative_to(root / 'layouts').as_posix().removesuffix('.sheet.gw.json'): read(p)
                                  for p in (root / 'layouts').rglob('*.json')}
     provenance = read(root / 'compendiums/PROVENANCE.json')
-    upstream = provenance['upstream']
-    assert upstream['copyright'] == 'Copyright 2021 Andrew Clayton'
-    assert upstream['license'] == 'MIT'
-    assert upstream['notice'] == 'compendiums/THIRD-PARTY-DATA-LICENSE.txt'
-    assert re.fullmatch('[0-9a-f]{40}', upstream['commit'])
-    notice = (root / upstream['notice']).read_text(encoding='utf-8')
-    assert 'Copyright 2021 Andrew Clayton' in notice
-    assert 'Permission is hereby granted, free of charge' in notice
-    assert 'THE SOFTWARE IS PROVIDED' in notice
+    notice_path = 'compendiums/THIRD-PARTY-DATA-LICENSE.txt'
+    assert provenance['upstream']['license'] == 'MIT'
+    assert provenance['upstream']['notice'] == notice_path
+    assert (root / notice_path).read_text(encoding='utf-8').startswith('Copyright 2021 Andrew Clayton\n')
     allowed_types = {item['id'] for item in browser['system']['itemTypes']}
     assert browser['content']['compendiums'] == ['compendiums/2014.json', 'compendiums/2024.json', 'compendiums/monsters-2014.json', 'compendiums/monsters-2024.json']
     totals = {}
     for edition in ('2014', '2024'):
         collection = read(root / f'compendiums/{edition}.json')
-        assert collection['license'] == 'CC-BY-4.0'
+        assert collection['license'] == 'CC-BY-4.0' and collection['folder'] == FOLDERS[edition]
         ids, counts = set(), Counter()
         for pack in collection['packs']:
             assert pack['type'] in {'item_pack', 'spell_pack'} and pack['entries']
@@ -51,18 +49,18 @@ def validate(root=ROOT):
                 assert data['rulesEdition'] == edition
                 source = data['provenance']
                 assert source['contentLicense'] == 'CC-BY-4.0'
-                assert isinstance(source['sourceId'], str) and source['sourceId']
-                assert re.fullmatch('[0-9a-f]{40}', source['sourceGitBlob'])
                 assert source['sourceCommit'] == provenance['upstream']['commit']
+                assert source['sourcePath'] and source['sourceId']
+                assert source['sourcePath'].startswith('packs/_source/') and '..' not in Path(source['sourcePath']).parts
+                assert re.fullmatch('[a-f0-9]{40}', source['sourceGitBlob'])
+                assert re.fullmatch('[a-f0-9]{64}', source['sourceSha256'])
                 assert source['officialSRD'] == provenance['official'][edition]['url']
                 assert source['officialPdfSha256'] == provenance['official'][edition]['sha256']
-                assert re.fullmatch('[0-9a-f]{64}', source['sourceSha256'])
-                assert source['sourcePath'].startswith('packs/_source/') and '..' not in Path(source['sourcePath']).parts
         assert dict(counts) == provenance['counts'][edition]
         totals[edition] = {'packs': len(collection['packs']), 'documents': len(ids)}
     for edition, count in [('2014',317),('2024',330)]:
         collection = read(root / f'compendiums/monsters-{edition}.json')
-        assert collection['license'] == 'CC-BY-4.0'
+        assert collection['license'] == 'CC-BY-4.0' and collection['folder'] == FOLDERS[edition]
         assert len(collection['packs']) == 1 and collection['packs'][0]['type'] == 'actor_pack'
         entries = collection['packs'][0]['entries']
         assert len(entries) == count and len({e['id'] for e in entries}) == count
@@ -70,6 +68,13 @@ def validate(root=ROOT):
             assert entry['type'] == 'monster' and entry['systemId'] == browser['id']
             assert entry['data']['rulesEdition'] == edition
             assert entry['data']['provenance']['contentLicense'] == 'CC-BY-4.0'
+            source = entry['data']['provenance']
+            if not source.get('adaptation', '').startswith('Direct official PDF'):
+                assert source['sourceCommit'] == provenance['upstream']['commit']
+                assert source['sourcePath'] and source['sourceId']
+                assert source['sourcePath'].startswith('packs/_source/') and '..' not in Path(source['sourcePath']).parts
+                assert re.fullmatch('[a-f0-9]{40}', source['sourceGitSha'])
+                assert re.fullmatch('[a-f0-9]{64}', source['sourceSha256'])
             assert entry['data']['provenance']['officialPdfSha256'] == provenance['official'][edition]['sha256']
             assert entry['data']['hp']['max'] > 0 and entry['data']['ac'] > 0
         totals[edition]['monsters'] = len(entries)
@@ -83,8 +88,8 @@ def validate(root=ROOT):
             for name, source in files.items():
                 assert archive.read(name) == source.read_bytes(), name
             assert {'manifest.json', 'LICENSE.md', 'NOTICE.md'} <= set(archive.namelist())
+            assert notice_path in archive.namelist()
             assert json.loads(archive.read('manifest.json')) == browser
-            assert 'compendiums/THIRD-PARTY-DATA-LICENSE.txt' in archive.namelist()
             assert not any(name.endswith(('.py', '.pyc', '.pyd')) or name.startswith(('server/', 'scripts/', 'tests/')) for name in archive.namelist())
         reports.append({'name': path.name, 'bytes': path.stat().st_size, 'sha256': digest, 'files': len(files)})
     return {'version': browser['version'], 'compendiums': totals, 'archives': reports}

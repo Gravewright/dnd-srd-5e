@@ -1,4 +1,4 @@
-# Automações, avanços e limites — 0.2.1
+# Automações, avanços e limites — 0.2.2
 
 As regras atuais são implementadas exclusivamente no pacote de sistema para o
 navegador: `rules.js`, `combat-rules.js`, `combat-controller.js` e `tracker.js`.
@@ -35,7 +35,7 @@ avanço de turno em uma transação compartilhada.
 O sistema conserva a edição de cada item em `data.rulesEdition`. A edição da
 ficha controla regras gerais, como exaustão e descanso; não converte o texto nem
 a fórmula de uma magia importada de outra edição. Campos antigos e fórmulas
-manuais continuam válidos. Não há avaliação de macros ou código externo.
+manuais continuam válidos. Não há avaliação de macros ou de código externo.
 
 O suporte abrange os onze tipos do sistema, com comportamentos diferentes por
 tipo. Importar uma descrição não significa executar todas as regras contidas
@@ -50,7 +50,7 @@ exceções e efeitos não representados continuam visíveis para resolução man
 | Classe e subclasse | Níveis, pré-requisitos de vínculo da subclasse, aumentos de atributos, escolhas de características, PV por nível, Dados de Vida e tabelas de espaços normais/de Pacto | Elegibilidade narrativa, requisitos de multiclasse não declarados, seleção completa de magias de classe e substituições opcionais não representadas |
 | Talento e característica | Concessões e escolhas declaradas, passivos seguros, recursos e progressões numéricas | Ativação de poderes, custos/contextos especiais e efeitos não reconhecidos |
 | Arma | Atributo, proficiência, bônus mágico, Acuidade, dano versátil, segunda arma, crítico e diferença de Pesada entre edições | Munição, mãos ocupadas, Recarga, alcance/cobertura do mapa, Maestria, ataques adicionais e gatilhos de dano extra |
-| Armadura | Uma armadura e um escudo, Destreza permitida, treino, furtividade, requisito de Força, Defesa sem Armadura declarada de Bárbaro/Monge e bônus mágicos | Outras fórmulas de CA sem representação e requisitos especiais não declarados |
+| Armadura | Uma armadura e um escudo, Destreza permitida, treino, furtividade, requisito de Força, Defesa sem Armadura declarada de Bárbaro/Monge, Resiliência Dracônica, estilo Defesa somente com armadura e bônus mágicos | Outras fórmulas de CA sem representação e requisitos especiais não declarados |
 | Equipamento mágico | Passivos declarados, sintonia, atributos efetivos, deslocamentos, sentidos e condições simples de uso | Efeitos ativados, restrições não declaradas, maldições e relações específicas com outros itens |
 | Consumível | Quantidade e usos explicitamente consumidos | Aplicar os efeitos particulares da descrição, escolher alvos e componentes necessários |
 | Magia | Fórmulas tipadas, progressão explícita, ataque/CD, espaço escolhido, ritual, concessão com usos e concentração | Áreas, múltiplos alvos, salvaguardas dos alvos, condições, invocações, componentes, custo material e particularidades de cada magia |
@@ -75,9 +75,14 @@ registro de contribuições, em vez de restaurar cegamente valores antigos.
 A primeira classe concede os treinos iniciais; uma classe adicional usa seus
 avanços de multiclasse. Classes e subclasses têm identidades próprias, limites
 de nível e reservas de Dados de Vida. As escolhas de PV guardam o dado de cada
-nível e aplicam Constituição, com mínimo de 1 PV por nível. Constituição efetiva
-é recalculada retroativamente apenas para fichas que possuem esses metadados;
-uma ficha manual ou um bloco de monstro conserva seu máximo informado.
+nível e aplicam Constituição, com mínimo de 1 PV por nível. Quando o
+modificador de Constituição efetiva muda, o máximo muda 1 PV por nível,
+inclusive nos níveis já obtidos (SRD 5.1, Pontos de Vida; SRD 5.2.1, Subir de
+Nível). Em uma ficha sem avanço de classe, o máximo digitado é conservado na
+primeira leitura, pois já inclui a Constituição daquele momento; mudanças
+posteriores do modificador o ajustam por nível. Itens como o Amuleto da Saúde
+alteram os PV enquanto estiverem equipados. Blocos de monstro conservam o
+máximo informado.
 
 Quando um aumento de atributo de classe permite talento, o plano oferece os
 talentos elegíveis da mesma edição, respeitando os pré-requisitos declarados.
@@ -104,7 +109,8 @@ não consome o recurso; seu uso é explícito. Área, alvos, CD e dano reduzido 
 salvaguarda continuam exigindo resolução da mesa. Outras características só
 rolam fórmulas declaradas, sem deduzir efeitos do nome ou da descrição.
 
-O Gravewright usa um plano e registro próprios para concessões e sua procedência, permitindo aplicação e reversão das alterações.
+Concessões e sua procedência são registradas para permitir aplicação e reversão,
+com plano e registro próprios do Gravewright.
 
 ## Fórmulas de magia
 
@@ -257,8 +263,16 @@ escudo arrastado ocupa seu espaço livre; itens adicionais ficam no inventário.
 Equipar outra armadura ou escudo substitui o item equipado no mesmo espaço.
 Monstros mantêm CA manual por padrão. Selecionar o modo manual nas configurações
 registra `acModeExplicit: true`, preservando essa escolha. Fichas antigas com o
-antigo padrão manual e armadura equipada passam ao cálculo automático, sem
-apagar o valor manual guardado em `ac`.
+antigo padrão manual passam ao cálculo automático quando têm armadura equipada
+ou a CA guardada ainda é o padrão 10; assim, sem armadura, a CA é `10 + DES`.
+Uma CA manual digitada com outro valor permanece, sem apagar `ac`.
+
+Bônus passivos de CA dos itens do compêndio usam o alvo `ac`, e efeitos criados
+na ficha usam `stat.ac`; ambos somam uma única vez. Assim, Anel e Manto de
+Proteção, Escaravelho de Proteção e Cajado do Poder aplicam o bônus enquanto
+equipados e, quando exigido, sintonizados. O estilo de luta Defesa declara o
+requisito `armored`: soma +1 apenas com armadura leve, média ou pesada, não com
+escudo sozinho.
 
 `armorTraining` usa `light`, `medium`, `heavy` e
 `shield`; um item pode ter `trained` explícito. A ausência de metadados de treino
@@ -295,6 +309,11 @@ Braçadeiras de Defesa; requisitos desconhecidos continuam manuais.
 Sem armadura, Bárbaro usa `10 + DES + CON` e pode usar escudo; Monge usa
 `10 + DES + SAB` e não pode usar escudo. Entre fórmulas disponíveis, a CA usa
 a maior opção legal, sem somá-las; CA manual explícita conserva seu valor.
+`mechanicalTraits.baseArmor` declara outras fórmulas de CA base sem armadura,
+que permitem escudo: `draconic` (Resiliência Dracônica de 2014, `13 + DES`) e
+`draconic2024` (de 2024, `10 + DES + CAR`). Elas ficam separadas de Defesa sem
+Armadura, para não acionar a restrição de multiclasse de 2014. A Resiliência
+Dracônica de 2014 também soma 1 PV por nível de Feiticeiro.
 A aquisição por multiclasse é distinta do cálculo: a proibição de ganhar
 Defesa sem Armadura novamente em 2014 é respeitada nas concessões de uma classe
 adicional. Desativar a característica não permite adquiri-la novamente.
@@ -346,6 +365,14 @@ O seletor permite escolher um teste comum, que continua usando somente o
 modificador do atributo. Perícias e ataques não recebem proficiência de
 salvaguarda.
 
+Os valores exibidos de salvaguardas, testes de atributo, perícias e iniciativa
+incluem os mesmos bônus fixos passivos que a rolagem soma, como o +1 do Anel de
+Proteção nas salvaguardas ou da Pedra da Sorte nos testes. Os campos `mod`
+continuam sendo a base das fórmulas; os totais exibidos ficam em `bonus`,
+`checkBonus` e `initBonus`. Modificadores com valor declarativo, como a Ordem
+Divina: Taumaturgo de 2024 (Sabedoria, mínimo +1, em Arcanismo e Religião), são
+avaliados na rolagem e na exibição.
+
 O resultado é a mensagem nativa do chat; não há uma segunda modal de resultado.
 Os controles de Inspiração Heroica e aplicação ficam nessa mensagem enquanto
 a ficha de origem está aberta. Uma nova rolagem por Inspiração Heroica gera
@@ -371,15 +398,14 @@ controles ficam desabilitados e a mensagem permanece no histórico.
   espécies pp.84–85; propriedades/treino de equipamento pp.89–93;
   Petrificado p.186; outras condições e rituais no glossário.
 
-Os catálogos versionados preservam as descrições oficiais e os hashes de origem.
-Os testes do runtime em
-`tests/rules.test.mjs`, `tests/rules-automation.test.mjs` e
-`tests/automation.test.mjs` verificam os cálculos e resultados nativos.
+Os testes do runtime em `tests/rules.test.mjs`, `tests/rules-automation.test.mjs`
+e `tests/automation.test.mjs` verificam os cálculos e resultados nativos.
+`tests/rules-audit.test.mjs` confere, com os itens reais dos compêndios, as
+regras revisadas com os PDFs oficiais do SRD.
 `tests/e2e/dnd_automation.py`, na raiz do VTT, exercita os controles em uma mesa
 descartável, incluindo salvamento ao fechar uma rolagem pendente, ambas as
 edições, Dados de Vida de multiclasse e acesso somente leitura em janela móvel.
-Os IDs e a procedência dos itens
-permanecem estáveis ao reconstruir os compêndios.
+Os IDs dos itens e sua procedência no SRD oficial permanecem estáveis.
 
 Os controles usam a API oficial do Translator e possuem catálogos completos de
 interface em português brasileiro, inglês e espanhol. O build confere paridade

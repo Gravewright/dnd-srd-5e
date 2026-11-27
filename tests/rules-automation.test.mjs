@@ -400,7 +400,7 @@ test('resource AST maxima preserve spent uses across proficiency, class-level an
   let deep={type:'constant',value:1};for(let n=0;n<14;n++)deep={type:'add',args:[deep]};assert.equal(evaluateUsesProfile(deep,source),null);
 });
 
-test('class HP follows retroactive Constitution with per-level minimums while manual HP remains untouched',()=>{
+test('class HP follows retroactive Constitution with per-level minimums, and a typed maximum is kept as entered',()=>{
   const parent={type:'class',classLevel:2,item:{data:{identifier:'wizard'}},hpRolls:{1:6,2:1}};
   const d=make({bars:bars(11,11),hpBaseMax:11,hpDerivedMax:11,hpConModifier:2,classHitPointLevels:2,abilities:{con:{score:8}},advancementLedger:{parents:{wizard:parent}}});
   assert.equal(d.hp.max,6);assert.equal(d.hpConModifier,-1);assert.equal(make(d).hp.max,6);

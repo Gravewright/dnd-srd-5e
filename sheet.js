@@ -78,7 +78,7 @@ export async function mountSheet(block, system, isItem=false, initialView) {
     syncHeroic();
     shell.querySelectorAll('input[type=checkbox][data-gw5-path]').forEach(input=>{input.checked=!!get(draft,input.dataset.gw5Path,false);});
     shell.querySelectorAll('[data-gw5-computed]').forEach(e=>{const value=get(draft,e.dataset.gw5Computed,0);e.textContent=e.dataset.gw5Signed?signed(value):String(value);if(e.dataset.gw5EffectiveAcExtra)e.hidden=value===draft.ac;});
-    shell.querySelectorAll('[data-gw5-ability-bonus]').forEach(out=>{const ability=out.dataset.gw5AbilityBonus,proficient=get(draft,`saves.${ability}.prof`,false);out.textContent=signed(get(draft,`${proficient?'saves':'abilities'}.${ability}.mod`,0));out.title=t(proficient?'dnd5e.ui.salvaguarda':'abilityCheck');});
+    shell.querySelectorAll('[data-gw5-ability-bonus]').forEach(out=>{const ability=out.dataset.gw5AbilityBonus,proficient=get(draft,`saves.${ability}.prof`,false);out.textContent=signed(get(draft,proficient?`saves.${ability}.bonus`:`abilities.${ability}.checkBonus`,0));out.title=t(proficient?'dnd5e.ui.salvaguarda':'abilityCheck');});
     shell.querySelectorAll('[data-gw5-effective-ability]').forEach(out=>{const ability=out.dataset.gw5EffectiveAbility;out.hidden=get(draft,`abilities.${ability}.score`)===get(draft,`abilities.${ability}.effectiveScore`);out.parentElement.classList.toggle('gw5-ability-base',!out.hidden);});
     shell.querySelectorAll('.gw5-hp-meter').forEach(meter=>{meter.max=Math.max(1,numeric(draft.bars?.bar_1?.max));meter.value=Math.max(0,numeric(draft.bars?.bar_1?.value));});
     shell.querySelectorAll('.gw5-portrait').forEach(image=>{image.style.objectPosition=portraitPosition();});
@@ -390,7 +390,7 @@ export async function mountSheet(block, system, isItem=false, initialView) {
     if(n.type==='dropZone')return element(doc,'p','gw5-empty',t('effectsHint'));
     if(n.type==='abilityCard'){
       const ability=n.scorePath.split('.')[2],proficient=get(draft,`saves.${ability}.prof`,false);
-      const box=element(doc,'div','gw5-ability'),out=element(doc,'output','gw5-mod',signed(get(draft,`${proficient?'saves':'abilities'}.${ability}.mod`,0)));out.dataset.gw5AbilityBonus=ability;out.title=t(proficient?'dnd5e.ui.salvaguarda':'abilityCheck');
+      const box=element(doc,'div','gw5-ability'),out=element(doc,'output','gw5-mod',signed(get(draft,proficient?`saves.${ability}.bonus`:`abilities.${ability}.checkBonus`,0)));out.dataset.gw5AbilityBonus=ability;out.title=t(proficient?'dnd5e.ui.salvaguarda':'abilityCheck');
       const heading=element(doc,'div','gw5-ability-heading'),label=button(t(n.abbrKey),()=>roll(get(draft,`saves.${ability}.prof`,false)?`roll.save.${ability}`:n.interaction.action,null,ability),!view.canEdit);label.setAttribute('aria-label',t(n.labelKey));label.title=t(n.labelKey);
       const proficiency=field({type:'checkboxField',path:`sheet.saves.${ability}.prof`,labelKey:'proficient'}),saveLabel=t('saveProficiency',{ability:t(n.labelKey)});proficiency.classList.add('gw5-save-prof');proficiency.title=saveLabel;proficiency.querySelector('input').setAttribute('aria-label',saveLabel);proficiency.querySelector('input').title=saveLabel;
       heading.append(proficiency,label);const score=field({type:'numberField',path:n.scorePath,labelKey:n.abbrKey}),effective=element(doc,'output','gw5-effective-score',String(get(draft,`abilities.${ability}.effectiveScore`,get(draft,n.scorePath))));effective.dataset.gw5Computed=`abilities.${ability}.effectiveScore`;effective.dataset.gw5EffectiveAbility=ability;effective.hidden=get(draft,n.scorePath)===get(draft,`abilities.${ability}.effectiveScore`,get(draft,n.scorePath));effective.title=t('effectiveAbility');score.classList.toggle('gw5-ability-base',!effective.hidden);score.append(effective);box.append(heading,out,score);return box;
@@ -407,7 +407,9 @@ export async function mountSheet(block, system, isItem=false, initialView) {
         for(const ability of ABILITIES){const option=element(doc,'option','',t(`dnd5e.abbr.${ABILITY_ABBR[ability]}`));option.value=ability;option.title=t(ABILITY_LABELS[ability]);input.append(option);}
         input.value=skillAbility(draft,skill);input.addEventListener('change',()=>changed(input.dataset.gw5Path,input.value),{signal});row.append(input);
       }
-      if(n.modPath){const out=element(doc,'output','',signed(get(draft,n.modPath,0)));out.dataset.gw5Computed=n.modPath;out.dataset.gw5Signed='true';row.append(out);}return row;
+      // Skills show the same total the roll uses, including flat passive bonuses.
+      const modPath=Object.hasOwn(SKILLS,skill||'')?`sheet.skills.${skill}.bonus`:n.modPath;
+      if(n.modPath){const out=element(doc,'output','',signed(get(draft,modPath,0)));out.dataset.gw5Computed=modPath;out.dataset.gw5Signed='true';row.append(out);}return row;
     }
     if(n.type==='combatStat') {
       const box=element(doc,'div','gw5-stat');
@@ -417,10 +419,11 @@ export async function mountSheet(block, system, isItem=false, initialView) {
       const automaticAC=n.valuePath==='sheet.ac'&&draft.acMode==='equipment';
       const automaticSpeed=type==='character'&&n.valuePath==='sheet.speed';
       const readonly=automaticAC||automaticSpeed||['sheet.init','sheet.prof','sheet.spell.dc','sheet.spell.attack'].includes(n.valuePath);
-      const value=field({path:automaticAC?'sheet.effective_ac':automaticSpeed?'sheet.effectiveMovement.walk':n.valuePath,labelKey:n.labelKey,type:readonly?'readonlyField':n.kind==='text'?'textField':'numberField'});
+      const valuePath=automaticAC?'sheet.effective_ac':automaticSpeed?'sheet.effectiveMovement.walk':n.valuePath==='sheet.init'?'sheet.initBonus':n.valuePath;
+      const value=field({path:valuePath,labelKey:n.labelKey,type:readonly?'readonlyField':n.kind==='text'?'textField':'numberField'});
       if(n.interaction)value.classList.add('gw5-field--stat-action');
       if(['sheet.init','sheet.prof','sheet.spell.attack'].includes(n.valuePath)){
-        const out=value.querySelector('output');out.dataset.gw5Signed='true';out.textContent=signed(get(draft,n.valuePath,0));
+        const out=value.querySelector('output');out.dataset.gw5Signed='true';out.textContent=signed(get(draft,valuePath,0));
       }
       box.append(value);
       if(n.valuePath==='sheet.ac'&&!automaticAC){const out=element(doc,'output','',String(draft.effective_ac));out.dataset.gw5Computed='effective_ac';out.dataset.gw5EffectiveAcExtra='true';out.title=t('effectiveAC');out.setAttribute('aria-label',t('effectiveAC'));out.hidden=draft.effective_ac===draft.ac;box.append(out);}return box;

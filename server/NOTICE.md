@@ -8,6 +8,6 @@ Changes: original software representations of initiative, edition-specific exhau
 
 The companion's original Python code is copyright 2026 Ricardo Tristão and Gravewright contributors, distributed under the MIT license reproduced in `LICENSE.md` in the release archive. The app registers only for the `gravewright.5e-srd` system ID. Its rules are supplied by this separately installed companion, not built into the VTT core.
 
-This server archive does not contain compendium collections, adapted third-party item data, official artwork, logos, rulebook PDFs, premium packs or third-party runtime code. The separately distributed browser system includes its own content provenance and notices. See the complete project at https://github.com/Gravewright/dnd-srd-5e and its root `NOTICE.md` for those browser-package attributions.
+This server archive does not contain compendium collections, adapted structured item data, official artwork, logos, rulebook PDFs, premium packs or third-party runtime code. The separately distributed browser system includes its own content provenance and notices. See the complete project at https://github.com/Gravewright/dnd-srd-5e and its root `NOTICE.md` for those browser-package attributions.
 
 Independent project; not affiliated with or endorsed by Wizards of the Coast. Software and content licenses do not grant rights to third-party brands or artwork.

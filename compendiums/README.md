@@ -8,8 +8,8 @@ nomes repetidos; cada registro mantém identidade e procedência próprias.
 | Tipo | 2014 / SRD 5.1 | 2024 / SRD 5.2.1 |
 |---|---:|---:|
 | Armas | 173 | 86 |
-| Armaduras e escudos | 65 | 24 |
-| Equipamentos e ferramentas | 243 | 332 |
+| Armaduras e escudos | 65 | 23 |
+| Equipamentos e ferramentas | 243 | 333 |
 | Consumíveis | 164 | 146 |
 | Magias | 319 | 338 |
 | Talentos | 1 | 17 |
@@ -34,31 +34,32 @@ contextos e efeitos sem representação continuam dependentes da mesa.
 ## Fontes e licenças
 
 - Conteúdo de regras: [SRD 5.1 e SRD 5.2.1 publicados pela Wizards](https://www.dndbeyond.com/srd), sob [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode). As atribuições exigidas estão em [NOTICE.md](../NOTICE.md).
-- Dados estruturados: representação pública sob MIT, Copyright 2021 Andrew Clayton, revisão `87e94dbd9f930135e0694cd7e7d49f210603cd2c`. O aviso completo está em [THIRD-PARTY-DATA-LICENSE.txt](THIRD-PARTY-DATA-LICENSE.txt); commits, caminhos, IDs e hashes permanecem nos registros de procedência.
-- Descrições de magias: extraídas diretamente dos PDFs ingleses oficiais, em ordem de leitura por coluna. Outras descrições: convertidas dos registros licenciados para texto simples. Links de compêndio tornam-se nomes; macros e notas de automação externa são removidas.
+- Representações estruturadas: dados YAML públicos, copyright 2021 Andrew Clayton, revisão `87e94dbd9f930135e0694cd7e7d49f210603cd2c`, sob MIT. O [aviso original](THIRD-PARTY-DATA-LICENSE.txt) acompanha o pacote; essa licença é separada da licença do texto das regras.
+- Descrições de magias: extraídas diretamente dos PDFs ingleses oficiais, em ordem de leitura por coluna. Outras descrições: convertidas para texto simples. Links de compêndio tornam-se nomes; macros e notas de automação de outros aplicativos são removidas.
 
 Nenhuma arte, ícone, tradução, código de automação, livro, PDF ou pacote premium
 de terceiros acompanha o ZIP. O código original do adaptador é MIT; essa
 licença não substitui a licença CC BY 4.0 do conteúdo das regras.
 
-Cada entrada guarda em `data.provenance` a edição, caminho e ID da fonte, commit,
-SHA Git do arquivo, SHA-256 e o PDF oficial correspondente. Magias incluem a
-página de origem. [PROVENANCE.json](PROVENANCE.json) registra contagens, hashes,
-transformações e exclusões. Os IDs são estáveis entre reconstruções da mesma
-edição e caminho de origem.
+Cada entrada guarda em `data.provenance` a licença do conteúdo, o PDF oficial
+correspondente e seu SHA-256. Magias e monstros incluem a página de origem.
+Registros adaptados também preservam a revisão, o caminho, o identificador e os
+hashes do dado estruturado de origem.
+[PROVENANCE.json](PROVENANCE.json) registra contagens, hashes dos PDFs,
+transformações e exclusões. Os IDs das entradas são estáveis.
 
 ## Filtros e limitações
 
-O adaptador exige o marcador explícito `CC-BY-4.0` no registro e compara o nome
-com o SRD da edição correspondente. Variantes só entram por regras restritas de
-nome; casos incertos ficam fora. O marcador upstream sozinho não basta:
+A seleção exige conteúdo explicitamente licenciado em CC BY 4.0 e compara o
+nome com o SRD da edição correspondente. Variantes só entram por regras restritas
+de nome; casos incertos ficam fora. A licença sozinha não basta:
 **Arcane Vigor** foi excluída por não constar no SRD 5.2.1. **Ice Knife** consta
-no SRD, mas foi omitida porque o registro estruturado não possui esse marcador.
+no SRD, mas foi omitida porque o registro estruturado não declara essa licença.
 Os documentos auxiliares vazios **Book of Shadows** e **Unarmed Strike** também foram omitidos. O relatório
 lista as demais exclusões; a seleção não deve ser anunciada como SRD completo.
 
 Valores de alcance, tempo e duração das magias usam seus cabeçalhos no PDF,
-evitando fórmulas que dependem do runtime externo. Perfis estruturados
+sem fórmulas que dependam de outro aplicativo. Perfis estruturados
 distinguem dano, cura e PV temporários, preservam o modificador de conjuração
 quando explicitamente previsto e escalam por nível do personagem ou do espaço.
 Fórmulas por raio/projétil não somam todas as instâncias em um único ataque.
@@ -99,7 +100,7 @@ e traços tipados. Equipamento deve estar equipado e, quando exigido,
 sintonizado. Atributos, sentidos e deslocamentos efetivos são derivados sem
 alterar suas bases. Requisitos conhecidos, como ausência de armadura e escudo,
 são avaliados; condições desconhecidas permanecem manuais. Magias não recebem
-passivos automáticos só porque a fonte upstream marca transferência.
+passivos automáticos.
 
 Veja [automações e limites](../AUTOMATION.md) para as regras de combate,
 descanso, concentração, fórmulas, compatibilidade e decisões ainda manuais.
@@ -108,17 +109,19 @@ A representação é uma adaptação experimental. A fonte oficial permanece a
 referência para decisões de regras; diferenças de contexto não são resolvidas
 automaticamente pelo catálogo.
 
-## Validar e empacotar
+## Validar
 
-Os catálogos JSON revisados estão versionados. Na raiz do checkout:
+Os JSONs prontos estão versionados. As correções de regras conferidas com os
+PDFs oficiais ficam registradas em `data.contentCorrections` de cada entrada e
+em [PROVENANCE.json](PROVENANCE.json). Para validar:
 
 ```sh
-node --test tests/compendiums.test.mjs
-node --test tests/advancement.test.mjs
+node --test tests/compendiums.test.mjs tests/rules-audit.test.mjs
 python scripts/build.py
+python scripts/validate_package.py
 ```
 
-O build inclui os JSONs, os avisos de licença e a procedência. As ferramentas de importação e seus fixtures externos não são distribuídos.
+O build final inclui os JSON e estes avisos; não inclui ferramentas ou testes.
 
 O manifesto declara os dois catálogos de itens e os dois catálogos de monstros.
 A base valida caminhos, limites, tipos registrados, integridade e versão ativa.
@@ -128,14 +131,13 @@ leitura; importar documentos é reservado ao mestre. Veja o
 
 ## Monstros
 
-Os catálogos de monstros versionados preservam os hashes de origem e os
-blocos oficiais extraídos em ordem de leitura. A CA vem do
-PDF, incluindo armadura e escudo, sem depender do runtime externo. A iniciativa
+Os blocos oficiais foram extraídos dos PDFs em ordem de leitura, com hashes
+conferidos. A CA vem do PDF, incluindo armadura e escudo. A iniciativa
 preserva o bônus explícito de 2024. Ataques simples recebem rolagens sem duplicar
 atributo ou proficiência; dano de múltiplos tipos e efeitos contextuais permanecem
 no texto de referência. Centopeia Gigante e Vespa Gigante de 2024 são transcritas
-diretamente do PDF porque os registros YAML não têm licença explícita.
+diretamente do PDF.
 
-`MONSTER-PROVENANCE.json` registra a cobertura e as exclusões das fontes YAML.
+`MONSTER-PROVENANCE.json` registra a cobertura e as exclusões.
 Variantes de invocação e objetos mágicos não são anunciados como novos monstros.
 Atores importados são cópias independentes; o pacote não altera atores existentes.

@@ -1,5 +1,5 @@
 /** DnD initiative and forward-turn mechanics owned entirely by the browser system. */
-import {damage,heal,incomingDamage,effectiveAbilityScore,modifiers,numeric} from './rules.js';
+import {damage,heal,incomingDamage,effectiveAbilityScore,modifiers,modifierValue,numeric} from './rules.js';
 import {evaluateCombatFormula,formulaError} from './combat-formula.js';
 export {evaluateCombatFormula} from './combat-formula.js';
 const clone = value => structuredClone(value);
@@ -64,7 +64,7 @@ export function prepareInitiative(formula,source,{conditions=[]}={}) {
   if (advantage!==disadvantage) formula = formula.replace(/(?<![A-Za-z0-9_])1d20(?![A-Za-z0-9_])/i,advantage ? '2d20kh1' : '2d20kl1');
   if (edition==='2024' && exhaustion && /\d+d20/i.test(formula)) formula+=` - ${exhaustion*2}`;
   for (const change of active) {
-    if (['add','subtract'].includes(change.operation)) formula+=` ${change.operation==='add'?'+':'-'} (${numeric(change.value)})`;
+    if (['add','subtract'].includes(change.operation)) formula+=` ${change.operation==='add'?'+':'-'} (${modifierValue(change,data)})`;
     else if (change.operation==='add_dice') {
       const dice = String(change.value ?? '').trim();
       if (!/^\d{1,2}d\d{1,3}$/i.test(dice)) throw formulaError('combat-formula-invalid');

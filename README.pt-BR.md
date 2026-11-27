@@ -1,14 +1,14 @@
 # DnD 5e SRD
 
-Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. **0.2.1 Alpha**.
+Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. **0.2.2 Alpha**.
 
-[English](README.md) · [Baixar 0.2.1](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.2.1) · [Notas da release](docs/releases/0.2.1.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
+[English](README.md) · [Baixar 0.2.2](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.2.2) · [Notas da release](docs/releases/0.2.2.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 A ficha Noturno combina fundo escuro, tipografia em marfim, molduras douradas e um cabeçalho ilustrado. Inclui fichas próprias de personagem, monstro e 11 tipos de itens, salvamento automático e compêndios licenciados separados por edição. Este projeto adapta o framework legado Gravewright 5e SRD 0.3.1; o nome público atual é **DnD 5e SRD**.
 
 Projeto independente, sem afiliação ou endosso da Wizards of the Coast. Não inclui artes oficiais, livros ou conteúdo premium.
 
-A versão 0.2.1 acelera a iniciativa com lotes nativos no VTT 0.3.8 e reduz trabalho repetido do tracker e das fichas em hosts anteriores. O pacote mantém 317 monstros do SRD 5.1 e 330 do SRD 5.2.1 e permite aos jogadores copiar itens legíveis dos compêndios para fichas editáveis. As permissões de leitura do servidor continuam válidas; importações para a biblioteca e Efeitos continuam exclusivas do mestre.
+A versão 0.2.2 agrupa os 22 pacotes de compêndio em uma pasta **DnD 5e SRD** no VTT 0.3.8, com uma subpasta por edição; hosts anteriores mantêm a lista sem pastas. Também corrige automações conferidas com o SRD oficial, como CA pela Destreza, PV pela Constituição, itens de proteção e o estilo de luta Defesa. A iniciativa usa lotes nativos no VTT 0.3.8 e reduz trabalho repetido do tracker e das fichas em hosts anteriores. O pacote mantém 317 monstros do SRD 5.1 e 330 do SRD 5.2.1 e permite aos jogadores copiar itens legíveis dos compêndios para fichas editáveis. As permissões de leitura do servidor continuam válidas; importações para a biblioteca e Efeitos continuam exclusivas do mestre.
 
 ## Instalar e escolher uma edição
 
@@ -17,10 +17,11 @@ com SDK 1.x. Para português/espanhol, use o [Translator oficial 0.1.2 ou mais
 recente](https://github.com/Gravewright/translator). Inglês é o padrão. Não é
 necessário alterar o core do VTT nem instalar um módulo separado de regras.
 O caminho opcional de iniciativa em lote exige o VTT **0.3.8** e é selecionado
-automaticamente quando a capacidade pública está disponível.
+automaticamente quando a capacidade pública está disponível. As pastas de
+compêndio também exigem o 0.3.8; hosts anteriores ignoram essa declaração.
 
 1. Como proprietário do host, baixe
-   [`gravewright-5e-srd-0.2.1.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.2.1/gravewright-5e-srd-0.2.1.zip)
+   [`gravewright-5e-srd-0.2.2.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.2.2/gravewright-5e-srd-0.2.2.zip)
    da release no GitHub e instale pelo instalador local nativo de sistemas do
    host em execução. A versão do Marketplace pode ser diferente até a atualização
    de seu catálogo.
@@ -41,8 +42,8 @@ checksum SHA-256. Use o instalador do VTT, sem extrair o pacote no código-fonte
 O ID `gravewright.5e-srd`, os dados das fichas, as configurações e as cópias
 incorporadas permanecem no namespace original.
 
-A versão 0.2.1 instala ao lado das anteriores, incluindo os builds locais
-0.1.3–0.1.5. Selecione 0.2.1 nas extensões da mesa e recarregue as páginas abertas
+A versão 0.2.2 instala ao lado das anteriores, incluindo os builds locais
+0.1.3–0.1.5. Selecione 0.2.2 nas extensões da mesa e recarregue as páginas abertas
 para carregar a correção; reiniciar o servidor sozinho não altera essa seleção.
 Mantenha a versão anterior instalada para poder selecioná-la em uma reversão.
 O mesmo ID/versão é imutável e não pode ser sobrescrito com bytes diferentes.
@@ -107,7 +108,7 @@ não exige ativação de código de servidor.
 - Resultados no chat nativo, com controles de aplicar na ficha e Inspiração Heroica enquanto a ficha de origem está aberta; não há uma segunda modal de resultado.
 - Salvamento com revisão, erros sem descarte silencioso e espera ao fechar; tokens independentes mantêm sua própria ficha.
 - Interface em inglês, português brasileiro e espanhol pela API oficial do Translator, respeitando o idioma escolhido na conta. Não traduz conteúdo escrito pelos usuários nem os textos ingleses dos compêndios.
-- Compêndios separados por edição, disponíveis na interface nativa: 1.259 entradas de 2014 e 1.276 de 2024, incluindo 319 e 338 magias, respectivamente. São 2.535 entradas: 2.524 registros adaptados e 11 características originais derivadas dos textos licenciados de seus pais no SRD. Armas, armaduras, equipamentos, consumíveis, talentos, características, raças/espécies, antecedentes e classes têm dados próprios para a ficha.
+- Compêndios separados por edição, disponíveis na interface nativa: 1.259 entradas de 2014 e 1.276 de 2024, incluindo 319 e 338 magias, respectivamente. No VTT 0.3.8, o painel de compêndios as mostra em **DnD 5e SRD → SRD 5.1 · 2014** e **DnD 5e SRD → SRD 5.2.1 · 2024**, junto aos monstros de cada edição; as pastas começam fechadas. O mestre pode liberar ou ocultar uma edição inteira, ou o pacote todo, pelo botão **⋯** da pasta. Hosts anteriores listam os mesmos pacotes sem pastas. São 2.535 entradas: 2.524 registros adaptados e 11 características originais derivadas dos textos licenciados de seus pais no SRD. Armas, armaduras, equipamentos, consumíveis, talentos, características, raças/espécies, antecedentes e classes têm dados próprios para a ficha.
 - Cópia direta do compêndio para fichas editáveis pelo mestre ou jogador, após leitura autorizada. A inclusão mantém a procedência sem criar um documento adicional na biblioteca; cancelar as escolhas não deixa itens órfãos. A leitura continua validada pelo servidor; soltar em Efeitos continua exclusivo do mestre.
 
 ## Tradução pelo módulo oficial
@@ -122,7 +123,7 @@ Para contribuir, altere os três catálogos com as mesmas chaves e marcadores, c
 
 ## Escopo de conteúdo e automação
 
-Os compêndios de `compendiums/` são uma seleção rastreável dos SRDs 5.1 e 5.2.1, adaptada dos dados públicos licenciados de terceiros sob MIT e conferida com os PDFs oficiais. São **parciais**, incluem variantes e não representam todo o SRD. As descrições das magias vêm dos PDFs; outras descrições foram convertidas para texto simples, sem macros nem notas de automação externa. Conteúdo e nomes permanecem em inglês. Inclui dois compêndios de monstros: 317 blocos do SRD 5.1 e 330 do SRD 5.2.1, com descrições oficiais, atributos, PV, CA e ataques simples utilizáveis. Os pacotes de atores ficam privados até o mestre conceder leitura. Efeitos condicionais, conjuração e ataques múltiplos continuam manuais, com o bloco oficial completo para consulta. Não inclui efeitos prontos, livros, PDFs, logotipos ou artes oficiais. Os modelos antigos de `content/` não são registrados como compêndios. Veja [cobertura, fontes, exclusões e reconstrução](compendiums/README.md).
+Os compêndios de `compendiums/` são uma seleção rastreável dos SRDs 5.1 e 5.2.1, conferida com os PDFs oficiais. São **parciais**, incluem variantes e não representam todo o SRD. As descrições das magias vêm dos PDFs; outras descrições foram convertidas para texto simples, sem macros nem notas de automação de outros aplicativos. Conteúdo e nomes permanecem em inglês. Inclui dois compêndios de monstros: 317 blocos do SRD 5.1 e 330 do SRD 5.2.1, com descrições oficiais, atributos, PV, CA e ataques simples utilizáveis. Os pacotes de atores ficam privados até o mestre conceder leitura. Efeitos condicionais, conjuração e ataques múltiplos continuam manuais, com o bloco oficial completo para consulta. Não inclui efeitos prontos, livros, PDFs, logotipos ou artes oficiais. Os modelos antigos de `content/` não são registrados como compêndios. Veja [cobertura, fontes e exclusões](compendiums/README.md).
 
 As coleções só aparecem nas mesas que usam a versão instalada, aprovada e ativa deste sistema. No Gravewright 0.3.5, itens e magias já ficam visíveis aos jogadores; atores, diários, cenas e cartas dependem das permissões nativas. No Gravewright 0.3.4 e anteriores, todos dependem de leitura liberada pelo mestre. A importação para a biblioteca permanece reservada ao mestre. Trocar a edição da ficha não converte dados importados.
 
@@ -160,9 +161,7 @@ checksum SHA-256. Python, ferramentas, testes, fixtures e o diretório históric
 `1791849600`, para produzir artefatos determinísticos. A validação confere bytes,
 dados compilados, licenças e a procedência original dos compêndios offline.
 
-Testes opcionais de conversão exigem o cache licenciado fixado descrito em
-[compendiums/README.md](compendiums/README.md). Esses downloads não são necessários
-para testar regras, contratos nativos ou empacotar. O código Python histórico
+O código Python histórico
 de [server/README.md](server/README.md) é apenas referência de desenvolvimento.
 
 `tests/e2e/review_server.py` cria mesas descartáveis com banco, mídia, módulos
@@ -225,7 +224,11 @@ iniciativa, painel e fichas, as medições por etapa e o benchmark de navegador.
 
 ## Licenças
 
-Código original sob [MIT](LICENSE.md); conteúdo derivado dos SRDs sob **CC BY 4.0**, com as atribuições e modificações em [NOTICE.md](NOTICE.md). Os dados estruturados adaptados de terceiros preservam o [aviso MIT de sua representação](compendiums/THIRD-PARTY-DATA-LICENSE.txt). A licença MIT do código não concede direitos sobre marcas, artes ou conteúdo externo. Veja também [CONTENT_POLICY.md](CONTENT_POLICY.md).
+Código original sob [MIT](LICENSE.md); conteúdo derivado dos SRDs sob **CC BY 4.0**, com as atribuições e modificações em [NOTICE.md](NOTICE.md). A licença MIT do código não concede direitos sobre marcas, artes ou conteúdo externo. Veja também [CONTENT_POLICY.md](CONTENT_POLICY.md).
+
+Os dados estruturados adaptados têm copyright 2021 Andrew Clayton e preservam o
+[aviso MIT original](compendiums/THIRD-PARTY-DATA-LICENSE.txt), além da revisão,
+dos caminhos e dos hashes de origem em cada registro importado.
 
 O conteúdo dos compêndios permanece em inglês nesta atualização local de monstros. A tradução integral aguarda suporte nativo e traduções revisadas; mudar o idioma da interface ainda não traduz essas entradas.
 

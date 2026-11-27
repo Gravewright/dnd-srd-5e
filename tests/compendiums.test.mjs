@@ -22,6 +22,8 @@ test('installed collections preserve edition, registered types and unique stable
    assert.match(entry.data.provenance.sourceGitBlob,/^[a-f0-9]{40}$/);
    assert.match(entry.data.provenance.sourceSha256,/^[a-f0-9]{64}$/);
    assert.equal(entry.data.provenance.sourceCommit,report.upstream.commit);
+   assert.equal(entry.data.provenance.officialSRD,report.official[edition].url);
+   assert.equal(entry.data.provenance.officialPdfSha256,report.official[edition].sha256);
    counts[entry.type]=(counts[entry.type]||0)+1;
   }
   assert.deepEqual(counts,report.counts[edition]);
@@ -67,7 +69,7 @@ test('weapons, armor and resources match usable Gravewright fields',()=>{
 
 test('runtime descriptions contain no upstream HTML, macros, automation notes or executable formulas',()=>{
  for(const edition of ['2014','2024'])for(const entry of entries(edition)){
-  assert.doesNotMatch(entry.data.description,/<\/?[a-z][^>]*>|\[\[|&reference\[|@(?:UUID|Embed|\w+\.)|System Reference Document/i,`${edition}: ${entry.name}`);
+  assert.doesNotMatch(entry.data.description,/<\/?[a-z][^>]*>|\[\[|&reference\[|@(?:UUID|Embed|\w+\.)|Automation\b|automatically update your sheet|: scale [a-z]+ [a-z-]+|System Reference Document/i,`${edition}: ${entry.name}`);
   for(const field of ['damage','range','duration','casting_time'])assert.doesNotMatch(String(entry.data[field]||''),/@|\[\[/,`${entry.name}.${field}`);
   if(entry.data.damage)assert.match(entry.data.damage,/^[0-9dD+*()/ .-]{1,120}$/);
  }
