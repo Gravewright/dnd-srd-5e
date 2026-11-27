@@ -2,7 +2,7 @@
 
 Sistema de quinta edição para o Gravewright VTT, com escolha entre **2014 / SRD 5.1** e **2024 / SRD 5.2.1**. **0.2.2 Alpha**.
 
-[English](README.md) · [Baixar 0.2.2](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.2.2) · [Notas da release](docs/releases/0.2.2.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
+[English](README.md) · [Marketplace 0.2.2](https://github.com/Gravewright/marketplace/releases/tag/gravewright.5e-srd-v0.2.2) · [Baixar ZIP](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.2.2) · [Notas da release](docs/releases/0.2.2.md) · [Automações e limites](AUTOMATION.md) · [Reportar problema](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 A ficha Noturno combina fundo escuro, tipografia em marfim, molduras douradas e um cabeçalho ilustrado. Inclui fichas próprias de personagem, monstro e 11 tipos de itens, salvamento automático e compêndios licenciados separados por edição. Este projeto adapta o framework legado Gravewright 5e SRD 0.3.1; o nome público atual é **DnD 5e SRD**.
 
@@ -20,11 +20,10 @@ O caminho opcional de iniciativa em lote exige o VTT **0.3.8** e é selecionado
 automaticamente quando a capacidade pública está disponível. As pastas de
 compêndio também exigem o 0.3.8; hosts anteriores ignoram essa declaração.
 
-1. Como proprietário do host, baixe
-   [`gravewright-5e-srd-0.2.2.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.2.2/gravewright-5e-srd-0.2.2.zip)
-   da release no GitHub e instale pelo instalador local nativo de sistemas do
-   host em execução. A versão do Marketplace pode ser diferente até a atualização
-   de seu catálogo.
+1. Como proprietário do host, abra **Sistemas → Instalar sistema** e instale
+   **DnD 5e SRD 0.2.2** pelo catálogo oficial do Marketplace. Se o sistema já
+   estiver instalado, escolha **Atualizar** em sua entrada. O catálogo verifica
+   a assinatura do pacote e o checksum do download.
 2. Crie uma mesa com **DnD 5e SRD**. Mesas existentes podem selecionar a nova
    versão exata do pacote em **Configurações → Extensões**.
 3. O mestre define a edição padrão para novas fichas em **Configurações →
@@ -35,6 +34,11 @@ compêndio também exigem o 0.3.8; hosts anteriores ignoram essa declaração.
    nativas. No Gravewright 0.3.5, os pacotes de itens e
    magias já aparecem para jogadores. No Gravewright 0.3.4 sem essa alteração,
    o mestre deve liberar a leitura em **⋯ Permissões**.
+
+Para uma instalação local, baixe
+[`gravewright-5e-srd-0.2.2.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.2.2/gravewright-5e-srd-0.2.2.zip)
+da release do repositório-fonte, confira o arquivo SHA-256 que acompanha o ZIP
+e escolha **Sistemas → Instalar sistema → Instalar de ZIP** no VTT em execução.
 
 Um único ZIP reúne fichas de personagens, monstros e itens, compêndios,
 traduções, configurações, iniciativa e automações de turno. O download inclui

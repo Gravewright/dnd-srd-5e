@@ -2,7 +2,7 @@
 
 A fifth-edition game system for Gravewright VTT, with selectable **2014 / SRD 5.1** and **2024 / SRD 5.2.1** rules. **0.2.2 Alpha**.
 
-[Português brasileiro](README.pt-BR.md) · [Download 0.2.2](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.2.2) · [Release notes](docs/releases/0.2.2.md) · [Report an issue](https://github.com/Gravewright/dnd-srd-5e/issues)
+[Português brasileiro](README.pt-BR.md) · [Marketplace 0.2.2](https://github.com/Gravewright/marketplace/releases/tag/gravewright.5e-srd-v0.2.2) · [Download ZIP](https://github.com/Gravewright/dnd-srd-5e/releases/tag/v0.2.2) · [Release notes](docs/releases/0.2.2.md) · [Report an issue](https://github.com/Gravewright/dnd-srd-5e/issues)
 
 The Noturno sheet brings a dark background, ivory typography, gold frames and an illustrated character header. Character, monster and item sheets use native Gravewright windows, automatic saving and chat rolls. The system includes licensed, edition-separated SRD compendiums and declarative automation for supported rules.
 
@@ -24,11 +24,10 @@ the published VTT 0.2.3 without a core patch or a separately installed rules mod
 
 ## Install and choose an edition
 
-1. As host owner, download
-   [`gravewright-5e-srd-0.2.2.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.2.2/gravewright-5e-srd-0.2.2.zip)
-   from the GitHub release and install it through the running host's native
-   local system installer. The Marketplace version may differ until its catalog
-   is updated.
+1. As host owner, open **Systems → Install system** and install **DnD 5e SRD
+   0.2.2** from the official Marketplace catalog. If the system is already
+   installed, choose **Update** on its entry. The catalog verifies the signed
+   package and its download checksum.
 2. Create a table using **DnD 5e SRD**. Existing tables can select the new exact
    package version in **Settings → Extensions**.
 3. The GM chooses the default edition for new sheets in **Settings → Extensions
@@ -38,6 +37,11 @@ the published VTT 0.2.3 without a core patch or a separately installed rules mod
    when players need it. In Gravewright 0.3.5, item
    and spell packs are already visible to players. On unmodified Gravewright
    0.3.4, the GM must grant read access through **⋯ Permissions**.
+
+For a local installation, download
+[`gravewright-5e-srd-0.2.2.zip`](https://github.com/Gravewright/dnd-srd-5e/releases/download/v0.2.2/gravewright-5e-srd-0.2.2.zip)
+from the source release, verify its SHA-256 sidecar, and choose **Systems →
+Install system → Install from ZIP** in the running VTT.
 
 One system ZIP contains character, monster and item sheets, compendiums,
 translations, settings, initiative and supported turn automation. Its SHA-256
